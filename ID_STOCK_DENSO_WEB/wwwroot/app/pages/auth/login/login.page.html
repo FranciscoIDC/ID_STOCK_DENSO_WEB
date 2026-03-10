@@ -1,0 +1,734 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ID Stock — Denso | Iniciar Sesión</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+              *, *::before, *::after {
+                  box-sizing: border-box;
+                  margin: 0;
+                  padding: 0;
+              }
+
+        :root {
+            --navy: #0d1829;
+            --navy2: #131f32;
+            --navy3: #1c2b42;
+            --navySide: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --blue: #1a56db;
+            --blue-hover: #1648c0;
+            --red-denso: #c8202f;
+            --slate: #64748b;
+            --muted: #94a3b8;
+            --border: #e2e8f0;
+            --bg: #eef1f6;
+            --white: #ffffff;
+            --text: #1e293b;
+            --text-sub: #64748b;
+        }
+
+              /* ── PAGE ── */
+              html {
+                  height: 100%;
+              }
+
+              body {
+                  min-height: 100%;
+                  height: 100vh;
+                  font-family: 'Inter', sans-serif;
+                  background: var(--bg);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  padding: 24px;
+              }
+
+                  /* Background subtle pattern */
+                  body::before {
+                      content: '';
+                      position: fixed;
+                      inset: 0;
+                      background-image: radial-gradient(circle, #c8d5e8 1px, transparent 1px);
+                      background-size: 24px 24px;
+                      opacity: 0.45;
+                      pointer-events: none;
+                      z-index: 0;
+                  }
+
+                  body::after {
+                      content: '';
+                      position: fixed;
+                      inset: 0;
+                      background: radial-gradient(ellipse 700px 500px at 15% 50%, rgba(26,86,219,0.06) 0%, transparent 65%), radial-gradient(ellipse 600px 400px at 85% 50%, rgba(200,32,47,0.04) 0%, transparent 65%);
+                      pointer-events: none;
+                      z-index: 0;
+                  }
+
+              /* ── CARD ── */
+              .login-card {
+                  position: relative;
+                  z-index: 1;
+                  width: min(880px, 100%);
+                  background: var(--white);
+                  border-radius: 18px;
+                  box-shadow: 0 0 0 1px rgba(0,0,0,0.07), 0 8px 24px rgba(0,0,0,0.06), 0 24px 60px rgba(0,0,0,0.10);
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  overflow: hidden;
+                  animation: cardIn 0.6s cubic-bezier(0.16,1,0.3,1) both;
+              }
+
+              @keyframes cardIn {
+                  from {
+                      opacity: 0;
+                      transform: translateY(20px) scale(0.98);
+                  }
+
+                  to {
+                      opacity: 1;
+                      transform: translateY(0) scale(1);
+                  }
+              }
+
+              /* ══════════════════════════════
+           LEFT — FORM
+        ══════════════════════════════ */
+              .form-side {
+                  padding: 44px 48px 40px;
+                  display: flex;
+                  flex-direction: column;
+                  border-right: 1px solid var(--border);
+              }
+
+              /* ID Stock logo */
+              .brand-row {
+                    display: flex;
+                    flex-direction: column;   /* apila verticalmente */
+                    align-items: center;      /* centra */
+                    gap: 8px;
+                    margin-bottom: 28px;
+                    text-align: center;
+                }
+
+              .brand-logo {
+                  height: 80px;
+                  width: 80px;
+                  object-fit: contain;
+                  border-radius: 6px;
+                  padding: 3px;
+                  flex-shrink: 0;
+              }
+
+              .brand-txt {
+                  line-height: 1.2;
+              }
+
+                  .brand-txt strong {
+                      display: block;
+                      font-size: 0.88rem;
+                      font-weight: 700;
+                      color: var(--text);
+                      letter-spacing: -0.01em;
+                  }
+
+                  .brand-txt small {
+                      font-size: 0.68rem;
+                      font-weight: 400;
+                      color: var(--muted);
+                      letter-spacing: 0.02em;
+                  }
+
+              /* Heading */
+              .form-heading {
+                  margin-bottom: 30px;
+              }
+
+                  .form-heading h2 {
+                      font-size: 1.55rem;
+                      font-weight: 700;
+                      color: var(--text);
+                      letter-spacing: -0.025em;
+                      margin-bottom: 5px;
+                      line-height: 1.2;
+                  }
+
+                  .form-heading p {
+                      font-size: 0.82rem;
+                      color: var(--text-sub);
+                  }
+
+              /* Red Denso accent line under heading */
+              .accent-line {
+                  width: 36px;
+                  height: 3px;
+                  background: var(--red-denso);
+                  border-radius: 2px;
+                  margin-bottom: 24px;
+                  opacity: 0.75;
+              }
+
+              /* Fields */
+              .field {
+                  margin-bottom: 16px;
+              }
+
+                  .field label {
+                      display: block;
+                      font-size: 0.72rem;
+                      font-weight: 600;
+                      color: var(--slate);
+                      letter-spacing: 0.05em;
+                      text-transform: uppercase;
+                      margin-bottom: 6px;
+                  }
+
+              .input-wrap {
+                  position: relative;
+              }
+
+              .input-ico {
+                  position: absolute;
+                  left: 12px;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  color: #b8c4d0;
+                  display: flex;
+                  pointer-events: none;
+                  transition: color 0.2s;
+              }
+
+              .input-wrap input {
+                  width: 100%;
+                  padding: 11px 14px 11px 38px;
+                  background: #f7f9fc;
+                  border: 1.5px solid #dde3ea;
+                  border-radius: 9px;
+                  font-family: 'Inter', sans-serif;
+                  font-size: 0.84rem;
+                  color: var(--text);
+                  outline: none;
+                  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+              }
+
+                  .input-wrap input::placeholder {
+                      color: #c0ccd8;
+                  }
+
+                  .input-wrap input:focus {
+                      border-color: var(--blue);
+                      background: #fff;
+                      box-shadow: 0 0 0 3px rgba(26,86,219,0.10);
+                  }
+
+                      .input-wrap input:focus ~ .input-ico {
+                          color: var(--blue);
+                      }
+
+              /* Aux row */
+              .aux-row {
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  margin: 4px 0 22px;
+              }
+
+              .remember {
+                  display: flex;
+                  align-items: center;
+                  gap: 7px;
+                  font-size: 0.78rem;
+                  color: var(--text-sub);
+                  cursor: pointer;
+                  user-select: none;
+              }
+
+                  .remember input[type=checkbox] {
+                      accent-color: var(--blue);
+                      width: 13px;
+                      height: 13px;
+                      cursor: pointer;
+                  }
+
+              .forgot {
+                  font-size: 0.78rem;
+                  color: var(--blue);
+                  cursor: pointer;
+                  text-decoration: none;
+                  font-weight: 500;
+                  transition: opacity 0.2s;
+              }
+
+                  .forgot:hover {
+                      opacity: 0.7;
+                  }
+
+              /* Button — navy blue, NOT red */
+              .btn-login {
+                  width: 100%;
+                  padding: 12px;
+                  background: var(--navySide);
+                  color: white;
+                  border: none;
+                  border-radius: 9px;
+                  font-family: 'Inter', sans-serif;
+                  font-size: 0.88rem;
+                  font-weight: 600;
+                  letter-spacing: 0.02em;
+                  cursor: pointer;
+                  box-shadow: 0 4px 14px rgba(13,24,41,0.25);
+                  transition: background 0.18s, transform 0.15s, box-shadow 0.18s;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  gap: 8px;
+              }
+
+                  .btn-login:hover {
+                      background: var(--navy3);
+                      transform: translateY(-1px);
+                      box-shadow: 0 6px 20px rgba(13,24,41,0.32);
+                  }
+
+                  .btn-login:active {
+                      transform: translateY(0);
+                  }
+
+                  .btn-login svg {
+                      opacity: 0.7;
+                  }
+
+              /* Footer */
+              .form-footer {
+                  margin-top: auto;
+                  padding-top: 24px;
+                  border-top: 1px solid var(--border);
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  gap: 12px;
+              }
+
+              .powered {
+                  display: flex;
+                  align-items: center;
+                  gap: 7px;
+                  font-size: 0.7rem;
+                  color: var(--muted);
+              }
+
+              .powered-img {
+                  height: 32px;
+                  object-fit: contain;
+                  opacity: 0.85;
+                  filter: grayscale(0.2);
+              }
+
+              .version-badge {
+                  font-size: 0.65rem;
+                  font-weight: 500;
+                  color: var(--slate);
+                  background: #f0f3f7;
+                  border: 1px solid var(--border);
+                  border-radius: 100px;
+                  padding: 3px 10px;
+                  letter-spacing: 0.04em;
+                  white-space: nowrap;
+              }
+
+              /* ══════════════════════════════
+           RIGHT — VISUAL
+        ══════════════════════════════ */
+              .visual-side {
+                  position: relative;
+                  background: var(--navySide);
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  justify-content: center;
+                  padding: 48px 40px;
+                  gap: 28px;
+                  overflow: hidden;
+              }
+
+                  /* Denso red top bar */
+                  .visual-side::before {
+                      content: '';
+                      position: absolute;
+                      top: 0;
+                      left: 0;
+                      right: 0;
+                      height: 3px;
+                      background: var(--red-denso);
+                      z-index: 3;
+                  }
+
+              /* Glow blobs */
+              .vblob {
+                  position: absolute;
+                  border-radius: 50%;
+                  filter: blur(80px);
+                  pointer-events: none;
+              }
+
+              .vblob-1 {
+                  width: 260px;
+                  height: 260px;
+                  background: rgba(200,32,47,0.12);
+                  top: -80px;
+                  right: -60px;
+              }
+
+              .vblob-2 {
+                  width: 200px;
+                  height: 200px;
+                  background: rgba(26,86,219,0.10);
+                  bottom: -50px;
+                  left: -40px;
+              }
+
+              /* Grid */
+              .v-grid {
+                  position: absolute;
+                  inset: 0;
+                  background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+                  background-size: 30px 30px;
+                  pointer-events: none;
+              }
+
+              /* DENSO mark */
+              .denso-section {
+                  z-index: 2;
+                  text-align: center;
+              }
+
+              .denso-word {
+                  font-family: 'Inter', sans-serif;
+                  font-size: 2.6rem;
+                  font-weight: 800;
+                  font-style: italic;
+                  color: var(--red-denso);
+                  letter-spacing: -0.01em;
+                  line-height: 1;
+                  margin-bottom: 5px;
+                  text-shadow: 0 0 50px rgba(200,32,47,0.3);
+              }
+
+              .denso-sub {
+                  font-size: 0.62rem;
+                  font-weight: 500;
+                  color: #4a6280;
+                  letter-spacing: 0.22em;
+                  text-transform: uppercase;
+              }
+
+              .v-sep {
+                  z-index: 2;
+                  width: 32px;
+                  height: 1px;
+                  background: rgba(255,255,255,0.10);
+              }
+
+              /* Features */
+              .features {
+                  z-index: 2;
+                  width: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 9px;
+              }
+
+              .feat {
+                  display: flex;
+                  align-items: center;
+                  gap: 12px;
+                  padding: 11px 14px;
+                  background: rgba(255,255,255,0.04);
+                  border: 1px solid rgba(255,255,255,0.06);
+                  border-radius: 10px;
+                  animation: feUp 0.5s ease both;
+              }
+
+                  .feat:nth-child(1) {
+                      animation-delay: 0.10s;
+                  }
+
+                  .feat:nth-child(2) {
+                      animation-delay: 0.18s;
+                  }
+
+                  .feat:nth-child(3) {
+                      animation-delay: 0.26s;
+                  }
+
+                  .feat:nth-child(4) {
+                      animation-delay: 0.34s;
+                  }
+
+              .feat-ico {
+                  width: 30px;
+                  height: 30px;
+                  flex-shrink: 0;
+                  background: rgba(200,32,47,0.12);
+                  border-radius: 7px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: #e05a66;
+              }
+
+              .feat-txt strong {
+                  display: block;
+                  font-size: 0.74rem;
+                  font-weight: 600;
+                  color: rgba(255,255,255,0.82);
+              }
+
+              .feat-txt span {
+                  font-size: 0.67rem;
+                  color: #4a6280;
+              }
+
+              /* Online indicator */
+              .online-row {
+                  z-index: 2;
+                  display: flex;
+                  align-items: center;
+                  gap: 6px;
+                  font-size: 0.68rem;
+                  color: #3d566e;
+              }
+
+              .online-dot {
+                  width: 6px;
+                  height: 6px;
+                  border-radius: 50%;
+                  background: #22c55e;
+                  flex-shrink: 0;
+                  animation: dotBlink 2.5s ease-in-out infinite;
+              }
+
+              @keyframes feUp {
+                  from {
+                      opacity: 0;
+                      transform: translateY(8px);
+                  }
+
+                  to {
+                      opacity: 1;
+                      transform: translateY(0);
+                  }
+              }
+
+              @keyframes dotBlink {
+                  0%, 100% {
+                      opacity: 1;
+                      box-shadow: 0 0 0 0 rgba(34,197,94,0.4);
+                  }
+
+                  50% {
+                      opacity: 0.6;
+                      box-shadow: 0 0 0 4px rgba(34,197,94,0);
+                  }
+              }
+
+              /* ── RESPONSIVE ── */
+              @media (max-width: 660px) {
+                  body {
+                      padding: 16px;
+                      align-items: flex-start;
+                  }
+
+                  .login-card {
+                      grid-template-columns: 1fr;
+                  }
+
+                  .visual-side {
+                      display: none;
+                  }
+
+                  .form-side {
+                      padding: 36px 28px 32px;
+                  }
+              }
+    </style>
+</head>
+<body>
+
+    <br><br><br>
+    <div class="login-card">
+
+        <!-- ══ FORM SIDE ══ -->
+        <div class="form-side">
+
+            <!-- ID Stock brand -->
+            <div class="brand-row">
+                <img class="brand-logo"
+                     src="../../../../images/auth/logo_idstock_png_black.png"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                     alt="ID Stock" />
+                <div style="display:none; width:46px; height:46px; background:#0d1829; border-radius:6px; align-items:center; justify-content:center; flex-shrink:0;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <line x1="3" y1="9" x2="21" y2="9" />
+                        <line x1="3" y1="15" x2="21" y2="15" />
+                        <line x1="9" y1="3" x2="9" y2="21" />
+                        <line x1="15" y1="3" x2="15" y2="21" />
+                    </svg>
+                </div>
+                <small>Sistema de Control de Almacenes</small>
+            </div>
+
+            <!-- Heading -->
+            <div class="form-heading">
+                <h2>Iniciar Sesión</h2>
+                <p>Ingresa tus credenciales para acceder al sistema</p>
+            </div>
+
+            <!-- Usuario -->
+            <div class="field">
+                <label>Usuario</label>
+                <div class="input-wrap">
+                    <input type="text"
+                           placeholder="Ingresa tu usuario"
+                           ng-model="model.user"
+                           ng-keypress="$event.keyCode === 13 && LogIn()" />
+                    <span class="input-ico">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Contraseña -->
+            <div class="field">
+                <label>Contraseña</label>
+                <div class="input-wrap">
+                    <input type="password"
+                           placeholder="Ingresa tu contraseña"
+                           ng-model="model.password"
+                           ng-keypress="$event.keyCode === 13 && LogIn()" />
+                    <span class="input-ico">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                    </span>
+                </div>
+            </div>
+
+            <!--<div class="aux-row">
+                <label class="remember">
+                    <input type="checkbox" /> Recordar sesión
+                </label>
+                <a class="forgot" ng-click="GoRecoverPassword()">¿Olvidaste tu contraseña?</a>
+            </div>-->
+
+            <!-- Submit — navy blue -->
+            <button class="btn-login" type="button" ng-click="LogIn()">
+                Iniciar Sesión
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                </svg>
+            </button>
+
+            <!-- Footer -->
+            <div class="form-footer">
+                <div class="powered">
+                    <span>Powered by</span>
+                    <!--
+                      Cambia src por la ruta real:
+                      src="../../../../images/logo_idconsultores.png"
+                    -->
+                    <img class="powered-img"
+                         src="../../../../images/logo_idconsultores.png"
+                         onerror="this.outerHTML='<span style=\'font-weight:700;color:#1e3a5f;font-size:1rem;\'>ID Consultores</span>'"
+                         alt="ID Consultores" />
+                </div>
+                <div class="version-badge">v1.0 · Fase 1</div>
+            </div>
+
+        </div>
+
+        <!-- ══ VISUAL SIDE ══ -->
+        <div class="visual-side">
+            <div class="vblob vblob-1"></div>
+            <div class="vblob vblob-2"></div>
+            <div class="v-grid"></div>
+
+            <!-- DENSO wordmark -->
+            <div class="denso-section">
+                <div class="denso-word">DENSO</div>
+                <div class="denso-sub">Almacén de Refacciones</div>
+            </div>
+
+            <div class="v-sep"></div>
+
+            <!-- Features list -->
+            <div class="features">
+                <div class="feat">
+                    <div class="feat-ico">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                    </div>
+                    <div class="feat-txt">
+                        <strong>Recepción de Material</strong>
+                        <span>Validación contra órdenes de compra</span>
+                    </div>
+                </div>
+                <div class="feat">
+                    <div class="feat-ico">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg>
+                    </div>
+                    <div class="feat-txt">
+                        <strong>Ubicación y Acomodo</strong>
+                        <span>Asignación por layout del almacén</span>
+                    </div>
+                </div>
+                <div class="feat">
+                    <div class="feat-ico">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                        </svg>
+                    </div>
+                    <div class="feat-txt">
+                        <strong>Trazabilidad RFID</strong>
+                        <span>Historial completo de movimientos</span>
+                    </div>
+                </div>
+                <div class="feat">
+                    <div class="feat-ico">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="8" y1="6" x2="21" y2="6" />
+                            <line x1="8" y1="12" x2="21" y2="12" />
+                            <line x1="8" y1="18" x2="21" y2="18" />
+                            <line x1="3" y1="6" x2="3.01" y2="6" />
+                            <line x1="3" y1="12" x2="3.01" y2="12" />
+                            <line x1="3" y1="18" x2="3.01" y2="18" />
+                        </svg>
+                    </div>
+                    <div class="feat-txt">
+                        <strong>Picking y Salidas</strong>
+                        <span>Órdenes de requisición confirmadas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Online -->
+            <div class="online-row">
+                <div class="online-dot"></div>
+                Sistema en línea · ID Stock v1.0
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

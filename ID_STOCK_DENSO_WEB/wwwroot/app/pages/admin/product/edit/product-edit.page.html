@@ -1,0 +1,177 @@
+﻿<div class="container-fluid">
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <div class="titlemb-30">
+                    <h2>Producto</h2>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="breadcrumb-wrapper mb-30">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a onclick="history.back()" style="cursor:pointer;">Productos</a></li>
+                            <li class="breadcrumb-item active" aria-current="page" style="cursor:pointer;">
+                                Vista de producto
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card-style settings-card-1 mb-30">
+                <div class="title
+                            mb-30
+                            d-flex
+                            justify-content-between
+                            align-items-center">
+
+                    <h6>Editar</h6>
+                    <button class="border-0 bg-transparent" ng-click="ChangueMode()">
+                        <i class="lni lni-lock"></i>
+                    </button>
+                </div>
+                <div class="warning-alert p-0 ">
+                    <div class="alert p-0">
+                        <p class=" text-center text-medium">Solo Lectura</p>
+                    </div>
+                </div>
+                <div class="profile-info">
+                    <div class="row justify-content-center align-items-center mb-2">
+                        <img class="col col-sm-11 col-md-11 col-lg-11" ng-src="{{model.Image}}"
+                             onerror="this.onerror=null;this.src='/images/imageNotFound.png'"
+                             title="Imagen actual del activo" width="90%" height="90%" style="object-fit:contain" alt="">
+                    </div>
+                    <div class="input-style-1">
+                        <label>Descripcion</label>
+                        <input type="text" ng-model="model.description" />
+                    </div>
+                    <div class="input-style-1">
+                        <label>Sku</label>
+                        <input type="text" ng-model="model.sku" />
+                    </div>
+                    <div class="row">
+                        <div class="col-xxl-6">
+                            <div class="input-style-1">
+                                <label>Codigo de Barras</label>
+                                <input type="text" ng-model="model.barcode" />
+                            </div>
+                        </div>
+                        <div class="col-xxl-6">
+                            <div class="input-style-1">
+                                <label>Codigo Adicional</label>
+                                <input type="text" ng-model="model.additionalCode" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xxl-3">
+                            <div class="input-style-1">
+                                <label>Alto (cm)</label>
+                                <input type="text"
+                                       ng-model="model.height" />
+                            </div>
+                        </div>
+                        <div class="col-xxl-3">
+                            <div class="input-style-1">
+                                <label>Ancho (cm)</label>
+                                <input type="text"
+                                       ng-model="model.width" />
+                            </div>
+                        </div>
+                        <div class="col-xxl-3">
+                            <div class="input-style-1">
+                                <label>Largo (cm)</label>
+                                <input type="text"
+                                       ng-model="model.length" />
+                            </div>
+                        </div>
+                        <div class="col-xxl-3">
+                            <div class="input-style-1">
+                                <label>Peso (kg)</label>
+                                <input type="text"
+                                       ng-model="model.weight" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xxl-6">
+                            <div class="input-style-1">
+                                <label>Cliente</label>
+                                <input type="text" ng-model="model.clientName" />
+                            </div>
+                        </div>
+                        <div class="col-xxl-6">
+                            <div class="input-style-1">
+                                <label>Proveedor</label>
+                                <input type="text" ng-model="model.clientName" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xxl-6">
+                            <div class="input-style-1">
+                                <label>Categoría</label>
+                                <input type="text" ng-model="model.categoryName" />
+                            </div>
+                        </div>
+                        <div class="col-xxl-6">
+                            <div class="input-style-1">
+                                <label>Subcategoria</label>
+                                <input type="text" ng-model="model.subCategoryName" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xxl-4">
+                            <div class="input-style-1">
+                                <label>Unidad de Medida</label>
+                                <input type="text" ng-model="model.unidadMedidaName" />
+                            </div>
+                        </div>
+                        <div class="col-xxl-4">
+                            <div class="input-style-1">
+                                <label>Tipo de frescura</label>
+                                <input type="text" ng-model="model.tipoFrescuraName" />
+                            </div>
+                        </div>
+                        <div class="col-xxl-4">
+                            <div class="input-style-1">
+                                <label>Tipo de Distribucion</label>
+                                <input type="text" ng-model="model.tipoDistribucionName" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xxl-4">
+                            <div class="input-style-1">
+                                <label>Codigo Unico</label>
+                                <input type="text" ng-model="model.uniqueCode" />
+                            </div>
+                        </div>
+                        <div class="col-xxl-4">
+                            <div class="input-style-1">
+                                <label>Surtido Flexible</label>
+                                <input type="text" ng-model="model.flexibleSusazpply" />
+                            </div>
+                        </div>
+                        <div class="col-xxl-4">
+                            <div class="input-style-1">
+                                <label>Maxima Cantidad</label>
+                                <input type="text" ng-model="model.maxPallet" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-12 ">
+                        <button class="main-btn primary-btn rounded-full btn-hover w-100" ng-click="Update()">
+                            Actualizar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,282 @@
+/* =========================================================
+   IDSTOCK HEADER & MENU STYLES
+   Aislado / Hover only
+   ========================================================= */
+
+/* =======================
+   HEADER
+   ======================= */
+
+.header_background {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-bottom: 3px solid #ffc107;
+}
+
+/* =======================
+   NAV LINKS
+   ======================= */
+
+.navbar-nav .nav-link {
+    position: relative;
+    color: #ffffff !important;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all .3s ease;
+}
+
+    .navbar-nav .nav-link:hover {
+        color: #ffc107 !important;
+        background-color: rgba(255,193,7,.1);
+    }
+
+    .navbar-nav .nav-link i {
+        transition: transform .3s ease;
+    }
+
+    .navbar-nav .nav-link:hover i {
+        transform: rotate(-8deg) scale(1.1);
+    }
+
+    /* underline */
+    .navbar-nav .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 2px;
+        background-color: #ffc107;
+        opacity: 0;
+        transition: all .3s ease;
+    }
+
+    .navbar-nav .nav-link:hover::after {
+        width: 80%;
+        opacity: 1;
+    }
+
+/* Operaciones */
+.operations-highlight {
+    background-color: rgba(255,193,7,.15);
+    border: 1px solid rgba(255,193,7,.3);
+}
+
+    .operations-highlight:hover {
+        background-color: rgba(255,193,7,.25) !important;
+    }
+
+/* =======================
+   MENÚ PRINCIPAL (HOVER)
+   ======================= */
+
+.idstock-nav-item {
+    position: relative;
+}
+
+    .idstock-nav-item > a {
+        padding-bottom: 12px; /* extiende el área hover hacia abajo */
+    }
+
+/* Dropdown nivel 1 oculto */
+.idstock-dropdown-menu {
+    position: absolute;
+    left: 0;
+    min-width: 240px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.15);
+    display: none;
+    z-index: 9999;
+    top: calc(100% - 2px);
+}
+
+/* Mostrar dropdown nivel 1 */
+.idstock-nav-item:hover > .idstock-dropdown-menu {
+    display: block;
+}
+
+/* Mega menu */
+.idstock-mega-menu {
+    min-width: 260px;
+}
+
+/* =======================
+   DROPDOWN ITEMS
+   ======================= */
+
+.idstock-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .65rem 1.25rem;
+    font-size: .9rem;
+    color: #2c3e50;
+    min-width: 220px; /* ancho mínimo */
+    text-decoration: none;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+    .idstock-dropdown-item i {
+        font-size: 1.1rem;
+        width: 32px;
+        color: #6c757d;
+        transition: all .2s ease;
+    }
+
+    .idstock-dropdown-item:hover {
+        background-color: #f8f9fa;
+        color: #ffc107;
+        padding-left: 1.5rem;
+    }
+
+        .idstock-dropdown-item:hover i {
+            color: #ffc107;
+            transform: translateX(3px);
+        }
+
+/* =======================
+   SUBMENÚ NIVEL 2 (HOVER)
+   ======================= */
+
+.idstock-dropdown-submenu {
+    position: relative;
+}
+
+    /* Flecha */
+    .idstock-dropdown-submenu > a::after {
+        content: "\ea4e";
+        font-family: 'LineIcons';
+        position: absolute;
+        right: 1rem;
+        font-size: .8rem;
+        transition: transform .2s ease;
+    }
+
+    .idstock-dropdown-submenu:hover > a::after {
+        transform: translateX(3px);
+    }
+
+/* Submenú oculto */
+.idstock-submenu {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    min-width: 220px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.15);
+    display: none;
+    z-index: 10000;
+}
+
+/* Mostrar submenú */
+.idstock-dropdown-submenu:hover > .idstock-submenu {
+    display: block;
+}
+
+/* =======================
+   ANIMACIONES
+   ======================= */
+
+@keyframes idstockFade {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes idstockSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* =======================
+   USER PROFILE
+   ======================= */
+
+.profile-info h6 {
+    font-size: .9rem;
+    font-weight: 600;
+}
+
+.profile-image img {
+    transition: transform .2s ease;
+}
+
+.dropdown:hover .profile-image img {
+    transform: scale(1.05);
+}
+
+.status-dot {
+    box-shadow: 0 0 0 3px rgba(40,167,69,.3);
+}
+
+/* =======================
+   PREMIUM BADGE
+   ======================= */
+
+.premium-badge img {
+    filter: drop-shadow(0 2px 8px rgba(255,193,7,.3));
+    transition: all .3s ease;
+}
+
+.premium-badge:hover img {
+    transform: scale(1.05);
+}
+
+/* =======================
+   ACCESSIBILITY
+   ======================= */
+
+a:focus,
+button:focus {
+    outline: 2px solid #ffc107;
+    outline-offset: 2px;
+}
+
+/* =======================
+   RESPONSIVE
+   ======================= */
+
+@media (max-width: 991px) {
+    .navbar-nav {
+        flex-direction: column !important;
+        gap: .5rem;
+    }
+
+    .idstock-submenu {
+        position: relative;
+        left: 0;
+        margin-left: 1rem;
+        box-shadow: none;
+    }
+
+    .idstock-dropdown-submenu:hover > .idstock-submenu {
+        animation: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar-logo img {
+        width: 150px !important;
+    }
+
+    .premium-badge,
+    .profile-info {
+        display: none !important;
+    }
+}

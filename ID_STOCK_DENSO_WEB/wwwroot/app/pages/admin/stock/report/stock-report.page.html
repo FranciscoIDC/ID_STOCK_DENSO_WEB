@@ -1,0 +1,81 @@
+﻿<div class="container-fluid">
+
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <div class="titlemb-30">
+                    <h2>Reporte de Existencias en Almacén</h2>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-lg-12">
+                <div class="card-style mb-30">
+                    <div class="row title mb-30 d-flex justify-content-between align-items-center">
+                        <div class="col-10">
+                            <h6 class="mb-10">Existencias</h6>
+                        </div>
+                        <div class="col-2">
+                            <div class="col-xxl-auto text-center">
+                                <div class="input-style-1 ">
+                                    <a class="main-btn success-btn rounded-full btn-hover w-100" style="text-decoration:none;" ng-click="GetExcel()">Descargar Excel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-wrapper table-responsive">
+                        <table class="table">
+                            <thead>
+                                <!-- table row -->
+                                <tr>
+                                    <th><h6>Folio</h6></th>
+                                    <th><h6>Codigo</h6></th>
+                                    <th><h6>SKU</h6></th>
+                                    <th><h6>Lote</h6></th>
+                                    <th><h6>Cantidad Actual</h6></th>
+                                    <th><h6>Tag RFID</h6></th>
+                                </tr>
+                                <!-- end table row -->
+                            </thead>
+                            <!-- Contenido de la tabla-->
+                            <tbody>
+                                <tr ng-if="ExistData()" ng-repeat="item in data">
+
+                                    <td class="min-width">
+                                        <p>{{DatumToString(item.Invoice)}}</p>
+                                    </td>
+                                    <td class="min-width">
+                                        <p>{{DatumToString(item.Barcode)}}</p>
+                                    </td>
+                                    <td class="min-width">
+                                        <p>{{DatumToString(item.Sku)}}</p>
+                                    </td>
+                                    <td class="min-width">
+                                        <p>{{DatumToString(item.Lote)}}</p>
+                                    </td>
+                                    <td class="min-width">
+                                        <p>{{DatumToString(item.CurrentQuantity)}}</p>
+                                    </td>
+                                    <td class="min-width">
+                                        <p>{{DatumToString(item.TagRFID)}}</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <!-- Fin del Contenido de la tabla-->
+                        </table>
+                        <!-- end table -->
+                    </div>
+                    <pagination-control show-items-per-page="true" paging-size="pagingSize" items-per-page="itemsPerPage" total-items="totalItems" display-items="displayItems" current-page="currentPage"></pagination-control>
+                </div>
+                <!-- end card -->
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>

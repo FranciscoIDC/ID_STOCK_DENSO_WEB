@@ -1,0 +1,964 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon"
+          href="~/images/favicon.svg"
+          type="image/x-icon" />
+    <title>Administrador Web | ID STOCK</title>
+
+
+    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+
+    <!-- ========== All CSS files linkup ========= -->
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    @* <link href="~/css/lineicons.css" rel="stylesheet" /> *@
+    <link href="~/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="~/css/fullcalendar.css" rel="stylesheet" />
+    <link href="~/css/fullcalendar.css" rel="stylesheet" />
+    <link href="~/css/main.css" rel="stylesheet" />
+    <link href="~/css/header-styles.css" rel="stylesheet" />
+    <link href="~/css/dashboard-styles.css" rel="stylesheet" />
+    <link href="~/css/catalog-modern-styles.css" rel="stylesheet" />
+    <link href="~/css/login-styles.css" rel="stylesheet" />
+
+    <script src="~/js/header-navigation.js"></script>
+
+    @*<link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/sign-in/">*@
+
+    @* CSS *@
+
+    <link href="~/lib/angular-material/angular-material.css" rel="stylesheet" />
+    <link href="~/lib/limonte-sweetalert2/sweetalert2.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/purchaseorder-styles.css" rel="stylesheet" />
+    @*<link href="~/css/signin.css" rel="stylesheet" />*@
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+    </style>
+
+    @* LIBRERIAS JS *@
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/limonte-sweetalert2/sweetalert2.js"></script>
+    <script src="~/js/crypto-js/crypto-js.js"></script>
+    <script src="~/lib/d3/d3.js"></script>
+    <script src="~/lib/angular.js/angular.min.js"></script>
+    <script src="~/lib/angular-animate/angular-animate.js"></script>
+    <script src="~/lib/angular-aria/angular-aria.js"></script>
+    <script src="~/lib/angular-messages/angular-messages.js"></script>
+    <script src="~/lib/angular-material/angular-material.js"></script>
+    <script src="~/lib/angular-ui-router/angular-ui-router.js"></script>
+    <script src="~/lib/angular-ui-router/stateEvents.js"></script>
+
+    @* APP JS *@
+
+    <script src="~/app/app.module.js"></script>
+    <script src="~/app/app.route.js"></script>
+
+    @* DIRECTIVAS *@
+    <script src="~/app/directives/menu/menu-control.component.js"></script>
+    <script src="~/app/directives/pagination-control/pagination-control.directive.js"></script>
+    @* APP MODEL JS *@
+
+    @* APP DTO JS *@
+    <script src="~/app/dtos/WarehouseDtoPost.js"></script>
+    <script src="~/app/dtos/WarehouseDtoPut.js"></script>
+
+    <script src="~/app/dtos/ZoneDtoPost.js"></script>
+    <script src="~/app/dtos/ZoneDtoPut.js"></script>
+
+    <script src="~/app/dtos/LocationDtoPost.js"></script>
+    <script src="~/app/dtos/LocationDtoPut.js"></script>
+
+
+    <script src="~/app/dtos/InventoryDtoGet.js"></script>
+    <script src="~/app/dtos/InventoryDetailDtoGet.js"></script>
+
+    <script src="~/app/dtos/PalletAssemblyDtoGet.js"></script>
+    <script src="~/app/dtos/PalletAssemblyDetailDtoGet.js"></script>
+
+    <script src="~/app/dtos/StaffDtoPost.js"></script>
+    
+    <script src="~/app/dtos/EmailDtoPost.js"></script>
+
+
+    @* APP SERVICE JS *@
+    <script src="~/app/shared/services/const.service.js"></script>
+    <script src="~/app/shared/services/error.service.js"></script>
+    <script src="~/app/shared/services/generalInfo.service.js"></script>
+
+
+    <script src="~/app/shared/services/auth.service.js"></script>
+    <script src="~/app/shared/services/url.service.js"></script>
+    <script src="~/app/pages/auth/login/login.service.js"></script>
+    <script src="~/app/shared/services/alert.service.js"></script>
+    <script src="~/app/pages/admin/home/home.service.js"></script>
+    <script src="~/app/shared/services/assetLocation.service.js"></script>
+
+    <script src="~/app/pages/admin/warehouse/warehouse.service.js"></script>
+    <script src="~/app/pages/admin/warehouse/list/warehouse-list.service.js"></script>
+    <script src="~/app/pages/admin/warehouse/add/warehouse-add.service.js"></script>
+    <script src="~/app/pages/admin/warehouse/edit/warehouse-edit.service.js"></script>
+
+    <script src="~/app/pages/admin/zone/zone.service.js"></script>
+    <script src="~/app/pages/admin/zone/list/zone-list.service.js"></script>
+    <script src="~/app/pages/admin/zone/add/zone-add.service.js"></script>
+    <script src="~/app/pages/admin/zone/edit/zone-edit.service.js"></script>
+
+    <script src="~/app/pages/admin/location/location.service.js"></script>
+    <script src="~/app/pages/admin/location/list/location-list.service.js"></script>
+    <script src="~/app/pages/admin/location/edit/location-edit.service.js"></script>
+    <script src="~/app/pages/admin/location/add/location-add.service.js"></script>
+
+    <script src="~/app/pages/admin/product/product.service.js"></script>
+    <script src="~/app/pages/admin/product/list/product-list.service.js"></script>
+    <script src="~/app/pages/admin/product/edit/product-edit.service.js"></script>
+    <script src="~/app/pages/admin/product/upload-image/upload-image.service.js"></script>
+
+    <script src="~/app/pages/admin/staff/staff.service.js"></script>
+    <script src="~/app/pages/admin/staff/list/staff-list.service.js"></script>
+    <script src="~/app/pages/admin/staff/edit/staff-edit.service.js"></script>
+    <script src="~/app/pages/admin/staff/add/staff-add.service.js"></script>
+
+    <script src="~/app/pages/admin/role/role.service.js"></script>
+    <script src="~/app/pages/admin/role/list/role-list.service.js"></script>
+    <script src="~/app/pages/admin/role/edit/role-edit.service.js"></script>
+    <script src="~/app/pages/admin/role/add/role-add.service.js"></script>
+
+    <script src="~/app/pages/admin/numpart_category/numpart_category.service.js"></script>
+    <script src="~/app/pages/admin/numpart_category/list/numpart_category-list.service.js"></script>
+    <script src="~/app/pages/admin/numpart_category/add/numpart_category-add.service.js"></script>
+    <script src="~/app/pages/admin/numpart_category/edit/numpart_category-edit.service.js"></script>
+
+    <script src="~/app/pages/admin/inbound/inbound.service.js"></script>
+    <script src="~/app/pages/admin/inbound/list/inbound-list.service.js"></script>
+    <script src="~/app/pages/admin/inbound/report/inbound-report.service.js"></script>
+
+    <script src="~/app/pages/admin/inventory/inventory.service.js"></script>
+    <script src="~/app/pages/admin/inventory/list/inventory-list.service.js"></script>
+    <script src="~/app/pages/admin/inventory/detail/inventory-detail.service.js"></script>
+
+    <script src="~/app/pages/admin/pallet_assembly/pallet_assembly.service.js"></script>
+    <script src="~/app/pages/admin/pallet_assembly/list/pallet_assembly-list.service.js"></script>
+    <script src="~/app/pages/admin/pallet_assembly/detail/pallet_assembly-detail.service.js"></script>
+
+    <script src="~/app/pages/admin/outbound/outbound.service.js"></script>
+    <script src="~/app/pages/admin/outbound/list/outbound-list.service.js"></script>
+    <script src="~/app/pages/admin/outbound/report/outbound-report.service.js"></script>
+
+    <script src="~/app/pages/admin/incident/incident.service.js"></script>
+    <script src="~/app/pages/admin/incident/report/incident-report.service.js"></script>
+    <script src="~/app/pages/admin/incident/email/email.service.js"></script>
+
+    <script src="~/app/pages/admin/stock/stock.service.js"></script>
+    <script src="~/app/pages/admin/stock/report/stock-report.service.js"></script>
+
+    <script src="~/app/pages/admin/size/size.service.js"></script>
+    <script src="~/app/pages/admin/size/list/size-list.service.js"></script>
+    <script src="~/app/pages/admin/size/edit/size-edit.service.js"></script>
+    <script src="~/app/pages/admin/size/add/size-add.service.js"></script>
+
+    <script src="~/app/pages/admin/variety/variety.service.js"></script>
+    <script src="~/app/pages/admin/variety/list/variety-list.service.js"></script>
+    <script src="~/app/pages/admin/variety/edit/variety-edit.service.js"></script>
+    <script src="~/app/pages/admin/variety/add/variety-add.service.js"></script>
+
+    <script src="~/app/pages/admin/destination/destination.service.js"></script>
+    <script src="~/app/pages/admin/destination/list/destination-list.service.js"></script>
+    <script src="~/app/pages/admin/destination/edit/destination-edit.service.js"></script>
+    <script src="~/app/pages/admin/destination/add/destination-add.service.js"></script>
+
+    <script src="~/app/pages/admin/box/box.service.js"></script>
+    <script src="~/app/pages/admin/box/list/box-list.service.js"></script>
+    <script src="~/app/pages/admin/box/edit/box-edit.service.js"></script>
+    <script src="~/app/pages/admin/box/add/box-add.service.js"></script>
+
+    <script src="~/app/pages/admin/driver/driver.service.js"></script>
+    <script src="~/app/pages/admin/driver/list/driver-list.service.js"></script>
+    <script src="~/app/pages/admin/driver/edit/driver-edit.service.js"></script>
+    <script src="~/app/pages/admin/driver/add/driver-add.service.js"></script>
+
+    <script src="~/app/pages/admin/carrier/carrier.service.js"></script>
+    <script src="~/app/pages/admin/carrier/list/carrier-list.service.js"></script>
+    <script src="~/app/pages/admin/carrier/edit/carrier-edit.service.js"></script>
+    <script src="~/app/pages/admin/carrier/add/carrier-add.service.js"></script>
+
+    <script src="~/app/pages/admin/farmer/farmer.service.js"></script>
+    <script src="~/app/pages/admin/farmer/list/farmer-list.service.js"></script>
+    <script src="~/app/pages/admin/farmer/edit/farmer-edit.service.js"></script>
+    <script src="~/app/pages/admin/farmer/add/farmer-add.service.js"></script>
+
+    <script src="~/app/pages/admin/truck/truck.service.js"></script>
+    <script src="~/app/pages/admin/truck/list/truck-list.service.js"></script>
+    <script src="~/app/pages/admin/truck/edit/truck-edit.service.js"></script>
+    <script src="~/app/pages/admin/truck/add/truck-add.service.js"></script>
+
+    <script src="~/app/pages/admin/cold_box/cold_box.service.js"></script>
+    <script src="~/app/pages/admin/cold_box/list/cold_box-list.service.js"></script>
+    <script src="~/app/pages/admin/cold_box/edit/cold_box-edit.service.js"></script>
+    <script src="~/app/pages/admin/cold_box/add/cold_box-add.service.js"></script>
+
+    <script src="~/app/pages/admin/field_log/field_log.service.js"></script>
+    <script src="~/app/pages/admin/field_log/list/field_log-list.service.js"></script>
+    <script src="~/app/pages/admin/field_log/edit/field_log-edit.service.js"></script>
+    <script src="~/app/pages/admin/field_log/add/field_log-add.service.js"></script>
+
+    <script src="~/app/pages/admin/gate_registration/gate_registration.service.js"></script>
+    <script src="~/app/pages/admin/gate_registration/list/gate_registration-list.service.js"></script>
+
+    <script src="~/app/pages/admin/cold_room/cold_room.service.js"></script>
+    <script src="~/app/pages/admin/cold_room/list/cold_room-list.service.js"></script>
+    <script src="~/app/pages/admin/cold_room/edit/cold_room-edit.service.js"></script>
+    <script src="~/app/pages/admin/cold_room/add/cold_room-add.service.js"></script>
+
+    <script src="~/app/pages/admin/ramp/ramp.service.js"></script>
+    <script src="~/app/pages/admin/ramp/list/ramp-list.service.js"></script>
+    <script src="~/app/pages/admin/ramp/edit/ramp-edit.service.js"></script>
+    <script src="~/app/pages/admin/ramp/add/ramp-add.service.js"></script>
+
+    <script src="~/app/pages/admin/packing/packing.service.js"></script>
+    <script src="~/app/pages/admin/packing/list/packing-list.service.js"></script>
+    <script src="~/app/pages/admin/packing/edit/packing-edit.service.js"></script>
+    <script src="~/app/pages/admin/packing/add/packing-add.service.js"></script>
+
+    <script src="~/app/pages/admin/rejection/rejection.service.js"></script>
+    <script src="~/app/pages/admin/rejection/list/rejection-list.service.js"></script>
+    <script src="~/app/pages/admin/rejection/edit/rejection-edit.service.js"></script>
+    <script src="~/app/pages/admin/rejection/add/rejection-add.service.js"></script>
+
+    <script src="~/app/pages/admin/requisitionorder/requisitionorder.service.js"></script>
+    <script src="~/app/pages/admin/requisitionorder/list/requisitionorder-list.service.js"></script>
+
+    <script src="~/app/pages/admin/purchaseorder/purchaseorder.service.js"></script>
+    <script src="~/app/pages/admin/purchaseorder/list/purchaseorder-list.service.js"></script>
+
+    @* APP CONTROLLER JS *@
+    <script src="~/app/pages/admin/home/home.controller.js"></script>
+    <script src="~/app/pages/admin/dashboard/dashboard.controller.js"></script>
+
+    <script src="~/app/pages/admin/warehouse/warehouse.controller.js"></script>
+    <script src="~/app/pages/admin/warehouse/list/warehouse-list.controller.js"></script>
+    <script src="~/app/pages/admin/warehouse/add/warehouse-add.controller.js"></script>
+    <script src="~/app/pages/admin/warehouse/edit/warehouse-edit.controller.js"></script>
+
+    <script src="~/app/pages/admin/zone/zone.controller.js"></script>
+    <script src="~/app/pages/admin/zone/list/zone-list.controller.js"></script>
+    <script src="~/app/pages/admin/zone/add/zone-add.controller.js"></script>
+    <script src="~/app/pages/admin/zone/edit/zone-edit.controller.js"></script>
+
+    <script src="~/app/pages/admin/location/location.controller.js"></script>
+    <script src="~/app/pages/admin/location/list/location-list.controller.js"></script>
+    <script src="~/app/pages/admin/location/edit/location-edit.controller.js"></script>
+    <script src="~/app/pages/admin/location/add/location-add.controller.js"></script>
+
+    <script src="~/app/pages/admin/product/product.controller.js"></script>
+    <script src="~/app/pages/admin/product/list/product-list.controller.js"></script>
+    <script src="~/app/pages/admin/product/edit/product-edit.controller.js"></script>
+    <script src="~/app/pages/admin/product/upload-image/upload-image.controller.js"></script>
+
+    <script src="~/app/pages/admin/staff/staff.controller.js"></script>
+    <script src="~/app/pages/admin/staff/list/staff-list.controller.js"></script>
+    <script src="~/app/pages/admin/staff/edit/staff-edit.controller.js"></script>
+    <script src="~/app/pages/admin/staff/add/staff-add.controller.js"></script>
+
+    <script src="~/app/pages/admin/role/role.controller.js"></script>
+    <script src="~/app/pages/admin/role/list/role-list.controller.js"></script>
+    <script src="~/app/pages/admin/role/edit/role-edit.controller.js"></script>
+    <script src="~/app/pages/admin/role/add/role-add.controller.js"></script>
+
+    <script src="~/app/pages/admin/numpart_category/numpart_category.controller.js"></script>
+    <script src="~/app/pages/admin/numpart_category/list/numpart_category-list.controller.js"></script>
+    <script src="~/app/pages/admin/numpart_category/add/numpart_category-add.controller.js"></script>
+    <script src="~/app/pages/admin/numpart_category/edit/numpart_category-edit.controller.js"></script>
+
+    <script src="~/app/pages/admin/inbound/inbound.controller.js"></script>
+    <script src="~/app/pages/admin/inbound/list/inbound-list.controller.js"></script>
+    <script src="~/app/pages/admin/inbound/report/inbound-report.controller.js"></script>
+
+    <script src="~/app/pages/admin/inventory/inventory.controller.js"></script>
+    <script src="~/app/pages/admin/inventory/list/inventory-list.controller.js"></script>
+    <script src="~/app/pages/admin/inventory/detail/inventory-detail.controller.js"></script>
+
+    <script src="~/app/pages/admin/pallet_assembly/pallet_assembly.controller.js"></script>
+    <script src="~/app/pages/admin/pallet_assembly/list/pallet_assembly-list.controller.js"></script>
+    <script src="~/app/pages/admin/pallet_assembly/detail/pallet_assembly-detail.controller.js"></script>
+
+    <script src="~/app/pages/admin/outbound/outbound.controller.js"></script>
+    <script src="~/app/pages/admin/outbound/list/outbound-list.controller.js"></script>
+    <script src="~/app/pages/admin/outbound/report/outbound-report.controller.js"></script>
+
+    <script src="~/app/pages/admin/incident/incident.controller.js"></script>
+    <script src="~/app/pages/admin/incident/report/incident-report.controller.js"></script>
+    <script src="~/app/pages/admin/incident/email/email.controller.js"></script>
+
+    <script src="~/app/pages/admin/stock/stock.controller.js"></script>
+    <script src="~/app/pages/admin/stock/report/stock-report.controller.js"></script>
+
+    <script src="~/app/pages/admin/size/size.controller.js"></script>
+    <script src="~/app/pages/admin/size/list/size-list.controller.js"></script>
+    <script src="~/app/pages/admin/size/edit/size-edit.controller.js"></script>
+    <script src="~/app/pages/admin/size/add/size-add.controller.js"></script>
+
+    <script src="~/app/pages/admin/variety/variety.controller.js"></script>
+    <script src="~/app/pages/admin/variety/list/variety-list.controller.js"></script>
+    <script src="~/app/pages/admin/variety/edit/variety-edit.controller.js"></script>
+    <script src="~/app/pages/admin/variety/add/variety-add.controller.js"></script>
+
+    <script src="~/app/pages/admin/destination/destination.controller.js"></script>
+    <script src="~/app/pages/admin/destination/list/destination-list.controller.js"></script>
+    <script src="~/app/pages/admin/destination/edit/destination-edit.controller.js"></script>
+    <script src="~/app/pages/admin/destination/add/destination-add.controller.js"></script>
+
+    <script src="~/app/pages/admin/box/box.controller.js"></script>
+    <script src="~/app/pages/admin/box/list/box-list.controller.js"></script>
+    <script src="~/app/pages/admin/box/edit/box-edit.controller.js"></script>
+    <script src="~/app/pages/admin/box/add/box-add.controller.js"></script>
+
+    <script src="~/app/pages/admin/driver/driver.controller.js"></script>
+    <script src="~/app/pages/admin/driver/list/driver-list.controller.js"></script>
+    <script src="~/app/pages/admin/driver/edit/driver-edit.controller.js"></script>
+    <script src="~/app/pages/admin/driver/add/driver-add.controller.js"></script>
+
+    <script src="~/app/pages/admin/carrier/carrier.controller.js"></script>
+    <script src="~/app/pages/admin/carrier/list/carrier-list.controller.js"></script>
+    <script src="~/app/pages/admin/carrier/edit/carrier-edit.controller.js"></script>
+    <script src="~/app/pages/admin/carrier/add/carrier-add.controller.js"></script>
+
+    <script src="~/app/pages/admin/farmer/farmer.controller.js"></script>
+    <script src="~/app/pages/admin/farmer/list/farmer-list.controller.js"></script>
+    <script src="~/app/pages/admin/farmer/edit/farmer-edit.controller.js"></script>
+    <script src="~/app/pages/admin/farmer/add/farmer-add.controller.js"></script>
+
+    <script src="~/app/pages/admin/truck/truck.controller.js"></script>
+    <script src="~/app/pages/admin/truck/list/truck-list.controller.js"></script>
+    <script src="~/app/pages/admin/truck/edit/truck-edit.controller.js"></script>
+    <script src="~/app/pages/admin/truck/add/truck-add.controller.js"></script>
+
+    <script src="~/app/pages/admin/cold_box/cold_box.controller.js"></script>
+    <script src="~/app/pages/admin/cold_box/list/cold_box-list.controller.js"></script>
+    <script src="~/app/pages/admin/cold_box/edit/cold_box-edit.controller.js"></script>
+    <script src="~/app/pages/admin/cold_box/add/cold_box-add.controller.js"></script>
+
+    <script src="~/app/pages/admin/field_log/field_log.controller.js"></script>
+    <script src="~/app/pages/admin/field_log/list/field_log-list.controller.js"></script>
+    <script src="~/app/pages/admin/field_log/edit/field_log-edit.controller.js"></script>
+    <script src="~/app/pages/admin/field_log/add/field_log-add.controller.js"></script>
+
+    <script src="~/app/pages/admin/gate_registration/gate_registration.controller.js"></script>
+    <script src="~/app/pages/admin/gate_registration/list/gate_registration-list.controller.js"></script>
+
+    <script src="~/app/pages/admin/cold_room/cold_room.controller.js"></script>
+    <script src="~/app/pages/admin/cold_room/list/cold_room-list.controller.js"></script>
+    <script src="~/app/pages/admin/cold_room/edit/cold_room-edit.controller.js"></script>
+    <script src="~/app/pages/admin/cold_room/add/cold_room-add.controller.js"></script>
+
+    <script src="~/app/pages/admin/ramp/ramp.controller.js"></script>
+    <script src="~/app/pages/admin/ramp/list/ramp-list.controller.js"></script>
+    <script src="~/app/pages/admin/ramp/edit/ramp-edit.controller.js"></script>
+    <script src="~/app/pages/admin/ramp/add/ramp-add.controller.js"></script>
+
+    <script src="~/app/pages/admin/packing/packing.controller.js"></script>
+    <script src="~/app/pages/admin/packing/list/packing-list.controller.js"></script>
+    <script src="~/app/pages/admin/packing/edit/packing-edit.controller.js"></script>
+    <script src="~/app/pages/admin/packing/add/packing-add.controller.js"></script>
+
+    <script src="~/app/pages/admin/rejection/rejection.controller.js"></script>
+    <script src="~/app/pages/admin/rejection/list/rejection-list.controller.js"></script>
+    <script src="~/app/pages/admin/rejection/edit/rejection-edit.controller.js"></script>
+    <script src="~/app/pages/admin/rejection/add/rejection-add.controller.js"></script>
+
+    <script src="~/app/pages/admin/requisitionorder/requisitionorder.controller.js"></script>
+    <script src="~/app/pages/admin/requisitionorder/list/requisitionorder-list.controller.js"></script>
+
+    <script src="~/app/pages/admin/purchaseorder/purchaseorder.controller.js"></script>
+    <script src="~/app/pages/admin/purchaseorder/list/purchaseorder-list.controller.js"></script>
+
+   @*  <script src="~/app/pages/admin/stock_bystore/stock_bystore.controller.js"></script>
+    <script src="~/app/pages/admin/stock_bystore/list/stock_bystore-list.controller.js"></script> *@
+
+</head>
+<body ng-app="app" ng-controller="dashboardController">
+   
+    <!-- ======== main-wrapper start =========== -->
+    <main class="main-wrapper" style="margin-left:0">
+        
+        <!-- ========== header start ========== -->
+        <menu-control></menu-control>
+        <!-- ========== header end ========== -->
+
+        <!-- ========== section start ========== -->
+        <section class="section">
+            @RenderBody()
+
+
+            <!-- end container -->
+        </section>
+        <!-- ========== section end ========== -->
+        <!-- ========== footer start =========== -->
+        <footer class="footer bg-footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12 order-last order-md-first">
+                        <div class="copyright text-end text-md-end">
+                            <p class="text-sm" style="font-weight: bold;">
+                                Powered by  
+                                <img 
+                                     src="~/images/logo_idconsultores.png" 
+                                     alt="Id Consultores"
+                                     height="50"
+                                     href="https://www.id-consultores.com/"/>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- end col-->
+                    @*<div class="col-md-6">
+                                <div class="
+                          terms
+                          d-flex
+                          justify-content-center justify-content-md-end
+                        ">
+                                    <a href="#0" class="text-sm">Term & Conditions</a>
+                                    <a href="#0" class="text-sm ml-15">Privacy & Policy</a>
+                                </div>
+                            </div>*@
+                </div>
+                <!-- end row -->
+            </div>
+            <!-- end container -->
+        </footer>
+        <!-- ========== footer end =========== -->
+    </main>
+    <!-- ======== main-wrapper end =========== -->
+    <!-- ========= All Javascript files linkup ======== -->
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/Chart.min.js"></script>
+    <script src="~/js/dynamic-pie-chart.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/fullcalendar.js"></script>
+    <script src="~/js/jvectormap.min.js"></script>
+    <script src="~/js/world-merc.js"></script>
+    <script src="~/js/polyfill.js"></script>
+    <script src="~/js/main.js"></script>
+
+    @*<script src="assets/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/Chart.min.js"></script>
+        <script src="assets/js/dynamic-pie-chart.js"></script>
+        <script src="assets/js/moment.min.js"></script>
+        <script src="assets/js/fullcalendar.js"></script>
+        <script src="assets/js/jvectormap.min.js"></script>
+        <script src="assets/js/world-merc.js"></script>
+        <script src="assets/js/polyfill.js"></script>
+        <script src="assets/js/main.js"></script>*@
+
+    <script>
+        // ======== jvectormap activation
+        var markers = [
+            { name: "Egypt", coords: [26.8206, 30.8025] },
+            { name: "Russia", coords: [61.524, 105.3188] },
+            { name: "Canada", coords: [56.1304, -106.3468] },
+            { name: "Greenland", coords: [71.7069, -42.6043] },
+            { name: "Brazil", coords: [-14.235, -51.9253] },
+        ];
+
+        var jvm = new jsVectorMap({
+            map: "world_merc",
+            selector: "#map",
+            zoomButtons: true,
+
+            regionStyle: {
+                initial: {
+                    fill: "#d1d5db",
+                },
+            },
+
+            labels: {
+                markers: {
+                    render: (marker) => marker.name,
+                },
+            },
+
+            markersSelectable: true,
+            selectedMarkers: markers.map((marker, index) => {
+                var name = marker.name;
+
+                if (name === "Russia" || name === "Brazil") {
+                    return index;
+                }
+            }),
+            markers: markers,
+            markerStyle: {
+                initial: { fill: "#4A6CF7" },
+                selected: { fill: "#ff5050" },
+            },
+            markerLabelStyle: {
+                initial: {
+                    fontWeight: 400,
+                    fontSize: 14,
+                },
+            },
+        });
+        // ====== calendar activation
+        document.addEventListener("DOMContentLoaded", function () {
+            var calendarMiniEl = document.getElementById("calendar-mini");
+            var calendarMini = new FullCalendar.Calendar(calendarMiniEl, {
+                initialView: "dayGridMonth",
+                headerToolbar: {
+                    end: "today prev,next",
+                },
+            });
+            calendarMini.render();
+        });
+
+                // =========== chart one start
+                //const ctx1 = document.getElementById("Chart1").getContext("2d");
+                //const chart1 = new Chart(ctx1, {
+                //    // The type of chart we want to create
+                //    type: "line", // also try bar or other graph types
+
+                //    // The data for our dataset
+                //    data: {
+                //        labels: [
+                //            "Jan",
+                //            "Fab",
+                //            "Mar",
+                //            "Apr",
+                //            "May",
+                //            "Jun",
+                //            "Jul",
+                //            "Aug",
+                //            "Sep",
+                //            "Oct",
+                //            "Nov",
+                //            "Dec",
+                //        ],
+                //        // Information about the dataset
+                //        datasets: [
+                //            {
+                //                label: "",
+                //                backgroundColor: "transparent",
+                //                borderColor: "#4A6CF7",
+                //                data: [
+                //                    600, 800, 750, 880, 940, 880, 900, 770, 920, 890, 976, 1100,
+                //                ],
+                //                pointBackgroundColor: "transparent",
+                //                pointHoverBackgroundColor: "#4A6CF7",
+                //                pointBorderColor: "transparent",
+                //                pointHoverBorderColor: "#fff",
+                //                pointHoverBorderWidth: 5,
+                //                pointBorderWidth: 5,
+                //                pointRadius: 8,
+                //                pointHoverRadius: 8,
+                //            },
+                //        ],
+                //    },
+
+                //    // Configuration options
+                //    defaultFontFamily: "Inter",
+                //    options: {
+                //        tooltips: {
+                //            callbacks: {
+                //                labelColor: function (tooltipItem, chart) {
+                //                    return {
+                //                        backgroundColor: "#ffffff",
+                //                    };
+                //                },
+                //            },
+                //            intersect: false,
+                //            backgroundColor: "#f9f9f9",
+                //            titleFontFamily: "Inter",
+                //            titleFontColor: "#8F92A1",
+                //            titleFontColor: "#8F92A1",
+                //            titleFontSize: 12,
+                //            bodyFontFamily: "Inter",
+                //            bodyFontColor: "#171717",
+                //            bodyFontStyle: "bold",
+                //            bodyFontSize: 16,
+                //            multiKeyBackground: "transparent",
+                //            displayColors: false,
+                //            xPadding: 30,
+                //            yPadding: 10,
+                //            bodyAlign: "center",
+                //            titleAlign: "center",
+                //        },
+
+                //        title: {
+                //            display: false,
+                //        },
+                //        legend: {
+                //            display: false,
+                //        },
+
+                //        scales: {
+                //            yAxes: [
+                //                {
+                //                    gridLines: {
+                //                        display: false,
+                //                        drawTicks: false,
+                //                        drawBorder: false,
+                //                    },
+                //                    ticks: {
+                //                        padding: 35,
+                //                        max: 1200,
+                //                        min: 500,
+                //                    },
+                //                },
+                //            ],
+                //            xAxes: [
+                //                {
+                //                    gridLines: {
+                //                        drawBorder: false,
+                //                        color: "rgba(143, 146, 161, .1)",
+                //                        zeroLineColor: "rgba(143, 146, 161, .1)",
+                //                    },
+                //                    ticks: {
+                //                        padding: 20,
+                //                    },
+                //                },
+                //            ],
+                //        },
+                //    },
+                //});
+
+                // =========== chart one end
+
+                // =========== chart two start
+                //const ctx2 = document.getElementById("Chart2").getContext("2d");
+                //const chart2 = new Chart(ctx2, {
+                //    // The type of chart we want to create
+                //    type: "bar", // also try bar or other graph types
+                //    // The data for our dataset
+                //    data: {
+                //        labels: [
+                //            "Jan",
+                //            "Fab",
+                //            "Mar",
+                //            "Apr",
+                //            "May",
+                //            "Jun",
+                //            "Jul",
+                //            "Aug",
+                //            "Sep",
+                //            "Oct",
+                //            "Nov",
+                //            "Dec",
+                //        ],
+                //        // Information about the dataset
+                //        datasets: [
+                //            {
+                //                label: "",
+                //                backgroundColor: "#4A6CF7",
+                //                barThickness: 6,
+                //                maxBarThickness: 8,
+                //                data: [
+                //                    600, 700, 1000, 700, 650, 800, 690, 740, 720, 1120, 876, 900,
+                //                ],
+                //            },
+                //        ],
+                //    },
+                //    // Configuration options
+                //    options: {
+                //        borderColor: "#F3F6F8",
+                //        borderWidth: 15,
+                //        backgroundColor: "#F3F6F8",
+                //        tooltips: {
+                //            callbacks: {
+                //                labelColor: function (tooltipItem, chart) {
+                //                    return {
+                //                        backgroundColor: "rgba(104, 110, 255, .0)",
+                //                    };
+                //                },
+                //            },
+                //            backgroundColor: "#F3F6F8",
+                //            titleFontColor: "#8F92A1",
+                //            titleFontSize: 12,
+                //            bodyFontColor: "#171717",
+                //            bodyFontStyle: "bold",
+                //            bodyFontSize: 16,
+                //            multiKeyBackground: "transparent",
+                //            displayColors: false,
+                //            xPadding: 30,
+                //            yPadding: 10,
+                //            bodyAlign: "center",
+                //            titleAlign: "center",
+                //        },
+
+                //        title: {
+                //            display: false,
+                //        },
+                //        legend: {
+                //            display: false,
+                //        },
+
+                //        scales: {
+                //            yAxes: [
+                //                {
+                //                    gridLines: {
+                //                        display: false,
+                //                        drawTicks: false,
+                //                        drawBorder: false,
+                //                    },
+                //                    ticks: {
+                //                        padding: 35,
+                //                        max: 1200,
+                //                        min: 0,
+                //                    },
+                //                },
+                //            ],
+                //            xAxes: [
+                //                {
+                //                    gridLines: {
+                //                        display: false,
+                //                        drawBorder: false,
+                //                        color: "rgba(143, 146, 161, .1)",
+                //                        zeroLineColor: "rgba(143, 146, 161, .1)",
+                //                    },
+                //                    ticks: {
+                //                        padding: 20,
+                //                    },
+                //                },
+                //            ],
+                //        },
+                //    },
+                //});
+                //// =========== chart two end
+
+                //// =========== chart three start
+                //const ctx3 = document.getElementById("Chart3").getContext("2d");
+                //const chart3 = new Chart(ctx3, {
+                //    // The type of chart we want to create
+                //    type: "line", // also try bar or other graph types
+
+                //    // The data for our dataset
+                //    data: {
+                //        labels: [
+                //            "Jan",
+                //            "Fab",
+                //            "Mar",
+                //            "Apr",
+                //            "May",
+                //            "Jun",
+                //            "Jul",
+                //            "Aug",
+                //            "Sep",
+                //            "Oct",
+                //            "Nov",
+                //            "Dec",
+                //        ],
+                //        // Information about the dataset
+                //        datasets: [
+                //            {
+                //                label: "Revenue",
+                //                backgroundColor: "transparent",
+                //                borderColor: "#4a6cf7",
+                //                data: [80, 120, 110, 100, 130, 150, 115, 145, 140, 130, 160, 210],
+                //                pointBackgroundColor: "transparent",
+                //                pointHoverBackgroundColor: "#4a6cf7",
+                //                pointBorderColor: "transparent",
+                //                pointHoverBorderColor: "#fff",
+                //                pointHoverBorderWidth: 3,
+                //                pointBorderWidth: 5,
+                //                pointRadius: 5,
+                //                pointHoverRadius: 8,
+                //            },
+                //            {
+                //                label: "Profit",
+                //                backgroundColor: "transparent",
+                //                borderColor: "#9b51e0",
+                //                data: [
+                //                    120, 160, 150, 140, 165, 210, 135, 155, 170, 140, 130, 200,
+                //                ],
+                //                pointBackgroundColor: "transparent",
+                //                pointHoverBackgroundColor: "#9b51e0",
+                //                pointBorderColor: "transparent",
+                //                pointHoverBorderColor: "#fff",
+                //                pointHoverBorderWidth: 3,
+                //                pointBorderWidth: 5,
+                //                pointRadius: 5,
+                //                pointHoverRadius: 8,
+                //            },
+                //            {
+                //                label: "Order",
+                //                backgroundColor: "transparent",
+                //                borderColor: "#f2994a",
+                //                data: [180, 110, 140, 135, 100, 90, 145, 115, 100, 110, 115, 150],
+                //                pointBackgroundColor: "transparent",
+                //                pointHoverBackgroundColor: "#f2994a",
+                //                pointBorderColor: "transparent",
+                //                pointHoverBorderColor: "#fff",
+                //                pointHoverBorderWidth: 3,
+                //                pointBorderWidth: 5,
+                //                pointRadius: 5,
+                //                pointHoverRadius: 8,
+                //            },
+                //        ],
+                //    },
+
+                //    // Configuration options
+                //    options: {
+                //        tooltips: {
+                //            intersect: false,
+                //            backgroundColor: "#fbfbfb",
+                //            titleFontColor: "#8F92A1",
+                //            titleFontSize: 16,
+                //            titleFontFamily: "Inter",
+                //            titleFontStyle: "400",
+                //            bodyFontFamily: "Inter",
+                //            bodyFontColor: "#171717",
+                //            bodyFontSize: 16,
+                //            multiKeyBackground: "transparent",
+                //            displayColors: false,
+                //            xPadding: 30,
+                //            yPadding: 15,
+                //            borderColor: "rgba(143, 146, 161, .1)",
+                //            borderWidth: 1,
+                //            title: false,
+                //        },
+
+                //        title: {
+                //            display: false,
+                //        },
+
+                //        layout: {
+                //            padding: {
+                //                top: 0,
+                //            },
+                //        },
+
+                //        legend: false,
+
+                //        scales: {
+                //            yAxes: [
+                //                {
+                //                    gridLines: {
+                //                        display: false,
+                //                        drawTicks: false,
+                //                        drawBorder: false,
+                //                    },
+                //                    ticks: {
+                //                        padding: 35,
+                //                        max: 300,
+                //                        min: 50,
+                //                    },
+                //                },
+                //            ],
+                //            xAxes: [
+                //                {
+                //                    gridLines: {
+                //                        drawBorder: false,
+                //                        color: "rgba(143, 146, 161, .1)",
+                //                        zeroLineColor: "rgba(143, 146, 161, .1)",
+                //                    },
+                //                    ticks: {
+                //                        padding: 20,
+                //                    },
+                //                },
+                //            ],
+                //        },
+                //    },
+                //});
+                //// =========== chart three end
+
+                //// ================== chart four start
+                //const ctx4 = document.getElementById("Chart4").getContext("2d");
+                //const chart4 = new Chart(ctx4, {
+                //    // The type of chart we want to create
+                //    type: "bar", // also try bar or other graph types
+                //    // The data for our dataset
+                //    data: {
+                //        labels: ["Jan", "Fab", "Mar", "Apr", "May", "Jun"],
+                //        // Information about the dataset
+                //        datasets: [
+                //            {
+                //                label: "",
+                //                backgroundColor: "#4A6CF7",
+                //                barThickness: "flex",
+                //                maxBarThickness: 8,
+                //                data: [600, 700, 1000, 700, 650, 800],
+                //            },
+                //            {
+                //                label: "",
+                //                backgroundColor: "#d50100",
+                //                barThickness: "flex",
+                //                maxBarThickness: 8,
+                //                data: [690, 740, 720, 1120, 876, 900],
+                //            },
+                //        ],
+                //    },
+                //    // Configuration options
+                //    options: {
+                //        borderColor: "#F3F6F8",
+                //        borderWidth: 15,
+                //        backgroundColor: "#F3F6F8",
+                //        tooltips: {
+                //            callbacks: {
+                //                labelColor: function (tooltipItem, chart) {
+                //                    return {
+                //                        backgroundColor: "rgba(104, 110, 255, .0)",
+                //                    };
+                //                },
+                //            },
+                //            backgroundColor: "#F3F6F8",
+                //            titleFontColor: "#8F92A1",
+                //            titleFontSize: 12,
+                //            bodyFontColor: "#171717",
+                //            bodyFontStyle: "bold",
+                //            bodyFontSize: 16,
+                //            multiKeyBackground: "transparent",
+                //            displayColors: false,
+                //            xPadding: 30,
+                //            yPadding: 10,
+                //            bodyAlign: "center",
+                //            titleAlign: "center",
+                //        },
+
+                //        title: {
+                //            display: false,
+                //        },
+                //        legend: {
+                //            display: false,
+                //        },
+
+                //        scales: {
+                //            yAxes: [
+                //                {
+                //                    gridLines: {
+                //                        display: false,
+                //                        drawTicks: false,
+                //                        drawBorder: false,
+                //                    },
+                //                    ticks: {
+                //                        padding: 35,
+                //                        max: 1200,
+                //                        min: 0,
+                //                    },
+                //                },
+                //            ],
+                //            xAxes: [
+                //                {
+                //                    gridLines: {
+                //                        display: false,
+                //                        drawBorder: false,
+                //                        color: "rgba(143, 146, 161, .1)",
+                //                        zeroLineColor: "rgba(143, 146, 161, .1)",
+                //                    },
+                //                    ticks: {
+                //                        padding: 20,
+                //                    },
+                //                },
+                //            ],
+                //        },
+                //    },
+                //});
+                                                  // =========== chart four end
+    </script>
+</body>
+</html>
+

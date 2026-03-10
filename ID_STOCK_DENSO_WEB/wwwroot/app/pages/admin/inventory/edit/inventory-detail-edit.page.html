@@ -1,0 +1,76 @@
+﻿<div class="container-fluid">
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <div class="titlemb-30">
+                    <h2>Agregar Comentario</h2>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="breadcrumb-wrapper mb-30">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a onclick="history.back()" style="cursor:pointer;">Detalle del Inventario</a></li>
+                            <li class="breadcrumb-item active" aria-current="page" style="cursor:pointer;">
+                                Agregar Comentario
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card-style settings-card-1 mb-30">
+                <div class="
+                    title
+                    mb-30
+                    d-flex
+                    justify-content-between
+                    align-items-center
+                  ">
+
+                    <h6>Editar</h6>
+                    <button class="border-0 bg-transparent" ng-click="ChangueMode()">
+                        <i class="lni lni-pencil-alt"></i>
+                    </button>
+                </div>
+                <div class="warning-alert p-0 " ng-if="!editMode">
+                    <div class="alert p-0">
+                        <p class=" text-center text-medium">Solo Lectura</p>
+                    </div>
+                </div>
+
+                <div class="profile-info">
+                    <div class="input-style-1">
+                        <label>Nombre<span class="required">*</span></label>
+                        <input type="text" ng-model="model.AssetName" ng-disabled="true" />
+                    </div>
+                    <div class="input-style-1">
+                        <label>Localización<span class="required">*</span></label>
+                        <input type="text" ng-model="model.AssetLocation" ng-disabled="true" />
+                    </div>
+                    <div class="input-style-1">
+                        <label>Estatus<span class="required">*</span></label>
+                        <input type="text" ng-model="model.Status" ng-disabled="true" />
+                    </div>
+                    <div class="input-style-1">
+                        <label>Fecha<span class="required">*</span></label>
+                        <input type="text" ng-model="model.Date" ng-disabled="true" />
+                    </div>
+                    <div class="input-style-1">
+                        <label>Comentario<span class="required">*</span></label>
+                        <input type="text" ng-model="model.Comment" ng-disabled="true" />
+                    </div>
+
+                    <div class="col-12 col-sm-12" ng-if="editMode">
+                        <button class="main-btn primary-btn rounded-full btn-hover w-100" ng-disabled="true" ng-click="Update()">
+                            Actualizar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

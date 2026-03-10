@@ -1,0 +1,224 @@
+﻿<div class="container-fluid dashboard-modern">
+    <br>
+
+    <!-- ========== Accesos Rápidos ========== -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="quick-actions-card">
+                <div class="card-header-custom">
+                    <h5 class="mb-0">
+                        <i class="lni lni-bolt me-2"></i>Accesos Rápidos
+                    </h5>
+                </div>
+                <div class="quick-actions-grid">
+
+                    <a ui-sref="purchase_order.list" class="quick-action-item">
+                        <div class="action-icon bg-gradient-primary">
+                            <i class="lni lni-shopping-basket"></i>
+                        </div>
+                        <div class="action-content">
+                            <h6>Órdenes de Compra</h6>
+                            <small>Abiertas</small>
+                        </div>
+                    </a>
+
+                    <a ui-sref="requisition_order.list" class="quick-action-item">
+                        <div class="action-icon bg-gradient-success">
+                            <i class="lni lni-clipboard"></i>
+                        </div>
+                        <div class="action-content">
+                            <h6>Órdenes de Requisición</h6>
+                            <small>Abiertas</small>
+                        </div>
+                    </a>
+
+                    <a ui-sref="report.entries" class="quick-action-item">
+                        <div class="action-icon bg-gradient-info">
+                            <i class="lni lni-enter"></i>
+                        </div>
+                        <div class="action-content">
+                            <h6>Reporte de Entradas</h6>
+                            <small>Historial</small>
+                        </div>
+                    </a>
+
+                    <a ui-sref="report.exits" class="quick-action-item">
+                        <div class="action-icon bg-gradient-warning">
+                            <i class="lni lni-exit"></i>
+                        </div>
+                        <div class="action-content">
+                            <h6>Reporte de Salidas</h6>
+                            <small>Historial</small>
+                        </div>
+                    </a>
+
+                    <a ui-sref="report.inventory_location" class="quick-action-item">
+                        <div class="action-icon bg-gradient-purple">
+                            <i class="lni lni-package"></i>
+                        </div>
+                        <div class="action-content">
+                            <h6>Inventario por Ubicación</h6>
+                            <small>Físico</small>
+                        </div>
+                    </a>
+
+                    <a ui-sref="report.traceability" class="quick-action-item">
+                        <div class="action-icon bg-gradient-danger">
+                            <i class="lni lni-map-marker"></i>
+                        </div>
+                        <div class="action-content">
+                            <h6>Trazabilidad</h6>
+                            <small>Historial de movimientos</small>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== Título + Selector de Mes ========== -->
+    <div class="dashboard-header pt-30 pb-20">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <div class="title-section">
+                    <h2 class="dashboard-title mb-2">¡Bienvenido de vuelta! 👋</h2>
+                    <p class="dashboard-subtitle text-muted">
+                        Resumen de actividad del sistema ID Stock — Denso
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4 text-end">
+                <div class="date-selector-wrapper">
+                    <label class="date-label">Periodo de consulta</label>
+                    <input type="month"
+                           class="form-control month-picker"
+                           ng-model="month" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== Métricas de Movimientos ========== -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="metrics-header mb-3">
+                <h5>
+                    <i class="lni lni-stats-up me-2"></i>Actividad del Mes
+                </h5>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-4 col-sm-6"
+             ng-repeat="item in lastMoves"
+             ng-if="lastMoves !== null && lastMoves.length > 0">
+            <div class="metric-card animate-in">
+                <div class="metric-icon" ng-class="'icon-color-' + ($index % 6)">
+                    <i class="lni lni-move"></i>
+                </div>
+                <div class="metric-content">
+                    <h6 class="metric-label">{{item.Name}}</h6>
+                    <h2 class="metric-value">{{item.NumberOfMoves}}</h2>
+                    <div class="metric-badge">
+                        <span class="badge bg-primary-subtle">
+                            <i class="lni lni-calendar me-1"></i>Este mes
+                        </span>
+                    </div>
+                </div>
+                <div class="metric-footer">
+                    <small class="text-muted">Sistema | Operación</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12" ng-if="lastMoves === null || lastMoves.length <= 0">
+            <div class="empty-state-card">
+                <div class="empty-state-icon">
+                    <i class="lni lni-empty-file"></i>
+                </div>
+                <h4 class="empty-state-title">No hay movimientos registrados</h4>
+                <p class="empty-state-text">
+                    No se encontraron movimientos para el periodo seleccionado.
+                    Intenta seleccionar otro mes o verifica que haya datos registrados.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== Gráfica ========== -->
+    <div class="row" ng-if="lastMoves !== null && lastMoves.length > 0">
+        <div class="col-12">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <h5 class="mb-1">
+                            <i class="lni lni-bar-chart me-2"></i>Análisis de Movimientos
+                        </h5>
+                        <p class="text-muted small mb-0">Distribución de operaciones del mes</p>
+                    </div>
+                </div>
+                <div class="chart-body">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== Info + Consejos ========== -->
+    <div class="row mt-4">
+        <div class="col-lg-6">
+            <div class="info-card">
+                <div class="info-header">
+                    <i class="lni lni-information me-2"></i>
+                    <h6 class="mb-0">Información del Sistema</h6>
+                </div>
+                <div class="info-body">
+                    <div class="info-item">
+                        <span class="info-label">Sistema:</span>
+                        <span class="info-value">ID Stock Denso</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Versión:</span>
+                        <span class="info-value">v1.0</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Última actualización:</span>
+                        <span class="info-value">Enero 2026</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="tips-card">
+                <div class="tips-header">
+                    <i class="lni lni-bulb me-2"></i>
+                    <h6 class="mb-0">Consejos</h6>
+                </div>
+                <div class="tips-body">
+                    <p class="mb-0">
+                        <i class="lni lni-checkmark-circle text-success me-2"></i>
+                        Usa los accesos rápidos para navegar más eficientemente.
+                    </p>
+                    <p class="mb-0">
+                        <i class="lni lni-checkmark-circle text-success me-2"></i>
+                        La información de catálogos se sincroniza desde Spare Parts automáticamente.
+                    </p>
+                    <p class="mb-0">
+                        <i class="lni lni-checkmark-circle text-success me-2"></i>
+                        Verifica siempre las órdenes abiertas antes de iniciar operaciones.
+                    </p>
+                    <p class="mb-0">
+                        <i class="lni lni-checkmark-circle text-success me-2"></i>
+                        Usa los reportes de trazabilidad para auditar movimientos por refacción.
+                    </p>
+                    <p class="mb-0">
+                        <i class="lni lni-checkmark-circle text-success me-2"></i>
+                        Ante cualquier duda, revisa el historial de entradas y salidas del mes.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

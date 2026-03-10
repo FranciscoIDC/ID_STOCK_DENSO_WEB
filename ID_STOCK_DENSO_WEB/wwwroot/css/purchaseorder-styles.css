@@ -1,0 +1,623 @@
+/* ====================================
+   MÓDULO ÓRDENES DE COMPRA - DENSO
+   ==================================== */
+
+/* ========== BADGES DE ESTATUS ========== */
+.badge-status-completed,
+.badge-status-in-progress,
+.badge-status-pending,
+.badge-status-default {
+    padding: 5px 10px !important;
+    border-radius: 50px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    white-space: nowrap !important;
+}
+
+.badge-status-completed {
+    background-color: #28a745 !important;
+    color: #fff !important;
+}
+
+.badge-status-in-progress {
+    background-color: #17a2b8 !important;
+    color: #fff !important;
+}
+
+.badge-status-pending {
+    background-color: #fd7e14 !important;
+    color: #fff !important;
+}
+
+.badge-status-default {
+    background-color: #6c757d !important;
+    color: #fff !important;
+}
+
+/* ========== TIPOS DE PARTE ========== */
+.type-electric,
+.type-mechanic,
+.type-jig,
+.type-pneumatic,
+.type-default {
+    padding: 3px 8px !important;
+    border-radius: 4px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+}
+
+.type-electric {
+    background-color: #e8f4fd !important;
+    color: #1565c0 !important;
+    border: 1px solid #90caf9 !important;
+}
+
+.type-mechanic {
+    background-color: #fff3e0 !important;
+    color: #e65100 !important;
+    border: 1px solid #ffcc80 !important;
+}
+
+.type-jig {
+    background-color: #f3e5f5 !important;
+    color: #6a1b9a !important;
+    border: 1px solid #ce93d8 !important;
+}
+
+.type-pneumatic {
+    background-color: #e8f5e9 !important;
+    color: #2e7d32 !important;
+    border: 1px solid #a5d6a7 !important;
+}
+
+.type-default {
+    background-color: #f5f5f5 !important;
+    color: #616161 !important;
+    border: 1px solid #e0e0e0 !important;
+}
+
+/* ========== STAT CARDS DEL HEADER ========== */
+.stat-card-po {
+    background: #ffffff !important;
+    border: 1px solid #e9ecef !important;
+    border-radius: 12px !important;
+    padding: 16px 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+}
+
+.stat-icon-po {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 22px !important;
+    color: #fff !important;
+    flex-shrink: 0 !important;
+}
+
+    .stat-icon-po.bg-blue {
+        background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    }
+
+    .stat-icon-po.bg-green {
+        background: linear-gradient(135deg, #43e97b, #38f9d7) !important;
+    }
+
+    .stat-icon-po.bg-orange {
+        background: linear-gradient(135deg, #f7971e, #ffd200) !important;
+    }
+
+.stat-info-po h4 {
+    margin: 0 !important;
+    font-size: 24px !important;
+    font-weight: 700 !important;
+    color: #2d3748 !important;
+}
+
+.stat-info-po small {
+    color: #a0aec0 !important;
+    font-size: 12px !important;
+}
+
+/* ========== CONTADOR DE PARTES (tabla) ========== */
+.po-parts-count {
+    background: #edf2f7 !important;
+    color: #4a5568 !important;
+    border-radius: 50px !important;
+    padding: 3px 10px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+}
+
+/* ========== LOADING ========== */
+.loading-overlay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    color: #a0aec0;
+    gap: 14px;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e9ecef;
+    border-top-color: #667eea;
+    border-radius: 50%;
+    animation: po-spin 0.8s linear infinite;
+}
+
+@keyframes po-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ========================================================
+   MODAL - Selectores con alta especificidad para ganar
+   a Bootstrap y main.css
+   ======================================================== */
+
+div#modalDetailPO.modal .modal-content {
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    border: none !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3) !important;
+}
+
+/* Header con gradiente azul */
+div#modalDetailPO.modal .modal-header-po {
+    background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%) !important;
+    padding: 20px 24px !important;
+    border-bottom: none !important;
+    display: block !important;
+}
+
+    div#modalDetailPO.modal .modal-header-po .modal-title {
+        color: #ffffff !important;
+        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+        margin-bottom: 4px !important;
+    }
+
+    div#modalDetailPO.modal .modal-header-po .modal-subtitle {
+        color: rgba(255,255,255,0.85) !important;
+        font-size: 13px !important;
+        margin: 0 !important;
+    }
+
+    div#modalDetailPO.modal .modal-header-po .btn-close {
+        filter: invert(1) !important;
+        opacity: 0.8 !important;
+    }
+
+/* Barra de resumen (4 columnas) */
+div#modalDetailPO.modal .po-summary-bar {
+    background-color: #f0f4ff !important;
+    border-bottom: 1px solid #dee2e6 !important;
+}
+
+    div#modalDetailPO.modal .po-summary-bar .summary-col {
+        padding: 14px 0 !important;
+        text-align: center !important;
+        border-right: 1px solid #dee2e6 !important;
+    }
+
+        div#modalDetailPO.modal .po-summary-bar .summary-col:last-child {
+            border-right: none !important;
+        }
+
+    div#modalDetailPO.modal .po-summary-bar .summary-label {
+        font-size: 11px !important;
+        color: #a0aec0 !important;
+        text-transform: uppercase !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.4px !important;
+        display: block !important;
+        margin-bottom: 4px !important;
+    }
+
+    div#modalDetailPO.modal .po-summary-bar .summary-value {
+        font-size: 14px !important;
+        font-weight: 700 !important;
+        color: #2d3748 !important;
+        display: block !important;
+    }
+
+/* Tabla de partes - header azul */
+div#modalDetailPO.modal .parts-table thead tr {
+    background-color: #1a73e8 !important;
+}
+
+div#modalDetailPO.modal .parts-table thead th {
+    background-color: #1a73e8 !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    padding: 12px 14px !important;
+    border-color: #1565c0 !important;
+}
+
+div#modalDetailPO.modal .parts-table tbody td {
+    vertical-align: middle !important;
+    font-size: 13px !important;
+    padding: 10px 14px !important;
+}
+
+div#modalDetailPO.modal .parts-table tfoot tr {
+    background-color: #e8f0fe !important;
+    font-weight: 700 !important;
+}
+
+div#modalDetailPO.modal .parts-table tfoot td {
+    background-color: #e8f0fe !important;
+    padding: 10px 14px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+}
+
+/* Badge número de línea */
+.part-line-badge {
+    background: #4a5568 !important;
+    color: #fff !important;
+    border-radius: 50% !important;
+    width: 26px !important;
+    height: 26px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+}
+
+/* Cantidades */
+.qty-requested {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #2d3748 !important;
+}
+
+.qty-received {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #28a745 !important;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    .stat-card-po {
+        padding: 12px 14px !important;
+    }
+
+    .stat-icon-po {
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 18px !important;
+    }
+
+    .stat-info-po h4 {
+        font-size: 20px !important;
+    }
+}
+
+/* ========================================================
+   MODAL REQUISICIONES - Mismos estilos que #modalDetailPO
+   ======================================================== */
+
+div#modalDetailRequisition.modal .modal-content {
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    border: none !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3) !important;
+}
+
+div#modalDetailRequisition.modal .modal-header-po {
+    background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%) !important;
+    padding: 20px 24px !important;
+    border-bottom: none !important;
+    display: block !important;
+}
+
+    div#modalDetailRequisition.modal .modal-header-po .modal-title {
+        color: #ffffff !important;
+        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+        margin-bottom: 4px !important;
+    }
+
+    div#modalDetailRequisition.modal .modal-header-po .modal-subtitle {
+        color: rgba(255,255,255,0.85) !important;
+        font-size: 13px !important;
+        margin: 0 !important;
+    }
+
+    div#modalDetailRequisition.modal .modal-header-po .btn-close {
+        filter: invert(1) !important;
+        opacity: 0.8 !important;
+    }
+
+div#modalDetailRequisition.modal .po-summary-bar {
+    background-color: #f0f4ff !important;
+    border-bottom: 1px solid #dee2e6 !important;
+}
+
+    div#modalDetailRequisition.modal .po-summary-bar .summary-col {
+        padding: 14px 0 !important;
+        text-align: center !important;
+        border-right: 1px solid #dee2e6 !important;
+    }
+
+        div#modalDetailRequisition.modal .po-summary-bar .summary-col:last-child {
+            border-right: none !important;
+        }
+
+    div#modalDetailRequisition.modal .po-summary-bar .summary-label {
+        font-size: 11px !important;
+        color: #a0aec0 !important;
+        text-transform: uppercase !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.4px !important;
+        display: block !important;
+        margin-bottom: 4px !important;
+    }
+
+    div#modalDetailRequisition.modal .po-summary-bar .summary-value {
+        font-size: 14px !important;
+        font-weight: 700 !important;
+        color: #2d3748 !important;
+        display: block !important;
+    }
+
+div#modalDetailRequisition.modal .parts-table thead tr {
+    background-color: #1a73e8 !important;
+}
+
+div#modalDetailRequisition.modal .parts-table thead th {
+    background-color: #1a73e8 !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    padding: 12px 14px !important;
+    border-color: #1565c0 !important;
+}
+
+div#modalDetailRequisition.modal .parts-table tbody td {
+    vertical-align: middle !important;
+    font-size: 13px !important;
+    padding: 10px 14px !important;
+}
+
+div#modalDetailRequisition.modal .parts-table tfoot tr {
+    background-color: #e8f0fe !important;
+    font-weight: 700 !important;
+}
+
+div#modalDetailRequisition.modal .parts-table tfoot td {
+    background-color: #e8f0fe !important;
+    padding: 10px 14px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+}
+
+/* ========== TIPOS DE PARTE ADICIONALES (Requisiciones) ========== */
+/* type-hydraulic (idtipo 2) y type-mold (idtipo 7) */
+.type-hydraulic,
+.type-mold {
+    padding: 3px 8px !important;
+    border-radius: 4px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+}
+
+.type-hydraulic {
+    background-color: #e3f2fd !important;
+    color: #0277bd !important;
+    border: 1px solid #81d4fa !important;
+}
+
+.type-mold {
+    background-color: #fce4ec !important;
+    color: #880e4f !important;
+    border: 1px solid #f48fb1 !important;
+}
+
+/* ========================================================
+   PRODUCTOS — Thumbnail de imagen en tabla
+   ======================================================== */
+
+.product-img-thumb {
+    position: relative !important;
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    cursor: pointer !important;
+    border: 1px solid #e9ecef !important;
+    margin: 0 auto !important;
+    display: block !important;
+}
+
+    .product-img-thumb img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        display: block !important;
+    }
+
+.product-img-overlay {
+    position: absolute !important;
+    inset: 0 !important;
+    background: rgba(26, 115, 232, 0.7) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    opacity: 0 !important;
+    transition: opacity 0.2s ease !important;
+    color: #fff !important;
+    font-size: 18px !important;
+}
+
+.product-img-thumb:hover .product-img-overlay {
+    opacity: 1 !important;
+}
+
+/* ========================================================
+   PRODUCTOS — Modal imagen grande
+   ======================================================== */
+
+div#modalProductImage.modal .modal-content {
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    border: none !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3) !important;
+}
+
+div#modalProductImage.modal .modal-header-po {
+    background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%) !important;
+    padding: 20px 24px !important;
+    border-bottom: none !important;
+    display: block !important;
+}
+
+    div#modalProductImage.modal .modal-header-po .modal-title {
+        color: #ffffff !important;
+        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+        margin-bottom: 4px !important;
+    }
+
+    div#modalProductImage.modal .modal-header-po .modal-subtitle {
+        color: rgba(255,255,255,0.85) !important;
+        font-size: 13px !important;
+        margin: 0 !important;
+    }
+
+    div#modalProductImage.modal .modal-header-po .btn-close {
+        filter: invert(1) !important;
+        opacity: 0.8 !important;
+    }
+
+.product-image-container {
+    background: #f8f9fa !important;
+    border-radius: 12px !important;
+    border: 2px dashed #dee2e6 !important;
+    padding: 12px !important;
+    min-height: 220px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.product-image-full {
+    max-width: 100% !important;
+    max-height: 220px !important;
+    object-fit: contain !important;
+    border-radius: 8px !important;
+}
+
+/* ========================================================
+   LOCALIZACIONES — Badge de código (A05-11-27)
+   ======================================================== */
+
+.loc-code-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    padding: 5px 12px !important;
+    border-radius: 20px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    font-family: monospace !important;
+    letter-spacing: 0.5px !important;
+    white-space: nowrap !important;
+}
+
+.loc-code-badge-sm {
+    padding: 3px 8px !important;
+    font-size: 11px !important;
+}
+
+/* Rack A — Azul */
+.badge-loc-a {
+    background: rgba(26, 115, 232, 0.12) !important;
+    color: #1a73e8 !important;
+    border: 1px solid rgba(26, 115, 232, 0.3) !important;
+}
+
+/* Rack B — Verde */
+.badge-loc-b {
+    background: rgba(30, 167, 87, 0.12) !important;
+    color: #1ea757 !important;
+    border: 1px solid rgba(30, 167, 87, 0.3) !important;
+}
+
+/* Rack C — Naranja */
+.badge-loc-c {
+    background: rgba(251, 140, 0, 0.12) !important;
+    color: #fb8c00 !important;
+    border: 1px solid rgba(251, 140, 0, 0.3) !important;
+}
+
+/* Default — Gris */
+.badge-loc-default {
+    background: rgba(108, 117, 125, 0.12) !important;
+    color: #6c757d !important;
+    border: 1px solid rgba(108, 117, 125, 0.3) !important;
+}
+
+/* ========================================================
+   LOCALIZACIONES — Modal
+   ======================================================== */
+
+div#modalLocationDetail.modal .modal-content {
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    border: none !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3) !important;
+}
+
+div#modalLocationDetail.modal .modal-header-po {
+    background: linear-gradient(135deg, #0f5132 0%, #198754 100%) !important;
+    padding: 20px 24px !important;
+    border-bottom: none !important;
+    display: block !important;
+}
+
+    div#modalLocationDetail.modal .modal-header-po .modal-title {
+        color: #ffffff !important;
+        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+        margin-bottom: 6px !important;
+    }
+
+    div#modalLocationDetail.modal .modal-header-po .modal-subtitle {
+        color: rgba(255,255,255,0.9) !important;
+        margin: 0 !important;
+    }
+
+div#modalLocationDetail.modal .loc-code-badge {
+    background: rgba(255,255,255,0.2) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255,255,255,0.4) !important;
+    font-size: 13px !important;
+}
+
+div#modalLocationDetail.modal .btn-close {
+    filter: invert(1) !important;
+    opacity: 0.8 !important;
+}

@@ -1,0 +1,137 @@
+﻿<div class="container-fluid">
+
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <div class="titlemb-30">
+                    <h2>Editar Role</h2>
+                </div>
+            </div>
+            <!-- end col -->
+            <div class="col-md-6">
+                <div class="breadcrumb-wrapper mb-30">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a onclick="history.back()" style="cursor:pointer;">Roles</a></li>
+                            <li class="breadcrumb-item active" aria-current="page" style="cursor:pointer;">
+                                Editar
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card-style settings-card-1 mb-30">
+                <div class="profile-info">
+                    <div class="row align-items-center">
+                       
+                        <div class="col-xxl-4">
+                            <div class="input-style-1">
+                                <label>Nombre del Role</label>
+                                <input type="text" ng-model="model.Name" />
+                            </div>
+                        </div>
+                        <div class="col-xxl-4">
+                            <div class="input-style-1">
+                                <label>Descripción</label>
+                                <input type="text" ng-model="model.Description" />
+                            </div>
+                        </div>
+                        <!--<div class="col-xxl-3">
+                            <div class="input-style-1">
+                                <label>Buscar</label>
+                                <input type="text" ng-model="filterSearch" />
+                            </div>
+                        </div>-->
+
+                        <div class="col-xxl-4">
+                            <div class="row align-items-center justify-content-end">
+
+                                <div class="col-xxl-auto text-center">
+                                    <div class="input-style-1">
+                                        <a class="main-btn primary-btn rounded-full btn-hover w-100" style="text-decoration:none;" ng-click="Save()">Guardar</a>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="card-style mb-30">
+                    <div class="title mb-30 d-flex justify-content-between align-items-center">
+                        <h6 class="mb-10">Lista de permisos</h6>
+                        <div>
+                            <!--<a class="main-btn primary-btn rounded-full btn-hover" ng-if="printLabelsButtonIsVisible" ng-click="MultipleLabelPrintingAsync()"
+                               style="text-decoration:none;">Imprimir Etiquetas</a>-->
+
+                            <a class="main-btn primary-btn rounded-full btn-hover" style="text-decoration:none;" ng-click="SavePermissions()">Guardar Permisos</a>
+                        </div>
+                    </div>
+
+
+
+                    <div class="table-wrapper table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+
+                                    <th><h6>Modulo</h6></th>
+                                    <th><h6>Descripción</h6></th>
+                                    <th><h6>Aplicación</h6></th>
+                                    <th><h6>Categoria</h6></th>
+                                    <th><h6>Permitido</h6></th>
+                        
+                                </tr>
+                                <!-- end table row-->
+                            </thead>
+                            <tbody>
+                                <tr ng-if="ExistData()" ng-repeat="item in data">
+                         
+                                    <td class="min-width">
+                                        <p>{{DatumToString(item.Permission)}}</p>
+                                    </td>
+                                    <td class="min-width">
+                                        <p>{{DatumToString(item.Description)}}</p>
+                                    </td>
+                                    <td class="min-width">
+                                        <p>{{DatumToString(item.Application)}}</p>
+                                    </td>
+                                    <td class="min-width">
+                                        <p>{{DatumToString(item.Category)}}</p>
+                                    </td>
+                                    <td class="min-width">
+                                        <div class="col-12 form-check form-switch toggle-switch mb-4">
+                                            <input class="form-check-input mr-10" style="width:100%;" type="checkbox" ng-model="item.IsEnabled">
+                                        </div>
+                                    </td>
+                                    
+                                </tr>
+                                <tr ng-if="!ExistData()">
+                                    <td colspan="11"><p style="text-align:center;font-size:22px;">Sin Resultados</p></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- end table -->
+                    </div>
+                    <!--<pagination-control show-items-per-page="true" paging-size="pagingSize" items-per-page="itemsPerPage" total-items="totalItems" display-items="displayItems" current-page="currentPage"></pagination-control>-->
+                </div>
+                <!-- end card -->
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>

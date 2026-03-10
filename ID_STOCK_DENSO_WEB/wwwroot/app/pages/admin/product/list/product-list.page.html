@@ -1,0 +1,287 @@
+﻿<div class="container-fluid">
+    <br>
+    <!-- ===== HEADER ===== -->
+    <div class="catalog-header mb-4">
+        <div class="row align-items-center">
+            <div class="col-lg-8 col-md-6">
+                <div class="header-content">
+                    <div class="breadcrumb-custom mb-2">
+                        <a ui-sref="home" class="breadcrumb-link">
+                            <i class="lni lni-home"></i> Inicio
+                        </a>
+                        <span class="separator">/</span>
+                        <span class="current">Productos</span>
+                    </div>
+                    <h2 class="page-title mb-1">
+                        <i class="lni lni-package"></i> Catálogo de Productos
+                    </h2>
+                    <p class="page-subtitle text-muted mb-0">
+                        Números de parte — Sistema Spare Parts DENSO
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="row g-2">
+                    <div class="col-6">
+                        <div class="stat-card-po">
+                            <div class="stat-icon-po bg-blue"><i class="lni lni-package"></i></div>
+                            <div class="stat-info-po">
+                                <h4>{{counterData}}</h4>
+                                <small>Total Productos</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <!-- Botón carga masiva -->
+                        <button class="main-btn w-100 h-100 btn-hover"
+                                ng-class="isLoadingFull ? 'light-btn' : 'warning-btn'"
+                                ng-disabled="isLoadingFull"
+                                ng-click="LoadFullCatalog()"
+                                style="border-radius:12px; font-size:13px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding: 12px 8px;">
+                            <i ng-class="isLoadingFull ? 'lni lni-reload' : 'lni lni-download'"
+                               ng-style="isLoadingFull && {'animation': 'po-spin 0.8s linear infinite'}"></i>
+                            <span ng-if="!isLoadingFull">Carga Masiva</span>
+                            <span ng-if="isLoadingFull">Sincronizando...</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== FILTROS ===== -->
+    <div class="card-style settings-card-1 mb-30">
+        <div class="row g-3 align-items-end">
+            <div class="col-lg-7 col-md-12">
+                <div class="input-style-1">
+                    <label><i class="lni lni-search-alt"></i> Buscar (Descripción, No. Denso, No. Denson, No. Parte)</label>
+                    <input type="text"
+                           ng-model="filterSearch"
+                           placeholder="Ej: SHAFT, E5VC-AM-004, CJ2H-CPU65..."
+                           ng-keypress="$event.keyCode === 13 && Search()" />
+                </div>
+            </div>
+            <div class="col-lg-5 col-md-12 d-flex justify-content-end gap-2">
+                <div class="col-auto">
+                    <a class="main-btn primary-btn rounded-full btn-hover"
+                       style="text-decoration:none;" ng-click="Search(1)">
+                        <i class="lni lni-search"></i> Buscar
+                    </a>
+                </div>
+                <div class="col-auto">
+                    <a class="main-btn danger-btn rounded-full btn-hover"
+                       style="text-decoration:none;" ng-click="ClearFilters()">
+                        <i class="lni lni-brush-alt"></i> Limpiar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TABLA ===== -->
+    <div class="card-style mb-30">
+        <div class="d-flex justify-content-between align-items-center mb-20">
+            <h6 class="mb-0"><i class="lni lni-list"></i> Listado de Productos</h6>
+            <small class="text-muted">
+                <i class="lni lni-information"></i>
+                La tabla se actualiza con los últimos registros al cargar.
+                Usa <strong>Carga Masiva</strong> para sincronizar el catálogo completo.
+            </small>
+        </div>
+
+        <!-- Loading -->
+        <div ng-if="isLoading" class="loading-overlay">
+            <div class="loading-spinner"></div>
+            <span>Cargando productos...</span>
+        </div>
+
+        <div ng-if="!isLoading" class="table-wrapper table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th style="width:70px;"><h6>Imagen</h6></th>
+                        <th><h6><i class="lni lni-tag"></i> ID Producto</h6></th>
+                        <th><h6><i class="lni lni-text-align-left"></i> Descripción</h6></th>
+                        <th><h6>No. Denso</h6></th>
+                        <th><h6>No. Denson</h6></th>
+                        <th><h6>No. Parte</h6></th>
+                        <th><h6>Tipo</h6></th>
+                        <th><h6><i class="lni lni-key"></i> Código</h6></th>
+                        <th style="width:80px;"><h6><i class="lni lni-cogs"></i></h6></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-if="!ExistData()">
+                        <td colspan="9">
+                            <p class="text-center text-muted fs-5 py-4">
+                                <i class="lni lni-warning"></i> Sin resultados
+                            </p>
+                        </td>
+                    </tr>
+                    <tr ng-if="ExistData()" ng-repeat="item in data">
+
+                        <!-- Imagen placeholder -->
+                        <td class="text-center">
+                            <div class="product-img-thumb"
+                                 ng-click="OpenImageModal(item)"
+                                 title="{{item.Image ? 'Ver imagen' : 'Sin imagen'}}">
+                                <img ng-src="{{GetProductImage(item.Image)}}"
+                                     onerror="this.onerror=null;this.src='/images/imageNotFound.png'"
+                                     alt="Imagen producto" />
+                                <div class="product-img-overlay">
+                                    <i class="lni lni-zoom-in"></i>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td><p><strong>{{item.idProducto}}</strong></p></td>
+                        <td class="min-width"><p>{{DatumToString(item.descripcioningles)}}</p></td>
+                        <td><p><code>{{DatumToString(item.NoDenso)}}</code></p></td>
+                        <td><p><code>{{DatumToString(item.NoDenson)}}</code></p></td>
+                        <td><p><code>{{DatumToString(item.noparte)}}</code></p></td>
+                        <td>
+                            <span ng-class="GetTypeClass(item.idTipo)" style="white-space:nowrap;">
+                                {{DatumToString(item.DescripcionTipo)}}
+                            </span>
+                        </td>
+                        <td>
+                            <span ng-if="item.CodeProduct"
+                                  title="{{item.CodeProduct}}"
+                                  style="font-size:11px; color:#6c757d; font-family:monospace; word-break:break-all;">
+                                {{item.CodeProduct | limitTo:8}}…
+                            </span>
+                            <span ng-if="!item.CodeProduct" class="text-muted">--</span>
+                        </td>
+                        <td class="text-center">
+                            <button class="main-btn light-btn btn-hover rounded-full"
+                                    style="padding: 5px 12px; font-size: 12px;"
+                                    ng-click="OpenImageModal(item)"
+                                    title="Ver imagen">
+                                <i class="lni lni-image"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <pagination-control show-items-per-page="true"
+                            paging-size="pagingSize"
+                            items-per-page="itemsPerPage"
+                            total-items="totalItems"
+                            display-items="displayItems"
+                            current-page="currentPage">
+        </pagination-control>
+    </div>
+</div>
+
+
+<!-- ================================================================ -->
+<!--           MODAL IMAGEN DE PRODUCTO (placeholder — sin func.)     -->
+<!-- ================================================================ -->
+<div class="modal fade" id="modalProductImage" tabindex="-1" role="dialog"
+     aria-labelledby="modalProductImageLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <!-- Header -->
+            <div class="modal-header-po">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5 class="modal-title" id="modalProductImageLabel">
+                            <i class="lni lni-image"></i>&nbsp; Imagen del Producto
+                        </h5>
+                        <p class="modal-subtitle mb-0">
+                            <i class="lni lni-tag"></i>
+                            <strong> ID #{{selectedProduct.idProducto}}</strong>
+                            &nbsp;|&nbsp;
+                            {{DatumToString(selectedProduct.descripcioningles)}}
+                        </p>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white mt-1"
+                            data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body p-4">
+                <div class="row g-4 align-items-start">
+
+                    <!-- Imagen -->
+                    <div class="col-md-5 text-center">
+                        <div class="product-image-container">
+                            <img ng-src="{{GetProductImage(selectedProduct.Image)}}"
+                                 onerror="this.onerror=null;this.src='/images/imageNotFound.png'"
+                                 alt="Imagen del producto"
+                                 class="product-image-full" />
+                        </div>
+                        <!-- Botón subir imagen — sin funcionalidad aún -->
+                        <button class="main-btn light-btn btn-hover rounded-full mt-3 w-100"
+                                disabled
+                                title="Funcionalidad próximamente disponible"
+                                style="font-size:13px; opacity:0.6; cursor:not-allowed;">
+                            <!--<i class="lni lni-upload"></i>&nbsp; Subir imagen
+                            <small class="d-block" style="font-size:10px;">(próximamente)</small>-->
+                        </button>
+                    </div>
+
+                    <!-- Info del producto -->
+                    <div class="col-md-7">
+                        <table class="table table-sm table-borderless">
+                            <tbody>
+                                <tr>
+                                    <td class="text-muted" style="width:140px; font-size:12px;">ID Producto</td>
+                                    <td><strong>{{selectedProduct.idProducto}}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted" style="font-size:12px;">Descripción</td>
+                                    <td><strong>{{DatumToString(selectedProduct.descripcioningles)}}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted" style="font-size:12px;">No. Denso</td>
+                                    <td><code>{{DatumToString(selectedProduct.NoDenso)}}</code></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted" style="font-size:12px;">No. Denson</td>
+                                    <td><code>{{DatumToString(selectedProduct.NoDenson)}}</code></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted" style="font-size:12px;">No. Parte</td>
+                                    <td><code>{{DatumToString(selectedProduct.noparte)}}</code></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted" style="font-size:12px;">Tipo</td>
+                                    <td>
+                                        <span ng-class="GetTypeClass(selectedProduct.idTipo)">
+                                            {{DatumToString(selectedProduct.DescripcionTipo)}}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted" style="font-size:12px;">Código interno</td>
+                                    <td>
+                                        <span ng-if="selectedProduct.CodeProduct"
+                                              style="font-size:11px; font-family:monospace; word-break:break-all;">
+                                            {{selectedProduct.CodeProduct}}
+                                        </span>
+                                        <span ng-if="!selectedProduct.CodeProduct" class="text-muted">--</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer" style="border-top: 1px solid #dee2e6;">
+                <button type="button"
+                        class="main-btn danger-btn btn-hover rounded-full"
+                        data-bs-dismiss="modal">
+                    <i class="lni lni-close"></i>&nbsp; Cerrar
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>

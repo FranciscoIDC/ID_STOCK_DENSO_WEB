@@ -1,0 +1,48 @@
+﻿<div class="pt-10 d-flex flex-wrap justify-content-between" ng-if="totalItems!==0">
+    <div class="left">
+        <p class="text-sm text-gray">Pagina <strong>{{pager.currentPage}}</strong> de <strong>{{pager.totalPages}}</strong></p>
+    </div>
+    <div class="right table-pagination d-flex">
+        <div class="select-style-3" ng-if="pager.showItemsPerPage">
+            <div class="select-position">
+                <label>Elementos por Pagina:</label>
+
+                <select class="light-bg" ng-model="pager.dataperPage" ng-change="PageChange()">
+                    <option value='5' selected>5</option>
+                    <option value='10'>10</option>
+                    <option value='20'>20</option>
+                    <option value='50'>50</option>
+                    <option value='100'>100</option>
+
+                </select>
+            </div>
+        </div>        
+        <ul class="d-flex justify-content-end align-items-center">
+
+            <li ng-if="pager.currentPage!==1" class="ms-2" style="cursor:pointer">
+                <a ng-disabled="{{pager.currentPage===1}}" ng-click="setPage(1)" style="text-decoration:none">
+                    <i class="lni lni-angle-double-left"></i>
+                </a>
+            </li>
+            <li ng-if="pager.currentPage !== 1" class="ms-2" style="cursor:pointer">
+                <a ng-click="setPage(pager.currentPage - 1)" style="text-decoration:none">
+                    <i class="lni lni-arrow-left"></i>
+                </a>
+            </li>
+            <li ng-repeat="page in pager.pages" class="ms-2" style="cursor:pointer">
+                <a ng-click="setPage(page)" ng-class="{active:pager.currentPage === page}" style="text-decoration:none; border-radius: 12px;">{{page}}</a>
+            </li>
+
+            <li ng-if="pager.currentPage !== pager.totalPages" class="ms-2" style="cursor:pointer">
+                <a ng-click="setPage(pager.currentPage + 1)" style="text-decoration: none; border-radius: 12px;">
+                    <i class="lni lni-arrow-right"></i>
+                </a>
+            </li>
+            <li ng-if="pager.currentPage !== pager.totalPages" class="ms-2" style="cursor:pointer">
+                <a ng-click="setPage(pager.totalPages)" style="text-decoration: none; border-radius: 12px;">
+                    <i class="lni lni-angle-double-right"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

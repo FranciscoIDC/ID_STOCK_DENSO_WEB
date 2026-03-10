@@ -1,0 +1,149 @@
+﻿<div class="container-fluid">
+
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <div class="titlemb-30">
+                    <h2>Líneas</h2>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card-style settings-card-1 mb-30">
+                <div class="profile-info">
+                    <div class="row align-items-center">
+                        <div class="col-xxl-6">
+                            <div class="select-style-1">
+                                <label>Tipo de Línea</label>
+                                <div class="select-position">
+                                    <select class="light-bg" ng-model="IdLineType" ng-change="LineTypeChange(IdLineType)">
+                                        <option value="" disabled selected>Seleccionar Tipo de Línea</option>
+                                        <option ng-repeat="item in stores" value="{{item.Id}}">{{item.Name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xxl-6">
+                            <div class="input-style-1">
+                                <label>Buscar</label>
+                                <input type="text" ng-model="filterSearch" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row align-items-center justify-content-end">
+
+                        <div class="col-xxl-auto text-center">
+                            <div class="input-style-1">
+                                <a class="main-btn primary-btn rounded-full btn-hover w-100" style="text-decoration:none;" ng-click="Search()">Buscar</a>
+                            </div>
+
+                        </div>
+                        <div class="col-xxl-auto text-center">
+                            <div class="input-style-1 ">
+                                <a class="main-btn danger-btn rounded-full btn-hover w-100" style="text-decoration:none;" ng-click="ClearFilters()">Limpiar Filtros</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="card-style mb-30">
+                    <div class="title mb-30 d-flex justify-content-between align-items-center">
+                        <h6 class="mb-10">Listado de líneas</h6>
+                        <div>
+                            <!--<a class="main-btn primary-btn rounded-full btn-hover" ng-if="printLabelsButtonIsVisible" ng-click="MultipleLabelPrintingAsync()"
+                               style="text-decoration:none;">Imprimir Etiquetas</a>-->
+
+                            <a class="main-btn primary-btn rounded-full btn-hover" ui-sref="line.add" style="text-decoration:none;">Agregar línea</a>
+                        </div>
+                    </div>
+
+
+                    <div class="gray-alert p-0 " ng-if="ShowAlertSelectedAll()">
+                        <div class="alert p-0">
+                            <p class=" text-center text-medium" style="margin :1rem 0  1rem 0;">
+                                Los {{dataPerPage}} activos de esta página están seleccionados.
+                                <a class="main-btn light-btn btn-sm btn-hover" ng-click="SelectAllAssets()" style="text-decoration:none;">
+                                    Seleccionar los
+                                    {{counterData}}
+                                    activos para la categoría y localizacion correspondiente
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="gray-alert p-0 " ng-if="ShowAlertUnSelectedAll()">
+                        <div class="alert p-0">
+                            <p class=" text-center text-medium" style="margin :1rem 0  1rem 0;">
+                                Los {{counterData}} activos estan seleccionados.
+                                <a class="main-btn light-btn btn-sm btn-hover" ng-click="UnSelectAllAssets()" style="text-decoration:none;">
+                                    Anular la selección
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="table-wrapper table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <!--<th><h6>#</h6></th>-->
+                                    <th><h6>Nombre</h6></th>
+                                    <th><h6>Descripción</h6></th>
+                                    <th><h6>Código</h6></th>
+                                </tr>
+                                <!-- end table row-->
+                            </thead>
+                            <tbody>
+                                <tr ng-if="ExistData()" ng-repeat="item in data">
+
+                                    <td class="min-width">
+                                        <p>{{DatumToString(item.Name)}}</p>
+                                    </td>
+                                    <td class="min-width">
+                                        <p>{{DatumToString(item.Description)}}</p>
+                                    </td>
+                                    <td class="min-width">
+                                        <p>{{DatumToString(item.Code)}}</p>
+                                    </td>
+
+                                    <td>
+                                        <div class="action">
+                                            <button class="text-warning" ng-click="GoEdit(item.Id,item.AssetsAddsId)">
+                                                <i class="lni lni-pencil"></i>
+                                            </button>
+                                            <div class="action">
+                                                <button class="text-danger" ng-click="Remove(item.Id)">
+                                                    <i class="lni lni-trash-can"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="min-width">
+                                        <span class="status-btn active-btn">Activo</span>
+                                    </td>
+                                </tr>
+                                <tr ng-if="!ExistData()">
+                                    <td colspan="11"><p style="text-align:center;font-size:22px;">Sin Resultados</p></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- end table -->
+                    </div>
+                    <pagination-control show-items-per-page="true" paging-size="pagingSize" items-per-page="itemsPerPage" total-items="totalItems" display-items="displayItems" current-page="currentPage"></pagination-control>
+                </div>
+                <!-- end card -->
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>

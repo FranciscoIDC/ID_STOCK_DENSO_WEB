@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\inventory\**" />
+    <Content Remove="Controllers\inventory\**" />
+    <EmbeddedResource Remove="Controllers\inventory\**" />
+    <None Remove="Controllers\inventory\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Controllers\dataTransferformService.service.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\app\helpers\" />
+    <Folder Include="wwwroot\app\models\" />
+    <Folder Include="wwwroot\app\services\" />
+    <Folder Include="wwwroot\images\IO_BARCEL\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\app\pages\admin\stock\report\stock-report.controller.js" />
+    <None Include="wwwroot\app\pages\admin\stock\report\stock-report.service.js" />
+  </ItemGroup>
+
+</Project>

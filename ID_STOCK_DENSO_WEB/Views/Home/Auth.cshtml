@@ -1,0 +1,139 @@
+﻿@{ Layout = null; }
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon"
+          href="~/images/favicon.svg"
+          type="image/x-icon" />
+    <title>Login | ID STOCK</title>
+
+    <!-- ========== All CSS files linkup ========= -->
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/lineicons.css" rel="stylesheet" />
+    <link href="~/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="~/css/fullcalendar.css" rel="stylesheet" />
+    <link href="~/css/fullcalendar.css" rel="stylesheet" />
+    <link href="~/css/main.css" rel="stylesheet" />
+
+    @*<link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/sign-in/">*@
+
+    @* CSS *@
+
+    <link href="~/lib/angular-material/angular-material.css" rel="stylesheet" />
+    <link href="~/lib/limonte-sweetalert2/sweetalert2.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/signin.css" rel="stylesheet" />
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @*@media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }*@
+    </style>
+
+    @* LIBRERIAS JS *@
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/limonte-sweetalert2/sweetalert2.js"></script>
+    <script src="~/js/crypto-js/crypto-js.js"></script>
+
+    <script src="~/lib/angular.js/angular.min.js"></script>
+    <script src="~/lib/angular-animate/angular-animate.js"></script>
+    <script src="~/lib/angular-aria/angular-aria.js"></script>
+    <script src="~/lib/angular-messages/angular-messages.js"></script>
+    <script src="~/lib/angular-material/angular-material.js"></script>
+    <script src="~/lib/angular-ui-router/angular-ui-router.js"></script>
+    <script src="~/lib/angular-ui-router/stateEvents.js"></script>
+
+    @* APP JS *@
+
+    <script src="~/app/app.module.js"></script>
+    <script src="~/app/app.route.js"></script>
+
+    @* APP MODEL JS *@
+
+    @* APP DTO JS *@
+
+    @* APP SERVICE JS *@
+    <script src="~/app/shared/services/const.service.js"></script>
+    <script src="~/app/shared/services/generalInfo.service.js"></script>
+    <script src="~/app/pages/admin/role/edit/role-edit.service.js"></script>
+    <script src="~/app/shared/services/auth.service.js"></script>
+    <script src="~/app/shared/services/url.service.js"></script>
+    <script src="~/app/shared/services/alert.service.js"></script>
+    <script src="~/app/pages/auth/login/login.service.js"></script>
+    <script src="~/app/pages/auth/recover_password/recover_password.service.js"></script>
+
+    @* APP CONTROLLER JS *@
+
+    <script src="~/app/pages/auth/login/login.controller.js"></script>
+    <script src="~/app/pages/auth/recover_password/recover_password.controller.js"></script>
+</head>
+<body ng-app="app">
+    <!-- ======== sidebar-nav start =========== -->
+    
+    <div class="overlay"></div>
+
+    <main class="main-wrapper" style="margin-left:0;">
+
+        <div ui-view></div>
+        <!-- ========== signin-section end ========== -->
+        <!-- ========== footer start =========== -->
+        <!--<footer class="footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6 order-last order-md-first">
+                        <div class="copyright text-center text-md-start">
+                            <p class="text-sm">
+                                Designed and Developed by
+                                <a href="https://plainadmin.com"
+                                   rel="nofollow"
+                                   target="_blank">
+                                    PlainAdmin
+                                </a>
+                            </p>
+                        </div>
+                    </div>-->
+                    <!-- end col-->
+                    <!--<div class="col-md-6">
+                        <div class="
+                  terms
+                  d-flex
+                  justify-content-center justify-content-md-end
+                ">
+                            <a href="#0" class="text-sm">Term & Conditions</a>
+                            <a href="#0" class="text-sm ml-15">Privacy & Policy</a>
+                        </div>
+                    </div>
+                </div>-->
+                <!-- end row -->
+            <!--</div>-->
+            <!-- end container -->
+        <!--</footer>-->
+        <!-- ========== footer end =========== -->
+    </main>
+    <!-- ======== main-wrapper end =========== -->
+    <!-- ========= All Javascript files linkup ======== -->
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/Chart.min.js"></script>
+    <script src="~/js/dynamic-pie-chart.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/fullcalendar.js"></script>
+    <script src="~/js/jvectormap.min.js"></script>
+    <script src="~/js/world-merc.js"></script>
+    <script src="~/js/polyfill.js"></script>
+    <script src="~/js/main.js"></script>
+
+</body>
+</html>

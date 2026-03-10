@@ -1,0 +1,335 @@
+﻿<div class="container-fluid">
+    <br>
+
+    <!-- ===== HEADER ===== -->
+    <div class="catalog-header mb-4">
+        <div class="row align-items-center">
+            <div class="col-lg-8 col-md-6">
+                <div class="header-content">
+                    <div class="breadcrumb-custom mb-2">
+                        <a ui-sref="home" class="breadcrumb-link">
+                            <i class="lni lni-home"></i> Inicio
+                        </a>
+                        <span class="separator">/</span>
+                        <span class="current">Localizaciones</span>
+                    </div>
+                    <h2 class="page-title mb-1">
+                        <i class="lni lni-map-marker"></i> Localizaciones
+                    </h2>
+                    <p class="page-subtitle text-muted mb-0">
+                        Catálogo de ubicaciones del almacén — Sistema Spare Parts DENSO
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="row g-2">
+                    <!-- Stat card -->
+                    <div class="col-6">
+                        <div class="stat-card-po">
+                            <div class="stat-icon-po bg-blue">
+                                <i class="lni lni-map-marker"></i>
+                            </div>
+                            <div class="stat-info-po">
+                                <h4>{{counterData}}</h4>
+                                <small>Total Localizaciones</small>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Botón Sync WMS -->
+                    <div class="col-6">
+                        <button class="main-btn w-100 h-100 btn-hover"
+                                ng-class="isSyncing ? 'light-btn' : 'warning-btn'"
+                                ng-disabled="isSyncing"
+                                ng-click="SyncFromWMS()"
+                                style="border-radius:12px; font-size:13px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:12px 8px;">
+                            <i ng-class="isSyncing ? 'lni lni-reload' : 'lni lni-download'"
+                               ng-style="isSyncing && {'animation':'po-spin 0.8s linear infinite'}"></i>
+                            <span ng-if="!isSyncing">Carga Masiva</span>
+                            <span ng-if="isSyncing">Sincronizando...</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== FILTROS ===== -->
+    <div class="card-style settings-card-1 mb-30">
+        <div class="row g-3 align-items-end">
+            <div class="col-lg-7 col-md-12">
+                <div class="input-style-1">
+                    <label>
+                        <i class="lni lni-search-alt"></i>
+                        Buscar (Localización, Almacén, Gaveta, Cajón, Clave)
+                    </label>
+                    <input type="text"
+                           ng-model="filterSearch"
+                           placeholder="Ej: A90-01-09, BANDAS_90, RACKA92..."
+                           ng-keypress="$event.keyCode === 13 && Search(1)" />
+                </div>
+            </div>
+            <div class="col-lg-5 col-md-12 d-flex justify-content-end gap-2">
+                <div class="col-auto">
+                    <a class="main-btn primary-btn rounded-full btn-hover"
+                       style="text-decoration:none;" ng-click="Search(1)">
+                        <i class="lni lni-search"></i> Buscar
+                    </a>
+                </div>
+                <div class="col-auto">
+                    <a class="main-btn danger-btn rounded-full btn-hover"
+                       style="text-decoration:none;" ng-click="ClearFilters()">
+                        <i class="lni lni-brush-alt"></i> Limpiar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TABLA ===== -->
+    <div class="card-style mb-30">
+        <div class="d-flex justify-content-between align-items-center mb-20">
+            <h6 class="mb-0">
+                <i class="lni lni-list"></i> Listado de Localizaciones
+            </h6>
+            <small class="text-muted">
+                <i class="lni lni-information"></i>
+                Datos locales — usa <strong>Sync WMS</strong> para actualizar desde Spare Parts
+            </small>
+        </div>
+
+        <!-- Spinner carga normal -->
+        <div ng-if="isLoading" class="loading-overlay">
+            <div class="loading-spinner"></div>
+            <span>Cargando localizaciones...</span>
+        </div>
+
+        <div ng-if="!isLoading" class="table-wrapper table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th><h6>Localización</h6></th>
+                        <th><h6>Almacén</h6></th>
+                        <th><h6>Gaveta (Rack)</h6></th>
+                        <th><h6>Cajón</h6></th>
+                        <th><h6>Clave</h6></th>
+                        <th><h6>Medidas (L x A)</h6></th>
+                        <th><h6>Última Actualización</h6></th>
+                        <th style="width:80px;"><h6></h6></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-if="!ExistData()">
+                        <td colspan="8">
+                            <div class="text-center py-5 text-muted">
+                                <i class="lni lni-map-marker" style="font-size:48px; opacity:0.3;"></i>
+                                <p class="mt-3 fs-5">Sin localizaciones sincronizadas</p>
+                                <p style="font-size:13px;">
+                                    Presiona <strong>Sync WMS</strong> para importar las
+                                    localizaciones desde Spare Parts
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr ng-if="ExistData()" ng-repeat="item in data">
+
+                        <!-- Código de localización — dato más importante -->
+                        <td>
+                            <span class="loc-code-badge"
+                                  ng-class="GetAlmacenClass(item.localizacion)">
+                                <i class="lni lni-map-marker"></i>
+                                {{DatumToString(item.localizacion)}}
+                            </span>
+                        </td>
+
+                        <td class="min-width">
+                            <p class="mb-0" style="font-size:13px;">
+                                {{DatumToString(item.descripcionalmacen)}}
+                            </p>
+                            <small class="text-muted">ID: {{item.idalmacen}}</small>
+                        </td>
+
+                        <td class="min-width">
+                            <p class="mb-0" style="font-size:13px;">
+                                {{DatumToString(item.descripciongaveta)}}
+                            </p>
+                            <small class="text-muted">ID: {{item.idgaveta}}</small>
+                        </td>
+
+                        <td class="min-width">
+                            <p class="mb-0" style="font-size:13px;">
+                                {{DatumToString(item.descripcioncajon)}}
+                            </p>
+                            <small class="text-muted">ID: {{item.idcajon}}</small>
+                        </td>
+
+                        <td>
+                            <code style="font-size:12px;">{{DatumToString(item.clave)}}</code>
+                        </td>
+
+                        <td>
+                            <p style="font-size:12px; margin:0;">
+                                {{DatumToString(item.medidal)}} x {{DatumToString(item.medidaa)}}
+                            </p>
+                        </td>
+
+                        <td>
+                            <p style="font-size:12px; margin:0;">
+                                {{DatumToString(item.fechaultimaactualizacion)}}
+                            </p>
+                        </td>
+
+                        <td class="text-center">
+                            <button class="main-btn light-btn btn-hover rounded-full"
+                                    style="padding:5px 12px; font-size:12px;"
+                                    ng-click="OpenDetail(item)"
+                                    title="Ver detalle">
+                                <i class="lni lni-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <pagination-control show-items-per-page="true"
+                            paging-size="pagingSize"
+                            items-per-page="itemsPerPage"
+                            total-items="totalItems"
+                            display-items="displayItems"
+                            current-page="currentPage">
+        </pagination-control>
+    </div>
+</div>
+
+
+<!-- ================================================================ -->
+<!--             MODAL DETALLE DE LOCALIZACIÓN                        -->
+<!-- ================================================================ -->
+<div class="modal fade" id="modalLocationDetail" tabindex="-1" role="dialog"
+     aria-labelledby="modalLocationDetailLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <!-- Header -->
+            <div class="modal-header-po">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5 class="modal-title" id="modalLocationDetailLabel">
+                            <i class="lni lni-map-marker"></i>&nbsp; Detalle de Localización
+                        </h5>
+                        <p class="modal-subtitle mb-0">
+                            <span class="loc-code-badge loc-code-badge-sm"
+                                  ng-class="GetAlmacenClass(selectedLocation.localizacion)">
+                                {{DatumToString(selectedLocation.localizacion)}}
+                            </span>
+                        </p>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white mt-1"
+                            data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body p-4">
+                <table class="table table-sm table-borderless">
+                    <tbody>
+                        <tr>
+                            <td class="text-muted" style="width:160px; font-size:12px;">
+                                <i class="lni lni-tag"></i> ID Localización
+                            </td>
+                            <td><strong>{{selectedLocation.idlocalizacion}}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted" style="font-size:12px;">
+                                <i class="lni lni-map-marker"></i> Localización
+                            </td>
+                            <td>
+                                <span class="loc-code-badge"
+                                      ng-class="GetAlmacenClass(selectedLocation.localizacion)">
+                                    {{DatumToString(selectedLocation.localizacion)}}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted" style="font-size:12px;">
+                                <i class="lni lni-apartment"></i> Planta
+                            </td>
+                            <td>
+                                {{DatumToString(selectedLocation.descripcionplanta)}}
+                                <small class="text-muted">(ID: {{selectedLocation.idplanta}})</small>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted" style="font-size:12px;">
+                                <i class="lni lni-home"></i> Almacén
+                            </td>
+                            <td>
+                                {{DatumToString(selectedLocation.descripcionalmacen)}}
+                                <small class="text-muted">(ID: {{selectedLocation.idalmacen}})</small>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted" style="font-size:12px;">
+                                <i class="lni lni-grid-alt"></i> Gaveta (Rack)
+                            </td>
+                            <td>
+                                {{DatumToString(selectedLocation.descripciongaveta)}}
+                                <small class="text-muted">(ID: {{selectedLocation.idgaveta}})</small>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted" style="font-size:12px;">
+                                <i class="lni lni-layers"></i> Cajón
+                            </td>
+                            <td>
+                                {{DatumToString(selectedLocation.descripcioncajon)}}
+                                <small class="text-muted">(ID: {{selectedLocation.idcajon}})</small>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted" style="font-size:12px;">
+                                <i class="lni lni-key"></i> Clave
+                            </td>
+                            <td><code>{{DatumToString(selectedLocation.clave)}}</code></td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted" style="font-size:12px;">
+                                <i class="lni lni-text-align-left"></i> Descripción
+                            </td>
+                            <td>{{DatumToString(selectedLocation.descripcionlocalizacion)}}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted" style="font-size:12px;">
+                                <i class="lni lni-ruler-alt"></i> Medidas (L x A)
+                            </td>
+                            <td>
+                                {{DatumToString(selectedLocation.medidal)}}
+                                &times;
+                                {{DatumToString(selectedLocation.medidaa)}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted" style="font-size:12px;">
+                                <i class="lni lni-calendar"></i> Últ. Actualización
+                            </td>
+                            <td>
+                                {{DatumToString(selectedLocation.fechaultimaactualizacion)}}
+                                {{DatumToString(selectedLocation.horaUltimaActualizacion)}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer" style="border-top:1px solid #dee2e6;">
+                <button type="button"
+                        class="main-btn danger-btn btn-hover rounded-full"
+                        data-bs-dismiss="modal">
+                    <i class="lni lni-close"></i>&nbsp; Cerrar
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>

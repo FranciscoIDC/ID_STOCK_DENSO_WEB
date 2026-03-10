@@ -1,0 +1,120 @@
+﻿<header class="header header_background shadow-sm py-2 bg-dark">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <!-- Logo -->
+            <div class="navbar-logo col-lg-2 col-md-3 col-12 text-center text-md-start mb-2 mb-md-0">
+                <a ui-sref="home">
+                    <img src="../../../images/logo/logo_idstock.jpg" width="180px" alt="Logo" />
+                </a>
+            </div>
+
+            <!-- Navegación Principal -->
+            <div class="col-lg-8 col-md-6 col-12">
+                <ul class="navbar-nav d-flex flex-row justify-content-start align-items-center gap-3">
+
+                    <!-- ITERAR SOBRE LOS ITEMS DEL MENÚ -->
+                    <li class="nav-item dropdown position-relative"
+                        ng-repeat="item in $ctrl.menu_items">
+                        <a class="nav-link dropdown-toggle text-white px-3 py-2 rounded hover-bg"
+                           ng-class="{'operations-highlight': item.Name === 'Operaciones'}"
+                           href="#"
+                           role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            <i class="{{item.Icon}} me-2"></i>{{item.Name}}
+                        </a>
+
+                        <!-- Dropdown Level 1 -->
+                        <!-- Dropdown Level 1 -->
+                        <!--<ul class="idstock-dropdown-menu idstock-dropdown-menu idstock-fade-in mt-2"-->
+                        <ul class="dropdown-menu fade-in mt-2"
+                            ng-class="{'idstock-mega-menu': item.Name === 'Catálogos'}">
+
+
+                            <li ng-repeat="option in item.List"
+                                ng-if="option.Subcategories && option.Subcategories.length > 0"
+                                class="idstock-dropdown-submenu">
+
+                                <a class="idstock-dropdown-item idstock-dropdown-toggle" href="javascript:void(0)">
+                                    <i class="lni lni-{{option.Icon}} me-2" ng-if="option.Icon"></i>
+                                    {{option.Permission}}
+                                </a>
+
+                                <!-- Submenu Level 2 -->
+                                <ul class="idstock-submenu">
+                                    <li ng-repeat="subitem in option.Subcategories">
+                                        <a class="idstock-dropdown-item"
+                                           ui-sref="{{subitem.UrlAccess}}">
+                                            {{subitem.Permission}}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li ng-repeat="option in item.List"
+                                ng-if="!option.Subcategories || option.Subcategories.length === 0">
+                                <a class="idstock-dropdown-item"
+                                   ui-sref="{{option.UrlAccess}}">
+                                    {{option.Permission}}
+                                </a>
+                            </li>
+
+                        </ul>
+
+                    </li>
+
+                </ul>
+            </div>
+
+            <!-- Usuario y Premium Badge -->
+            <div class="col-lg-2 col-md-3 col-12 text-end">
+                <div class="d-flex align-items-center justify-content-end gap-3">
+                    <!-- Premium Badge -->
+                    <div class="premium-badge d-none d-md-block">
+                        <img src="../../../images/denso/logo-denso-nav.jpg" alt="Premium" style="height: 34px; opacity: 0.9;" />
+                    </div>
+
+                    <!-- User Dropdown -->
+                    <div class="dropdown">
+                        <button class="dropdown-toggle bg-transparent border-0 d-flex align-items-center gap-2"
+                                type="button"
+                                id="profile"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                            <div class="profile-info text-white text-end d-none d-lg-block">
+                                <h6 class="mb-0 fw-semibold" style="color: #ffffff !important; font-size: 0.9rem;">{{$ctrl.headerName}}</h6>
+                                <small class="text-opacity-75" style="font-size: 0.75rem;">Usuario</small>
+                            </div>
+                            <div class="profile-image position-relative">
+                                <img src="../../../images/585e4beacb11b227491c3399.png"
+                                     class="rounded-circle border border-2 border-warning"
+                                     width="36"
+                                     height="36"
+                                     alt="Profile">
+                                <span class="status-dot position-absolute bottom-0 end-0 bg-success rounded-circle border border-2 border-white"
+                                      style="width:10px; height:10px;"></span>
+                            </div>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="profile">
+                            <li>
+                                <a class="dropdown-item2 d-flex align-items-center gap-2" ng-click="$ctrl.logout()">
+                                    <i class="lni lni-exit"></i> Cerrar Sesión
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <style>
+            .dropdown-item2 {
+                color: #2c3e50 !important;
+            }
+
+                .dropdown-item2:hover {
+                    color: #ffc107 !important;
+                    background-color: #f8f9fa !important;
+                }
+        </style>
+    </div>
+</header>
