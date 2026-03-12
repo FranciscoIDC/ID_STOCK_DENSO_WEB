@@ -5,9 +5,9 @@
         .module('app')
         .factory('authService', authService);
 
-    authService.$inject = ['$http', 'GeneralInfo', 'RoleEditService', 'AlertService'];
+    authService.$inject = ['$http', 'GeneralInfo', 'RoleEditService', 'AlertService', 'ConstService'];
 
-    function authService($http, GeneralInfo, RoleEditService, AlertService) {
+    function authService($http, GeneralInfo, RoleEditService, AlertService, ConstService) {
         let service = {
             IsLogged: _IsLogged,
             LogOut: _LogOut,
@@ -20,7 +20,7 @@
 
             if (!session) {
                 if (routeTo?.templateUrl.toLowerCase().includes("admin")) {
-                    window.location.replace("/");
+                    window.location.replace(ConstService.pathBase + '/');
                     return;
                 }
             } else {
@@ -58,7 +58,7 @@
                     if (!accessible || (!hasPermission && menuId > 0)) {
                         //window.location.replace('/#!/auth/login');
                         //LogOut();
-                        window.location.replace('/Home/Index#!admin/dashboard/home');
+                        window.location.replace(ConstService.pathBase + '/Home/Index#!admin/dashboard/home');
                         AlertService.ErrorHtml("Opps", 'Al parecer no estas autorizado para acceder a esta opción');
                         return;
                     }
@@ -66,7 +66,7 @@
                     return;
                 }
 
-                window.location.replace('/Home/Index#!admin/dashboard/home');
+                window.location.replace(ConstService.pathBase + '/Home/Index#!admin/dashboard/home');
                 return;
             }
         }
@@ -97,7 +97,7 @@
         function _LogOut() {
             GeneralInfo.removeDataInLs();
             //localStorage.removeItem("session");
-            window.location.replace('/');
+            window.location.replace(ConstService.pathBase + '/');
         }
 
         return service;

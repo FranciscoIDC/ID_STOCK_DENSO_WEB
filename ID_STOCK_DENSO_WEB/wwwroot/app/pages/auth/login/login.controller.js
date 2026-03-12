@@ -3,9 +3,9 @@
         .module('app')
         .controller('LoginController', LoginController);
 
-    LoginController.$inject = ['$scope', '$state', 'LoginService', 'AlertService', 'GeneralInfo'];
+    LoginController.$inject = ['$scope', '$state', 'LoginService', 'AlertService', 'GeneralInfo', 'ConstService'];
 
-    function LoginController(self, $state, LoginService, AlertService, GeneralInfo) {
+    function LoginController(self, $state, LoginService, AlertService, GeneralInfo, ConstService) {
 
 
         function _Init() {
@@ -68,7 +68,7 @@
         }
 
         function _GoHome() {
-            window.location.replace('/Home/Index#!admin/dashboard/home');
+            window.location.replace(ConstService.pathBase + '/Home/Index#!admin/dashboard/home');
         }
 
         _Init();

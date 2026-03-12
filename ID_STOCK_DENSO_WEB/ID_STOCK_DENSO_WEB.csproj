@@ -27,4 +27,11 @@
     <None Include="wwwroot\app\pages\admin\stock\report\stock-report.service.js" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="DartSassBuilder.NET9" Version="1.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
 </Project>

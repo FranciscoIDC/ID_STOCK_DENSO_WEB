@@ -24,6 +24,12 @@ namespace ID_STOCK_SODISA_WEB
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var pathBase = Configuration["AppSettings:PathBase"] ?? "";
+            if (!string.IsNullOrEmpty(pathBase))
+            {
+                app.UsePathBase(pathBase);
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
