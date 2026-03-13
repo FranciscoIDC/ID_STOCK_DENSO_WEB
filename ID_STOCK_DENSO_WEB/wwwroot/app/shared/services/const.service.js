@@ -10,7 +10,19 @@
     function ConstService() {
         let appConfig = window.__APP_CONFIG__ || {};
         let webApiIp = appConfig.webApiUrl || 'http://localhost:59020/api/';
-        let pathBase = appConfig.pathBase || '';
+
+        // Derive pathBase from <base href> tag (set server-side by Razor) as primary source.
+        // This is more reliable than window.__APP_CONFIG__ since it's always rendered by the server.
+        let pathBase = '';
+        var baseEl = document.querySelector('base');
+        if (baseEl) {
+            var basePath = new URL(baseEl.getAttribute('href'), window.location.origin).pathname;
+            pathBase = basePath.replace(/\/+$/, '');
+        }
+        if (!pathBase) {
+            pathBase = appConfig.pathBase || '';
+        }
+
         // Derive webApiDomain (host+path without protocol and trailing /api/) for image URL construction
         let webApiDomain = webApiIp.replace(/^https?:\/\//, '').replace(/\/api\/?$/, '');
 
