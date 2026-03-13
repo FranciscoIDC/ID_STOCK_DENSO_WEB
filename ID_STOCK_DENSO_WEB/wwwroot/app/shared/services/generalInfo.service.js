@@ -49,7 +49,7 @@
             //let permissions = JSON.parse(localStorage.getItem(ConstService.permissionsList));
             try {
                 let res = _DecryptUserPermissions(localStorage.getItem(info.KEY_USER_P_LS));
-                return JSON.parse(res);
+                return res;
             } catch (e) {
                 let error = e;
             }
@@ -82,7 +82,7 @@
 
         function _GetDataInLs() {
             let res = _DecryptUser(localStorage.getItem(info.KEY_USER_LS));
-            return JSON.parse(res);
+            return res;
         }
 
         //GUARDADO DE PERMISOS DEL USUARIO

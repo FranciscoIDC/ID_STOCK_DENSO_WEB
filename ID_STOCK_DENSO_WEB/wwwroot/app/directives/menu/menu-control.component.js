@@ -143,7 +143,7 @@ MenuControl_Controller.$inject = ['$scope', 'GeneralInfo', 'authService'];
 
 angular.module('app')
     .component('menuControl', {
-        templateUrl: '/app/directives/menu/menu-control.component.html',
+        templateUrl: 'app/directives/menu/menu-control.component.html',
         controller: MenuControl_Controller,
         bindings: {}
     });

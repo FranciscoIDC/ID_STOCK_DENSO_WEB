@@ -51,7 +51,7 @@
                 const { Status, Message, Data } = response.data;
                 console.log("Login | Request: ", response.data);
                 if (Status === 200) {
-                    GeneralInfo.setUserInLS(JSON.stringify({ 'id': Data.ID, 'name': Data.UserName, 'userType': 1, 'sessionDate': Date.now(), 'departmentId' : Data.IdDepartament, 'companyId': Data.CompanyId, 'roleId': Data.RoleId }));
+                    GeneralInfo.setUserInLS({ 'id': Data.ID, 'name': Data.UserName, 'userType': 1, 'sessionDate': Date.now(), 'departmentId' : Data.IdDepartament, 'companyId': Data.CompanyId, 'roleId': Data.RoleId });
                     //localStorage.setItem("session", JSON.stringify({ 'id': Data.ID, 'name': Data.UserName, 'userType': 1, 'sessionDate': Date.now() }))
                     swal.close();
                     return true;
