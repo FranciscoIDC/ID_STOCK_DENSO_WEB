@@ -42,11 +42,9 @@
             self.currentPage = 1;
             self.displayItems = [];
 
-            // Estado de carga
-            self.isLoading = false;
             self.isLoadingFull = false; // carga masiva en progreso
 
-            // Modal de imagen (placeholder — sin funcionalidad aún)
+            // Modal de imagen
             self.selectedProduct = {};
 
             // Catálogo de tipos para badge de color
@@ -70,6 +68,7 @@
             self.OpenImageModal = _OpenImageModal;
             self.LoadFullCatalog = _LoadFullCatalog;
 
+            // VISORES DE LAS VARIABLES QUE SE USAN EN EL CONTROL DE PAGINACION
             self.$watch("currentPage", _ChangueCurrentPage);
             self.$watch("itemsPerPage", _ChangueItemsPerPage);
         }
@@ -80,24 +79,27 @@
             swal.close();
         }
 
-        // ========== BÚSQUEDA NORMAL (GetLast) ==========
+        // ========== BÚSQUEDA NORMAL ==========
         async function _Search(newPage) {
             newPage = !newPage ? 1 : newPage;
 
-            self.isLoading = true;
-            self.currentPage = newPage;
             AlertService.Load();
+            self.currentPage = newPage;
 
-            let params = {
-                'Page': self.currentPage,
-                'ItemsPerPage': self.itemsPerPage,
-                'Search': self.filterSearch,
-            };
+            let params = _BuildParams(self.currentPage);
 
             await _GetProductsAsync(params);
 
-            self.isLoading = false;
             swal.close();
+        }
+
+        // Centraliza la construcción de parámetros para evitar inconsistencias entre funciones
+        function _BuildParams(page) {
+            return {
+                'Page': page || 1,
+                'ItemsPerPage': self.itemsPerPage,
+                'Search': self.filterSearch,
+            };
         }
 
         async function _GetProductsAsync(params) {
@@ -109,10 +111,10 @@
                 let response = await ProductListService.Get(params);
                 const { Status: status, Message: message, Data: data, Counter: counter } = response.data;
 
-                console.log('Productos obtenidos:', response);
+                console.log('✅ Productos obtenidos:', response);
 
                 if (status !== 200) {
-                    console.error('Error:', message);
+                    console.error('❌ Error:', message);
                     AlertService.Error("Oops", message);
                     return;
                 }
@@ -124,7 +126,7 @@
                 self.$apply();
             } catch (ex) {
                 let error = ErrorService.GetError(ex);
-                console.error('Error obteniendo productos:', error);
+                console.error('❌ Error obteniendo productos:', error);
                 AlertService.ErrorHtml('Oops...', error);
             }
         }
@@ -140,7 +142,6 @@
 
             if (!confirmed) return;
 
-            // ✅ $timeout en lugar de $apply para evitar inprog
             $timeout(function () {
                 self.isLoadingFull = true;
             });
@@ -168,7 +169,6 @@
                     return;
                 }
 
-                // ✅ Todo en un solo $timeout al finalizar
                 $timeout(function () {
                     self.data = data || [];
                     self.totalItems = counter || 0;
@@ -181,14 +181,14 @@
 
             } catch (ex) {
                 var error = ErrorService.GetError(ex);
-                console.error('Error en carga masiva:', error);
+                console.error('❌ Error en carga masiva:', error);
                 swal.close();
                 AlertService.ErrorHtml('Error en carga masiva', error);
                 $timeout(function () { self.isLoadingFull = false; });
             }
         }
 
-        // ========== MODAL IMAGEN (placeholder) ==========
+        // ========== MODAL IMAGEN ==========
         function _OpenImageModal(product) {
             self.selectedProduct = product;
             $timeout(function () {
@@ -223,20 +223,23 @@
         }
 
         function _ClearFilters() {
+            console.log('🧹 Limpiando filtros');
+
             self.filterSearch = "";
-            $timeout(function () { _Search(1); }, 100);
+
+            $timeout(function () {
+                _Search(1);
+            }, 100);
         }
 
         // ========== PAGINACIÓN ==========
         function _ChangueCurrentPage(newPage, oldPage) {
             if (newPage === oldPage) return;
+
+            console.log("📄 Cambiando a página:", newPage);
             AlertService.Load();
 
-            let params = {
-                'Page': newPage,
-                'ItemsPerPage': self.itemsPerPage,
-                'Search': self.filterSearch,
-            };
+            let params = _BuildParams(newPage);
 
             _GetProductsAsync(params);
             swal.close();
@@ -244,13 +247,11 @@
 
         async function _ChangueItemsPerPage(newValue, oldValue) {
             if (newValue === oldValue) return;
+
+            console.log("📊 Items por página:", newValue);
             AlertService.Load();
 
-            let params = {
-                'Page': 1,
-                'ItemsPerPage': self.itemsPerPage,
-                'Search': self.filterSearch,
-            };
+            let params = _BuildParams(1); // Reiniciar a primera página
 
             await _GetProductsAsync(params);
             swal.close();

@@ -80,19 +80,24 @@
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 d-flex justify-content-end gap-2 flex-wrap">
-                <a class="main-btn primary-btn rounded-full btn-hover"
-                   style="text-decoration:none;" ng-click="Search(1)">
-                    <i class="lni lni-search"></i> Buscar
-                </a>
-                <a class="main-btn danger-btn rounded-full btn-hover"
-                   style="text-decoration:none;" ng-click="ClearFilters()">
-                    <i class="lni lni-brush-alt"></i> Limpiar
-                </a>
-                <a class="main-btn success-btn rounded-full btn-hover"
-                   style="text-decoration:none;" ng-click="GetCSV()"
-                   ng-if="ExistData()">
-                    <i class="lni lni-download"></i> Exportar CSV
-                </a>
+                <div class="input-style-1">
+                    <a class="main-btn primary-btn rounded-full btn-hover"
+                       style="text-decoration:none;" ng-click="Search(1)">
+                        <i class="lni lni-search"></i> Buscar
+                    </a>
+                </div>
+                <div class="input-style-1">
+                    <a class="main-btn danger-btn rounded-full btn-hover"
+                       style="text-decoration:none;" ng-click="ClearFilters()">
+                        <i class="lni lni-brush-alt"></i> Limpiar
+                    </a>
+                </div>
+                <div class="input-style-1" ng-if="ExistData()">
+                    <a class="main-btn success-btn rounded-full btn-hover"
+                       style="text-decoration:none;" ng-click="GetCSV()">
+                        <i class="lni lni-download"></i> Exportar CSV
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -108,20 +113,14 @@
             </h6>
         </div>
 
-        <!-- Loading -->
-        <div ng-if="isLoading" class="loading-overlay">
-            <div class="loading-spinner"></div>
-            <span>Cargando entradas...</span>
-        </div>
-
         <!-- Estado vacío -->
-        <div ng-if="!isLoading && !ExistData()" class="text-center py-5 text-muted">
+        <div ng-if="!ExistData()" class="text-center py-5 text-muted">
             <i class="lni lni-search-alt" style="font-size:2.5rem; opacity:.3;"></i>
             <p class="mt-3">Aplica los filtros para consultar el reporte de entradas.</p>
         </div>
 
         <!-- Cards de entradas -->
-        <div ng-if="!isLoading && ExistData()">
+        <div ng-if="ExistData()">
             <div ng-repeat="item in data" class="inbound-entry-card mb-3">
 
                 <!-- ── Encabezado de la card ── -->
@@ -221,7 +220,6 @@
                     </div>
 
                 </div><!-- /timeline -->
-
                 <!-- ── Footer de la card ── -->
                 <div class="inbound-entry-footer mt-3 d-flex justify-content-between align-items-center">
                     <span class="text-muted" style="font-size:12px;">
@@ -236,7 +234,6 @@
                 </div>
 
             </div><!-- /ng-repeat -->
-
             <!-- Paginación -->
             <pagination-control show-items-per-page="true"
                                 paging-size="pagingSize"
@@ -411,132 +408,142 @@
 <!--                        CSS EMBEBIDO                              -->
 <!-- ================================================================ -->
 <style>
-/* ── Inbound Entry Card ── */
-.inbound-entry-card {
-    background: #fff;
-    border: 1px solid #e5e9f2;
-    border-radius: 10px;
-    padding: 18px 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.04);
-    transition: box-shadow .2s;
-}
-.inbound-entry-card:hover {
-    box-shadow: 0 4px 16px rgba(0,0,0,.08);
-}
+    /* ── Inbound Entry Card ── */
+    .inbound-entry-card {
+        background: #fff;
+        border: 1px solid #e5e9f2;
+        border-radius: 10px;
+        padding: 18px 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,.04);
+        transition: box-shadow .2s;
+    }
 
-/* ── Card header ── */
-.inbound-entry-header {
-    border-bottom: 1px solid #f0f2f7;
-    padding-bottom: 10px;
-}
-.inbound-po-num {
-    font-size: 15px;
-    color: #2d2d2d;
-}
-.inbound-supplier {
-    font-size: 13px;
-    color: #6c757d;
-}
+        .inbound-entry-card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,.08);
+        }
 
-/* ── Timeline ── */
-.inbound-timeline {
-    display: flex;
-    gap: 0;
-    padding: 10px 0 6px;
-    overflow-x: auto;
-}
-.timeline-step-block {
-    display: flex;
-    flex: 1;
-    min-width: 160px;
-    gap: 10px;
-}
-.step-icon-wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 2px;
-}
-.step-circle {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 15px;
-    flex-shrink: 0;
-    transition: background .2s, color .2s;
-}
-.step-line {
-    width: 2px;
-    flex: 1;
-    min-height: 30px;
-    margin-top: 4px;
-    margin-bottom: 4px;
-    background: #e5e9f2;
-}
+    /* ── Card header ── */
+    .inbound-entry-header {
+        border-bottom: 1px solid #f0f2f7;
+        padding-bottom: 10px;
+    }
 
-/* Horizontal connector between steps */
-.timeline-step-block:not(:last-child) .step-icon-wrap::after {
-    display: none; /* vertical layout, no after */
-}
+    .inbound-po-num {
+        font-size: 15px;
+        color: #2d2d2d;
+    }
 
-/* ── Step states ── */
-.timeline-step-done .step-circle {
-    background: #28a745;
-    color: #fff;
-}
-.timeline-step-done .step-line {
-    background: #28a745;
-}
-.timeline-step-done .step-title {
-    color: #28a745;
-    font-weight: 600;
-}
+    .inbound-supplier {
+        font-size: 13px;
+        color: #6c757d;
+    }
 
-.timeline-step-active .step-circle {
-    background: #fd7e14;
-    color: #fff;
-}
-.timeline-step-active .step-line {
-    background: #e5e9f2;
-}
-.timeline-step-active .step-title {
-    color: #fd7e14;
-    font-weight: 600;
-}
+    /* ── Timeline ── */
+    .inbound-timeline {
+        display: flex;
+        gap: 0;
+        padding: 10px 0 6px;
+        overflow-x: auto;
+    }
 
-.timeline-step-pending .step-circle {
-    background: #e5e9f2;
-    color: #aaa;
-}
-.timeline-step-pending .step-title {
-    color: #aaa;
-}
-.timeline-step-pending .step-detail {
-    color: #ccc;
-}
+    .timeline-step-block {
+        display: flex;
+        flex: 1;
+        min-width: 160px;
+        gap: 10px;
+    }
 
-/* ── Step body text ── */
-.step-body {
-    padding-bottom: 8px;
-}
-.step-title {
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: .4px;
-}
-.step-detail {
-    font-size: 12px;
-    color: #6c757d;
-    line-height: 1.5;
-}
+    .step-icon-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 2px;
+    }
 
-/* ── Card footer ── */
-.inbound-entry-footer {
-    border-top: 1px solid #f0f2f7;
-    padding-top: 10px;
-}
+    .step-circle {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        flex-shrink: 0;
+        transition: background .2s, color .2s;
+    }
+
+    .step-line {
+        width: 2px;
+        flex: 1;
+        min-height: 30px;
+        margin-top: 4px;
+        margin-bottom: 4px;
+        background: #e5e9f2;
+    }
+
+    /* ── Step states ── */
+    .timeline-step-done .step-circle {
+        background: #28a745;
+        color: #fff;
+    }
+
+    .timeline-step-done .step-line {
+        background: #28a745;
+    }
+
+    .timeline-step-done .step-title {
+        color: #28a745;
+        font-weight: 600;
+    }
+
+    .timeline-step-active .step-circle {
+        background: #fd7e14;
+        color: #fff;
+    }
+
+    .timeline-step-active .step-line {
+        background: #e5e9f2;
+    }
+
+    .timeline-step-active .step-title {
+        color: #fd7e14;
+        font-weight: 600;
+    }
+
+    .timeline-step-pending .step-circle {
+        background: #e5e9f2;
+        color: #aaa;
+    }
+
+    .timeline-step-pending .step-title {
+        color: #aaa;
+    }
+
+    .timeline-step-pending .step-detail {
+        color: #ccc;
+    }
+
+    /* ── Step body text ── */
+    .step-body {
+        padding-bottom: 8px;
+    }
+
+    .step-title {
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+    }
+
+    .step-detail {
+        font-size: 12px;
+        color: #6c757d;
+        line-height: 1.5;
+    }
+
+    /* ── Card footer ── */
+    .inbound-entry-footer {
+        border-top: 1px solid #f0f2f7;
+        padding-top: 10px;
+    }
 </style>

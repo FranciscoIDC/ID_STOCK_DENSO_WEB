@@ -40,8 +40,7 @@
             self.currentPage = 1;
             self.displayItems = [];
 
-            self.isLoading = false;
-            self.isSyncing = false;  // sync WMS en progreso
+            self.isSyncing = false; // sync WMS en progreso
 
             // Modal detalle
             self.selectedLocation = {};
@@ -56,6 +55,7 @@
             self.SyncFromWMS = _SyncFromWMS;
             self.GetAlmacenClass = _GetAlmacenClass;
 
+            // VISORES DE LAS VARIABLES QUE SE USAN EN EL CONTROL DE PAGINACION
             self.$watch('currentPage', _ChangueCurrentPage);
             self.$watch('itemsPerPage', _ChangueItemsPerPage);
         }
@@ -70,20 +70,23 @@
         async function _Search(newPage) {
             newPage = newPage || 1;
 
-            self.isLoading = true;
-            self.currentPage = newPage;
             AlertService.Load();
+            self.currentPage = newPage;
 
-            var params = {
-                'Page': self.currentPage,
-                'ItemsPerPage': self.itemsPerPage,
-                'Search': self.filterSearch,
-            };
+            var params = _BuildParams(self.currentPage);
 
             await _GetLocationsAsync(params);
 
-            self.isLoading = false;
             swal.close();
+        }
+
+        // Centraliza la construcción de parámetros para evitar inconsistencias entre funciones
+        function _BuildParams(page) {
+            return {
+                'Page': page || 1,
+                'ItemsPerPage': self.itemsPerPage,
+                'Search': self.filterSearch,
+            };
         }
 
         async function _GetLocationsAsync(params) {
@@ -98,10 +101,10 @@
                 var data = response.data.Data;
                 var counter = response.data.Counter;
 
-                console.log('[LocationList] Response:', response);
+                console.log('✅ Localizaciones obtenidas:', response);
 
                 if (status !== 200) {
-                    console.error('[LocationList] Error:', message);
+                    console.error('❌ Error:', message);
                     AlertService.Error('Oops', message);
                     return;
                 }
@@ -113,7 +116,7 @@
                 self.$apply();
             } catch (ex) {
                 var error = ErrorService.GetError(ex);
-                console.error('[LocationList] Error:', error);
+                console.error('❌ Error obteniendo localizaciones:', error);
                 AlertService.ErrorHtml('Oops...', error);
             }
         }
@@ -166,7 +169,7 @@
 
             } catch (ex) {
                 var error = ErrorService.GetError(ex);
-                console.error('[LocationList] Error en sync:', error);
+                console.error('❌ Error en sync:', error);
                 swal.close();
                 AlertService.ErrorHtml('Error en sincronización', error);
                 $timeout(function () { self.isSyncing = false; });
@@ -191,11 +194,16 @@
         }
 
         function _ClearFilters() {
+            console.log('🧹 Limpiando filtros');
+
             self.filterSearch = '';
-            $timeout(function () { _Search(1); }, 100);
+
+            $timeout(function () {
+                _Search(1);
+            }, 100);
         }
 
-        // Badge de color por almacén (primeras letras del código de localización)
+        // Badge de color por almacén (primera letra del código de localización)
         function _GetAlmacenClass(localizacion) {
             if (!localizacion) return 'badge-loc-default';
             var prefix = localizacion.substring(0, 1).toUpperCase();
@@ -210,13 +218,11 @@
         // ========== PAGINACIÓN ==========
         function _ChangueCurrentPage(newPage, oldPage) {
             if (newPage === oldPage) return;
+
+            console.log("📄 Cambiando a página:", newPage);
             AlertService.Load();
 
-            var params = {
-                'Page': newPage,
-                'ItemsPerPage': self.itemsPerPage,
-                'Search': self.filterSearch,
-            };
+            var params = _BuildParams(newPage);
 
             _GetLocationsAsync(params);
             swal.close();
@@ -224,13 +230,11 @@
 
         async function _ChangueItemsPerPage(newValue, oldValue) {
             if (newValue === oldValue) return;
+
+            console.log("📊 Items por página:", newValue);
             AlertService.Load();
 
-            var params = {
-                'Page': 1,
-                'ItemsPerPage': self.itemsPerPage,
-                'Search': self.filterSearch,
-            };
+            var params = _BuildParams(1); // Reiniciar a primera página
 
             await _GetLocationsAsync(params);
             swal.close();

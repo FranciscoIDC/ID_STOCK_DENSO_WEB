@@ -47,9 +47,13 @@
             self.currentPage = 1;
             self.displayItems = [];
 
+            // Contadores stat cards
+            self.countPaso1 = 0;
+            self.countPaso2 = 0;
+            self.countPaso3 = 0;
+
             // Modal de detalle de partes
             self.selectedOrder = {};
-
         }
 
         function _RegisterFunctions() {
@@ -73,12 +77,12 @@
             // CSV
             self.GetCSV = _GetCSV;
 
+            // VISORES DE LAS VARIABLES QUE SE USAN EN EL CONTROL DE PAGINACION
             self.$watch("currentPage", _ChangueCurrentPage);
             self.$watch("itemsPerPage", _ChangueItemsPerPage);
         }
 
         async function _FunctionsInit() {
-            AlertService.Load();
             // No cargamos datos al abrir; el usuario debe aplicar filtros
             swal.close();
         }
@@ -87,22 +91,24 @@
         async function _Search(newPage) {
             newPage = !newPage ? 1 : newPage;
 
-            self.currentPage = newPage;
             AlertService.Load();
+            self.currentPage = newPage;
 
-            let params = _BuildParams(self.currentPage, self.itemsPerPage);
+            let params = _BuildParams(self.currentPage);
+
             await _GetInboundAsync(params);
 
             swal.close();
         }
 
-        function _BuildParams(page, itemsPerPage) {
+        // Centraliza la construcción de parámetros para evitar inconsistencias entre funciones
+        function _BuildParams(page) {
             return {
-                Page: page,
-                ItemsPerPage: +itemsPerPage,
-                Search: self.filterSearch,
-                DtStart: self.filterDtStart || null,
-                DtEnd: self.filterDtEnd || null,
+                'Page': page || 1,
+                'ItemsPerPage': self.itemsPerPage,
+                'Search': self.filterSearch,
+                'DtStart': self.filterDtStart || null,
+                'DtEnd': self.filterDtEnd || null,
             };
         }
 
@@ -120,7 +126,7 @@
                     Counter: counter
                 } = response.data;
 
-                console.log('📦 InboundReport response:', response);
+                console.log('✅ InboundReport obtenido:', response);
 
                 if (status !== 200) {
                     console.error('❌ Error:', message);
@@ -128,7 +134,6 @@
                     return;
                 }
 
-                // listapartes ya viene ensamblada dentro de cada row por el backend (GroupBy en C#)
                 let rows = data || [];
 
                 self.data = rows;
@@ -144,7 +149,7 @@
 
             } catch (ex) {
                 let error = ErrorService.GetError(ex);
-                console.error('❌ Oops:', error);
+                console.error('❌ Error obteniendo entradas:', error);
                 AlertService.ErrorHtml('Oops...', error);
             }
         }
@@ -188,7 +193,6 @@
             }
         }
 
-        // Clase para cada paso individual en la timeline
         // stepIndex: 1=PickUp, 2=TempStorage, 3=Capture
         function _GetStepClass(pasoActual, stepIndex) {
             if (pasoActual >= stepIndex) return 'timeline-step-done';
@@ -203,7 +207,6 @@
                 return;
             }
 
-            // Cabecera del CSV (formato plano: una fila por parte por PO)
             let headers = [
                 '# Orden', 'Solicitud', 'Proveedor',
                 'F. Registro', 'F. Recepción',
@@ -221,7 +224,6 @@
                 let partes = row.listapartes || [];
 
                 if (partes.length === 0) {
-                    // PO sin detalle de partes registrado
                     csvRows.push(_BuildCsvRow(row, null));
                 } else {
                     partes.forEach(function (part) {
@@ -311,27 +313,40 @@
         }
 
         function _ClearFilters() {
+            console.log('🧹 Limpiando filtros');
+
             self.filterSearch = "";
             self.filterDtStart = "";
             self.filterDtEnd = "";
             self.data = [];
             self.totalItems = 0;
             self.counterData = 0;
+            self.countPaso1 = 0;
+            self.countPaso2 = 0;
+            self.countPaso3 = 0;
         }
 
         // ========== PAGINACIÓN ==========
         function _ChangueCurrentPage(newPage, oldPage) {
             if (newPage === oldPage) return;
+
+            console.log("📄 Cambiando a página:", newPage);
             AlertService.Load();
-            let params = _BuildParams(newPage, self.itemsPerPage);
+
+            let params = _BuildParams(newPage);
+
             _GetInboundAsync(params);
             swal.close();
         }
 
         async function _ChangueItemsPerPage(newValue, oldValue) {
             if (newValue === oldValue) return;
+
+            console.log("📊 Items por página:", newValue);
             AlertService.Load();
-            let params = _BuildParams(1, self.itemsPerPage);
+
+            let params = _BuildParams(1); // Reiniciar a primera página
+
             await _GetInboundAsync(params);
             swal.close();
         }

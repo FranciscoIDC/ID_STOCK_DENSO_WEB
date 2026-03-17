@@ -46,11 +46,7 @@
             // Modal de detalle de partes
             self.selectedRequisition = {};
 
-            // Estado de carga
-            self.isLoading = false;
-
             // Catálogo de estatus para el filtro dropdown
-            // Basado en la respuesta JSON: 1=En Espera de Entrada, 2=Entregado
             self.statusOptions = [
                 { id: "", label: "Todos los estatus" },
                 { id: "1", label: "En Espera de Entrada" },
@@ -75,6 +71,7 @@
             self.OpenDetailModal = _OpenDetailModal;
             self.SumQuantity = _SumQuantity;
 
+            // VISORES DE LAS VARIABLES QUE SE USAN EN EL CONTROL DE PAGINACION
             self.$watch("currentPage", _ChangueCurrentPage);
             self.$watch("itemsPerPage", _ChangueItemsPerPage);
         }
@@ -89,21 +86,24 @@
         async function _Search(newPage) {
             newPage = !newPage ? 1 : newPage;
 
-            self.isLoading = true;
-            self.currentPage = newPage;
             AlertService.Load();
+            self.currentPage = newPage;
 
-            let params = {
-                'Page': self.currentPage,
+            let params = _BuildParams(self.currentPage);
+
+            await _GetRequisitionsAsync(params);
+
+            swal.close();
+        }
+
+        // Centraliza la construcción de parámetros para evitar inconsistencias entre funciones
+        function _BuildParams(page) {
+            return {
+                'Page': page || 1,
                 'ItemsPerPage': self.itemsPerPage,
                 'Search': self.filterSearch,
                 'Status': self.filterStatus,
             };
-
-            await _GetRequisitionsAsync(params);
-
-            self.isLoading = false;
-            swal.close();
         }
 
         async function _GetRequisitionsAsync(params) {
@@ -115,10 +115,10 @@
                 let response = await RequisitionOrderListService.Get(params);
                 const { Status: status, Message: message, Data: data, Counter: counter } = response.data;
 
-                console.log('Requisiciones obtenidas:', response);
+                console.log('✅ Requisiciones obtenidas:', response);
 
                 if (status !== 200) {
-                    console.error('Error:', message);
+                    console.error('❌ Error:', message);
                     AlertService.Error("Oops", message);
                     return;
                 }
@@ -134,7 +134,7 @@
                 self.$apply();
             } catch (ex) {
                 let error = ErrorService.GetError(ex);
-                console.error('Error obteniendo requisiciones:', error);
+                console.error('❌ Error obteniendo requisiciones:', error);
                 AlertService.ErrorHtml('Oops...', error);
             }
         }
@@ -177,7 +177,7 @@
             }
         }
 
-        // Tipos de parte (igual que PurchaseOrder)
+        // Tipos de parte
         function _GetTypeClass(idtipo) {
             switch (idtipo) {
                 case 1: return 'type-electric';
@@ -209,22 +209,24 @@
         }
 
         function _ClearFilters() {
+            console.log('🧹 Limpiando filtros');
+
             self.filterSearch = "";
             self.filterStatus = "";
-            $timeout(function () { _Search(1); }, 100);
+
+            $timeout(function () {
+                _Search(1);
+            }, 100);
         }
 
         // ========== PAGINACIÓN ==========
         function _ChangueCurrentPage(newPage, oldPage) {
             if (newPage === oldPage) return;
+
+            console.log("📄 Cambiando a página:", newPage);
             AlertService.Load();
 
-            let params = {
-                'Page': newPage,
-                'ItemsPerPage': self.itemsPerPage,
-                'Search': self.filterSearch,
-                'Status': self.filterStatus,
-            };
+            let params = _BuildParams(newPage);
 
             _GetRequisitionsAsync(params);
             swal.close();
@@ -232,14 +234,11 @@
 
         async function _ChangueItemsPerPage(newValue, oldValue) {
             if (newValue === oldValue) return;
+
+            console.log("📊 Items por página:", newValue);
             AlertService.Load();
 
-            let params = {
-                'Page': 1,
-                'ItemsPerPage': self.itemsPerPage,
-                'Search': self.filterSearch,
-                'Status': self.filterStatus,
-            };
+            let params = _BuildParams(1); // Reiniciar a primera página
 
             await _GetRequisitionsAsync(params);
             swal.close();

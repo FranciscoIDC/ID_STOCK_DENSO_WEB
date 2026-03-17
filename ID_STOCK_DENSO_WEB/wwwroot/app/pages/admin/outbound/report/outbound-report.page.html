@@ -14,7 +14,7 @@
                         <span class="current">Reporte de Salidas</span>
                     </div>
                     <h2 class="page-title mb-1">
-                        <i class="lni lni lni-exit"></i> Reporte de Salidas
+                        <i class="lni lni-exit"></i> Reporte de Salidas
                     </h2>
                     <p class="page-subtitle text-muted mb-0">
                         Seguimiento de picking y entrega de requisiciones — DENSO Almacén 90
@@ -71,19 +71,24 @@
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 d-flex justify-content-end gap-2 flex-wrap">
-                <a class="main-btn primary-btn rounded-full btn-hover"
-                   style="text-decoration:none;" ng-click="Search(1)">
-                    <i class="lni lni-search"></i> Buscar
-                </a>
-                <a class="main-btn danger-btn rounded-full btn-hover"
-                   style="text-decoration:none;" ng-click="ClearFilters()">
-                    <i class="lni lni-brush-alt"></i> Limpiar
-                </a>
-                <a class="main-btn success-btn rounded-full btn-hover"
-                   style="text-decoration:none;" ng-click="GetCSV()"
-                   ng-if="ExistData()">
-                    <i class="lni lni-download"></i> Exportar CSV
-                </a>
+                <div class="input-style-1">
+                    <a class="main-btn primary-btn rounded-full btn-hover"
+                       style="text-decoration:none;" ng-click="Search(1)">
+                        <i class="lni lni-search"></i> Buscar
+                    </a>
+                </div>
+                <div class="input-style-1">
+                    <a class="main-btn danger-btn rounded-full btn-hover"
+                       style="text-decoration:none;" ng-click="ClearFilters()">
+                        <i class="lni lni-brush-alt"></i> Limpiar
+                    </a>
+                </div>
+                <div class="input-style-1" ng-if="ExistData()">
+                    <a class="main-btn success-btn rounded-full btn-hover"
+                       style="text-decoration:none;" ng-click="GetCSV()">
+                        <i class="lni lni-download"></i> Exportar CSV
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -244,7 +249,7 @@
                 </div>
             </div>
 
-            <!-- Summary bar: Picking + Entrega + Estado -->
+            <!-- Summary bar: Picking + Entrega + Firma + Estado -->
             <div class="po-summary-bar">
                 <div class="row g-0">
                     <!-- Picking -->
@@ -255,8 +260,7 @@
                             <br>
                             <small class="text-muted">{{FormatDateTime(selectedOrder.PickingDateTime)}}</small>
                             <br>
-                            <small class="text-muted"
-                                   ng-if="selectedOrder.PickingQuantity">
+                            <small class="text-muted" ng-if="selectedOrder.PickingQuantity">
                                 Cant. total: {{selectedOrder.PickingQuantity}}
                             </small>
                         </span>
@@ -274,7 +278,9 @@
                     <div class="col-md-3 summary-col">
                         <span class="summary-label"><i class="lni lni-pencil-alt"></i> Firma de Entrega</span>
                         <span class="summary-value">
-                            <span ng-if="!HasSignature(selectedOrder)" class="text-muted">Sin firma registrada</span>
+                            <span ng-if="!HasSignature(selectedOrder)" class="text-muted">
+                                Sin firma registrada
+                            </span>
                             <span ng-if="HasSignature(selectedOrder)">
                                 <img ng-src="{{selectedOrder.SignaturePhoto}}"
                                      alt="Firma de entrega"
@@ -371,394 +377,380 @@
 <!--                        CSS EMBEBIDO                              -->
 <!-- ================================================================ -->
 <style>
+    /* ── Entry Card ── */
+    .inbound-entry-card {
+        background: #fff;
+        border: 1px solid #e5e9f2;
+        border-radius: 10px;
+        padding: 18px 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,.04);
+        transition: box-shadow .2s;
+    }
 
-     /* ==========================================================
-    ENTRY CARD
-    ========================================================== */
-     .inbound-entry-card {
-         background: #fff;
-         border: 1px solid #e5e9f2;
-         border-radius: 10px;
-         padding: 18px 20px;
-         box-shadow: 0 2px 8px rgba(0,0,0,.04);
-         transition: box-shadow .2s;
-     }
+        .inbound-entry-card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,.08);
+        }
 
-         .inbound-entry-card:hover {
-             box-shadow: 0 4px 16px rgba(0,0,0,.08);
-         }
+    .inbound-entry-header {
+        border-bottom: 1px solid #f0f2f7;
+        padding-bottom: 10px;
+    }
 
-     /* Card header */
-     .inbound-entry-header {
-         border-bottom: 1px solid #f0f2f7;
-         padding-bottom: 10px;
-     }
+    .inbound-po-num {
+        font-size: 15px;
+        color: #2d2d2d;
+    }
 
-     .inbound-po-num {
-         font-size: 15px;
-         color: #2d2d2d;
-     }
+    .inbound-supplier {
+        font-size: 13px;
+        color: #6c757d;
+    }
 
-     .inbound-supplier {
-         font-size: 13px;
-         color: #6c757d;
-     }
+    .inbound-entry-footer {
+        border-top: 1px solid #f0f2f7;
+        padding-top: 10px;
+    }
 
-     /* Card footer */
-     .inbound-entry-footer {
-         border-top: 1px solid #f0f2f7;
-         padding-top: 10px;
-     }
+    /* ── Timeline ── */
+    .inbound-timeline {
+        display: flex;
+        gap: 0;
+        padding: 10px 0 6px;
+        overflow-x: auto;
+    }
 
-     /* ==========================================================
-    TIMELINE
-    ========================================================== */
-     .inbound-timeline {
-         display: flex;
-         gap: 0;
-         padding: 10px 0 6px;
-         overflow-x: auto;
-     }
+    .timeline-step-block {
+        display: flex;
+        flex: 1;
+        min-width: 160px;
+        gap: 10px;
+    }
 
-     .timeline-step-block {
-         display: flex;
-         flex: 1;
-         min-width: 160px;
-         gap: 10px;
-     }
+    .step-icon-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 2px;
+    }
 
-     .step-icon-wrap {
-         display: flex;
-         flex-direction: column;
-         align-items: center;
-         padding-top: 2px;
-     }
+    .step-circle {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        flex-shrink: 0;
+        transition: background .2s, color .2s;
+    }
 
-     .step-circle {
-         width: 34px;
-         height: 34px;
-         border-radius: 50%;
-         display: flex;
-         align-items: center;
-         justify-content: center;
-         font-size: 15px;
-         flex-shrink: 0;
-         transition: background .2s, color .2s;
-     }
+    .step-line {
+        width: 2px;
+        flex: 1;
+        min-height: 30px;
+        margin-top: 4px;
+        margin-bottom: 4px;
+        background: #e5e9f2;
+    }
 
-     .step-line {
-         width: 2px;
-         flex: 1;
-         min-height: 30px;
-         margin-top: 4px;
-         margin-bottom: 4px;
-         background: #e5e9f2;
-     }
+    /* ── Step states ── */
+    .timeline-step-done .step-circle {
+        background: #28a745;
+        color: #fff;
+    }
 
-     /* Step states */
-     .timeline-step-done .step-circle {
-         background: #28a745;
-         color: #fff;
-     }
+    .timeline-step-done .step-line {
+        background: #28a745;
+    }
 
-     .timeline-step-done .step-line {
-         background: #28a745;
-     }
+    .timeline-step-done .step-title {
+        color: #28a745;
+        font-weight: 600;
+    }
 
-     .timeline-step-done .step-title {
-         color: #28a745;
-         font-weight: 600;
-     }
+    .timeline-step-active .step-circle {
+        background: #fd7e14;
+        color: #fff;
+    }
 
-     .timeline-step-active .step-circle {
-         background: #fd7e14;
-         color: #fff;
-     }
+    .timeline-step-active .step-line {
+        background: #e5e9f2;
+    }
 
-     .timeline-step-active .step-line {
-         background: #e5e9f2;
-     }
+    .timeline-step-active .step-title {
+        color: #fd7e14;
+        font-weight: 600;
+    }
 
-     .timeline-step-active .step-title {
-         color: #fd7e14;
-         font-weight: 600;
-     }
+    .timeline-step-pending .step-circle {
+        background: #e5e9f2;
+        color: #aaa;
+    }
 
-     .timeline-step-pending .step-circle {
-         background: #e5e9f2;
-         color: #aaa;
-     }
+    .timeline-step-pending .step-title {
+        color: #aaa;
+    }
 
-     .timeline-step-pending .step-title {
-         color: #aaa;
-     }
+    .timeline-step-pending .step-detail {
+        color: #ccc;
+    }
 
-     .timeline-step-pending .step-detail {
-         color: #ccc;
-     }
+    /* ── Step body ── */
+    .step-body {
+        padding-bottom: 8px;
+    }
 
-     /* Step body text */
-     .step-body {
-         padding-bottom: 8px;
-     }
+    .step-title {
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+    }
 
-     .step-title {
-         font-size: 12px;
-         font-weight: 600;
-         text-transform: uppercase;
-         letter-spacing: .4px;
-     }
+    .step-detail {
+        font-size: 12px;
+        color: #6c757d;
+        line-height: 1.5;
+    }
 
-     .step-detail {
-         font-size: 12px;
-         color: #6c757d;
-         line-height: 1.5;
-     }
+    /* ── Modal ── */
+    .modal-po .modal-content {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0,0,0,.18);
+    }
 
-     /* ==========================================================
-    MODAL
-    ========================================================== */
-     .modal-po .modal-content {
-         border: none;
-         border-radius: 12px;
-         overflow: hidden;
-         box-shadow: 0 20px 60px rgba(0,0,0,.18);
-     }
+    .modal-header-po {
+        background: linear-gradient(135deg, #1a1f36 0%, #2d3561 100%);
+        color: #fff;
+        padding: 18px 24px 16px;
+        border-bottom: none;
+    }
 
-     .modal-header-po {
-         background: linear-gradient(135deg, #1a1f36 0%, #2d3561 100%);
-         color: #fff;
-         padding: 18px 24px 16px;
-         border-bottom: none;
-     }
+        .modal-header-po .modal-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
 
-         .modal-header-po .modal-title {
-             font-size: 17px;
-             font-weight: 700;
-             color: #fff;
-             margin-bottom: 4px;
-         }
+        .modal-header-po .modal-subtitle {
+            font-size: 13px;
+            color: rgba(255,255,255,.75);
+        }
 
-         .modal-header-po .modal-subtitle {
-             font-size: 13px;
-             color: rgba(255,255,255,.75);
-         }
+        .modal-header-po .btn-close-white {
+            filter: invert(1) grayscale(100%) brightness(200%);
+            opacity: .8;
+        }
 
-         .modal-header-po .btn-close-white {
-             filter: invert(1) grayscale(100%) brightness(200%);
-             opacity: .8;
-         }
+            .modal-header-po .btn-close-white:hover {
+                opacity: 1;
+            }
 
-             .modal-header-po .btn-close-white:hover {
-                 opacity: 1;
-             }
+    /* Summary bar */
+    .po-summary-bar {
+        background: #f8f9fc;
+        border-bottom: 1px solid #e5e9f2;
+    }
 
-     /* Summary bar */
-     .po-summary-bar {
-         background: #f8f9fc;
-         border-bottom: 1px solid #e5e9f2;
-     }
+        .po-summary-bar .summary-col {
+            padding: 12px 18px;
+            border-right: 1px solid #e5e9f2;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
 
-         .po-summary-bar .summary-col {
-             padding: 12px 18px;
-             border-right: 1px solid #e5e9f2;
-             display: flex;
-             flex-direction: column;
-             gap: 4px;
-         }
+            .po-summary-bar .summary-col:last-child {
+                border-right: none;
+            }
 
-             .po-summary-bar .summary-col:last-child {
-                 border-right: none;
-             }
+    .summary-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        color: #6c757d;
+        display: block;
+    }
 
-     .summary-label {
-         font-size: 11px;
-         font-weight: 700;
-         text-transform: uppercase;
-         letter-spacing: .5px;
-         color: #6c757d;
-         display: block;
-     }
+    .summary-value {
+        font-size: 13px;
+        font-weight: 600;
+        color: #2d2d2d;
+        display: block;
+        line-height: 1.5;
+    }
 
-     .summary-value {
-         font-size: 13px;
-         font-weight: 600;
-         color: #2d2d2d;
-         display: block;
-         line-height: 1.5;
-     }
+    /* Parts table */
+    .parts-table thead th {
+        background: #f0f2f7;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .3px;
+        color: #495057;
+        border-color: #dee2e6;
+        padding: 10px 12px;
+        white-space: nowrap;
+    }
 
-     /* Parts table */
-     .parts-table thead th {
-         background: #f0f2f7;
-         font-size: 12px;
-         font-weight: 700;
-         text-transform: uppercase;
-         letter-spacing: .3px;
-         color: #495057;
-         border-color: #dee2e6;
-         padding: 10px 12px;
-         white-space: nowrap;
-     }
+    .parts-table tbody td {
+        font-size: 13px;
+        padding: 9px 12px;
+        vertical-align: middle;
+        border-color: #f0f2f7;
+    }
 
-     .parts-table tbody td {
-         font-size: 13px;
-         padding: 9px 12px;
-         vertical-align: middle;
-         border-color: #f0f2f7;
-     }
+    .parts-table tbody tr:hover td {
+        background: #f8f9fc;
+    }
 
-     .parts-table tbody tr:hover td {
-         background: #f8f9fc;
-     }
+    .parts-table tfoot td {
+        background: #f8f9fc;
+        font-size: 13px;
+        padding: 9px 12px;
+        border-color: #dee2e6;
+    }
 
-     .parts-table tfoot td {
-         background: #f8f9fc;
-         font-size: 13px;
-         padding: 9px 12px;
-         border-color: #dee2e6;
-     }
+    .part-line-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: #1a1f36;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+    }
 
-     .part-line-badge {
-         display: inline-flex;
-         align-items: center;
-         justify-content: center;
-         width: 26px;
-         height: 26px;
-         border-radius: 50%;
-         background: #1a1f36;
-         color: #fff;
-         font-size: 12px;
-         font-weight: 700;
-     }
+    .qty-requested {
+        font-weight: 600;
+        color: #495057;
+    }
 
-     .qty-requested {
-         font-weight: 600;
-         color: #495057;
-     }
+    .qty-received {
+        font-weight: 700;
+        color: #28a745;
+    }
 
-     .qty-received {
-         font-weight: 700;
-         color: #28a745;
-     }
+    /* Status badges */
+    .badge-status-completed {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        background: #d4edda;
+        color: #155724;
+    }
 
-     /* Status badges */
-     .badge-status-completed {
-         display: inline-block;
-         padding: 4px 10px;
-         border-radius: 20px;
-         font-size: 11px;
-         font-weight: 700;
-         background: #d4edda;
-         color: #155724;
-     }
+    .badge-status-in-progress {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        background: #fff3cd;
+        color: #856404;
+    }
 
-     .badge-status-in-progress {
-         display: inline-block;
-         padding: 4px 10px;
-         border-radius: 20px;
-         font-size: 11px;
-         font-weight: 700;
-         background: #fff3cd;
-         color: #856404;
-     }
+    .badge-status-pending {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        background: #cce5ff;
+        color: #004085;
+    }
 
-     .badge-status-pending {
-         display: inline-block;
-         padding: 4px 10px;
-         border-radius: 20px;
-         font-size: 11px;
-         font-weight: 700;
-         background: #cce5ff;
-         color: #004085;
-     }
+    .badge-status-default {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        background: #e2e3e5;
+        color: #383d41;
+    }
 
-     .badge-status-default {
-         display: inline-block;
-         padding: 4px 10px;
-         border-radius: 20px;
-         font-size: 11px;
-         font-weight: 700;
-         background: #e2e3e5;
-         color: #383d41;
-     }
+    /* Stat cards */
+    .stat-card-po {
+        background: #fff;
+        border: 1px solid #e5e9f2;
+        border-radius: 10px;
+        padding: 10px 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 2px 6px rgba(0,0,0,.04);
+    }
 
-     /* Stat cards del header */
-     .stat-card-po {
-         background: #fff;
-         border: 1px solid #e5e9f2;
-         border-radius: 10px;
-         padding: 10px 14px;
-         display: flex;
-         align-items: center;
-         gap: 10px;
-         box-shadow: 0 2px 6px rgba(0,0,0,.04);
-     }
+    .stat-icon-po {
+        width: 38px;
+        height: 38px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+        color: #fff;
+        flex-shrink: 0;
+    }
 
-     .stat-icon-po {
-         width: 38px;
-         height: 38px;
-         border-radius: 8px;
-         display: flex;
-         align-items: center;
-         justify-content: center;
-         font-size: 17px;
-         color: #fff;
-         flex-shrink: 0;
-     }
+        .stat-icon-po.bg-orange {
+            background: #fd7e14;
+        }
 
-         .stat-icon-po.bg-orange {
-             background: #fd7e14;
-         }
+        .stat-icon-po.bg-blue {
+            background: #0d6efd;
+        }
 
-         .stat-icon-po.bg-blue {
-             background: #0d6efd;
-         }
+        .stat-icon-po.bg-green {
+            background: #28a745;
+        }
 
-         .stat-icon-po.bg-green {
-             background: #28a745;
-         }
+    .stat-info-po h4 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 700;
+        color: #2d2d2d;
+        line-height: 1.1;
+    }
 
-     .stat-info-po h4 {
-         margin: 0;
-         font-size: 20px;
-         font-weight: 700;
-         color: #2d2d2d;
-         line-height: 1.1;
-     }
+    .stat-info-po small {
+        font-size: 11px;
+        color: #6c757d;
+    }
 
-     .stat-info-po small {
-         font-size: 11px;
-         color: #6c757d;
-     }
+    /* ── Exclusivos Salidas ── */
+    .outbound-sign-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
 
-     /* ==========================================================
-    EXCLUSIVOS SALIDAS
-    ========================================================== */
-
-     /* Badge de firmado */
-     .outbound-sign-badge {
-         display: inline-flex;
-         align-items: center;
-         gap: 4px;
-         padding: 3px 10px;
-         border-radius: 20px;
-         font-size: 11px;
-         font-weight: 700;
-         background: #d4edda;
-         color: #155724;
-         border: 1px solid #c3e6cb;
-     }
-
-     /* Imagen de firma en el modal */
-     .outbound-signature-img {
-         max-width: 160px;
-         max-height: 80px;
-         border: 1px solid #dee2e6;
-         border-radius: 6px;
-         background: #fff;
-         padding: 4px;
-         display: block;
-         margin-top: 4px;
-     }
+    .outbound-signature-img {
+        max-width: 160px;
+        max-height: 80px;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        background: #fff;
+        padding: 4px;
+        display: block;
+        margin-top: 4px;
+    }
 </style>

@@ -47,6 +47,10 @@
             self.currentPage = 1;
             self.displayItems = [];
 
+            // Contadores stat cards
+            self.countPaso1 = 0;
+            self.countPaso2 = 0;
+
             // Modal de detalle
             self.selectedOrder = {};
         }
@@ -73,32 +77,38 @@
             // CSV
             self.GetCSV = _GetCSV;
 
+            // VISORES DE LAS VARIABLES QUE SE USAN EN EL CONTROL DE PAGINACION
             self.$watch("currentPage", _ChangueCurrentPage);
             self.$watch("itemsPerPage", _ChangueItemsPerPage);
         }
 
         async function _FunctionsInit() {
-            AlertService.Load();
+            // No cargamos datos al abrir; el usuario debe aplicar filtros
             swal.close();
         }
 
         // ========== BÚSQUEDA PRINCIPAL ==========
         async function _Search(newPage) {
             newPage = !newPage ? 1 : newPage;
-            self.currentPage = newPage;
+
             AlertService.Load();
-            let params = _BuildParams(self.currentPage, self.itemsPerPage);
+            self.currentPage = newPage;
+
+            let params = _BuildParams(self.currentPage);
+
             await _GetOutboundAsync(params);
+
             swal.close();
         }
 
-        function _BuildParams(page, itemsPerPage) {
+        // Centraliza la construcción de parámetros para evitar inconsistencias entre funciones
+        function _BuildParams(page) {
             return {
-                Page: page,
-                ItemsPerPage: +itemsPerPage,
-                Search: self.filterSearch,
-                DtStart: self.filterDtStart || null,
-                DtEnd: self.filterDtEnd || null,
+                'Page': page || 1,
+                'ItemsPerPage': self.itemsPerPage,
+                'Search': self.filterSearch,
+                'DtStart': self.filterDtStart || null,
+                'DtEnd': self.filterDtEnd || null,
             };
         }
 
@@ -116,7 +126,7 @@
                     Counter: counter
                 } = response.data;
 
-                console.log('📤 OutboundReport response:', response);
+                console.log('✅ OutboundReport obtenido:', response);
 
                 if (status !== 200) {
                     console.error('❌ Error:', message);
@@ -124,14 +134,13 @@
                     return;
                 }
 
-                // listapartes ya viene ensamblada dentro de cada row por el backend (GroupBy en C#)
                 let rows = data || [];
 
                 self.data = rows;
                 self.totalItems = counter || 0;
                 self.counterData = counter || 0;
 
-                // Stat cards
+                // Contadores para las stat cards del header
                 self.countPaso1 = rows.filter(function (r) { return r.PasoActual === 1; }).length;
                 self.countPaso2 = rows.filter(function (r) { return r.PasoActual === 2; }).length;
 
@@ -139,7 +148,7 @@
 
             } catch (ex) {
                 let error = ErrorService.GetError(ex);
-                console.error('❌ Oops:', error);
+                console.error('❌ Error obteniendo salidas:', error);
                 AlertService.ErrorHtml('Oops...', error);
             }
         }
@@ -297,27 +306,39 @@
         }
 
         function _ClearFilters() {
+            console.log('🧹 Limpiando filtros');
+
             self.filterSearch = "";
             self.filterDtStart = "";
             self.filterDtEnd = "";
             self.data = [];
             self.totalItems = 0;
             self.counterData = 0;
+            self.countPaso1 = 0;
+            self.countPaso2 = 0;
         }
 
         // ========== PAGINACIÓN ==========
         function _ChangueCurrentPage(newPage, oldPage) {
             if (newPage === oldPage) return;
+
+            console.log("📄 Cambiando a página:", newPage);
             AlertService.Load();
-            let params = _BuildParams(newPage, self.itemsPerPage);
+
+            let params = _BuildParams(newPage);
+
             _GetOutboundAsync(params);
             swal.close();
         }
 
         async function _ChangueItemsPerPage(newValue, oldValue) {
             if (newValue === oldValue) return;
+
+            console.log("📊 Items por página:", newValue);
             AlertService.Load();
-            let params = _BuildParams(1, self.itemsPerPage);
+
+            let params = _BuildParams(1); // Reiniciar a primera página
+
             await _GetOutboundAsync(params);
             swal.close();
         }
