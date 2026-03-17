@@ -1,212 +1,414 @@
-﻿<div class="container-fluid">
+﻿<style>
+    /* ── Estilos específicos de inventory-detail ────────────────────────────── */
 
-    <!-- ========== title-wrapper start ========== -->
+    /* Cabecera del inventario */
+    .inv-detail-header {
+        background: linear-gradient(135deg, #1565C0 0%, #0D47A1 100%);
+        border-radius: 12px;
+        padding: 24px 28px;
+        color: #fff;
+        margin-bottom: 24px;
+    }
+
+        .inv-detail-header .inv-folio {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .inv-detail-header .inv-meta {
+            font-size: 13px;
+            opacity: .85;
+            margin-top: 4px;
+        }
+
+        .inv-detail-header .inv-stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 14px;
+        }
+
+        .inv-detail-header .inv-stat {
+            background: rgba(255,255,255,.15);
+            border-radius: 8px;
+            padding: 8px 16px;
+            text-align: center;
+        }
+
+            .inv-detail-header .inv-stat .val {
+                font-size: 20px;
+                font-weight: 700;
+            }
+
+            .inv-detail-header .inv-stat .lbl {
+                font-size: 11px;
+                opacity: .8;
+            }
+
+    /* Badges de modo */
+    .inv-badge-modo {
+        border-radius: 20px;
+        padding: 3px 10px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .badge-general {
+        background: #E3F2FD;
+        color: #1565C0;
+    }
+
+    .badge-ubicacion {
+        background: #FFF3E0;
+        color: #E65100;
+    }
+
+    /* Badge de estado */
+    .badge-status-pending {
+        background: #FFF3E0;
+        color: #E65100;
+        border-radius: 20px;
+        padding: 3px 10px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .badge-status-completed {
+        background: #E8F5E9;
+        color: #2E7D32;
+        border-radius: 20px;
+        padding: 3px 10px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .badge-status-default {
+        background: #F5F5F5;
+        color: #616161;
+        border-radius: 20px;
+        padding: 3px 10px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    /* Cantidad grande en la tabla de partes */
+    .qty-badge {
+        display: inline-block;
+        background: #1565C0;
+        color: #fff;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        line-height: 36px;
+        text-align: center;
+        font-weight: 700;
+        font-size: 15px;
+    }
+
+    /* Tabla de tags en el modal */
+    .tags-table thead th {
+        background: #1565C0;
+        color: #fff;
+        font-size: 13px;
+    }
+
+    .tags-table td {
+        font-size: 13px;
+        vertical-align: middle;
+    }
+
+    .tag-rfid-code {
+        font-family: monospace;
+        background: #F3F4F6;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        color: #1565C0;
+    }
+
+    /* Modal header personalizado */
+    .modal-header-inv {
+        background: linear-gradient(135deg, #1565C0 0%, #0D47A1 100%);
+        color: #fff;
+        border-radius: 8px 8px 0 0;
+        padding: 18px 24px;
+    }
+
+        .modal-header-inv .modal-title {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .modal-header-inv .modal-subtitle {
+            font-size: 12px;
+            opacity: .8;
+            margin-top: 2px;
+        }
+
+        .modal-header-inv .btn-close-white {
+            filter: invert(1);
+            opacity: .8;
+        }
+
+    /* Resumen rápido de la parte seleccionada */
+    .part-summary-bar {
+        background: #F8FAFC;
+        border-bottom: 1px solid #E2E8F0;
+        padding: 12px 24px;
+        display: flex;
+        gap: 28px;
+        flex-wrap: wrap;
+    }
+
+        .part-summary-bar .summary-item .lbl {
+            font-size: 11px;
+            color: #6B7280;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        .part-summary-bar .summary-item .val {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1F2937;
+        }
+
+    /* Spinner de carga de tags */
+    .tags-loading {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 24px;
+        color: #6B7280;
+        font-size: 14px;
+    }
+</style>
+
+<div class="container-fluid">
+
+    <!-- ===== BREADCRUMB ===== -->
     <div class="title-wrapper pt-30">
         <div class="row align-items-center">
-            <div class="col-md-6">
-                <div class="titlemb-30">
-                        <h2>Detalle del Inventario</h2>
+            <div class="col-md-8">
+                <div class="breadcrumb-custom mb-2">
+                    <a ui-sref="home" class="breadcrumb-link"><i class="lni lni-home"></i> Inicio</a>
+                    <span class="separator">/</span>
+                    <a ng-click="GoBack()" class="breadcrumb-link" style="cursor:pointer;">Inventarios</a>
+                    <span class="separator">/</span>
+                    <span class="current">{{folio || 'Detalle'}}</span>
                 </div>
             </div>
-            <!-- end col -->
-            <div class="col-md-6">
-                <div class="breadcrumb-wrapper mb-30">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a onclick="history.back()" style="cursor:pointer;">Inventario</a></li>
-                            <li class="breadcrumb-item active" aria-current="page" style="cursor:pointer;">
-                                Detalle
-                            </li>
-                        </ol>
-                    </nav>
-                </div>
+            <div class="col-md-4 text-end">
+                <a class="main-btn danger-btn rounded-full btn-hover"
+                   style="text-decoration:none;" ng-click="GoBack()">
+                    <i class="lni lni-arrow-left"></i> Volver
+                </a>
             </div>
-            <!-- end col -->
         </div>
-        <!-- end row -->
     </div>
-    <!-- ========== title-wrapper end ========== -->
 
-    <div class="row">
-        <div class="col-lg-12">
-            
-                        <!--
-            <div class="card-style settings-card-1 mb-30">
-                <div class="profile-info">
-                    <div class="row align-items-center">
-
-                            <div class="col-xxl-3">
-                            <div class="select-style-1">
-                                <label>Empresa</label>
-                                <div class="select-position">
-                                    <select class="light-bg" ng-model="companyId" ng-change="CompanyChange(companyId)">
-                                        <option value="" disabled selected>Seleccionar Empresa</option>
-                                        <option ng-repeat="item in companies" value="{{item.Id}}">{{item.Name}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>-->
-                        <!--<div class="col-xxl-3">
-                            <div class="select-style-1">
-                                <label>Localizacion</label>
-                                <div class="select-position">
-                                    <select class="light-bg" ng-model="IdZone" ng-change="CompanyLocalizationChange(IdZone)">
-                                        <option value="" disabled selected>Seleccionar Localización</option>
-                                        <option ng-repeat="item in zones" value="{{item.Id}}">{{item.Name}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>-->
-                        <!--<div class="col-xxl-3">
-                            <div class="input-style-1">
-                                <label>Fecha de inicio</label>
-                                <input type="date" ng-model="startDate" />
-                            </div>
-                        </div>-->
-                        <!--<div class="col-xxl-3">
-                            <div class="input-style-1">
-                                <label>Fecha de final</label>
-                                <input type="date" ng-model="endDate" />
-                            </div>
-                        </div>
-
+    <!-- ===== CABECERA DEL INVENTARIO ===== -->
+    <div class="inv-detail-header">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <div class="inv-folio"><i class="lni lni-tag"></i> {{folio || 'Inventario #' + inventoryId}}</div>
+                <div class="inv-meta">
+                    <i class="lni lni-package"></i> Detalle de números de parte capturados
+                </div>
+                <div class="inv-stats">
+                    <div class="inv-stat">
+                        <div class="val">{{counterData}}</div>
+                        <div class="lbl">Núm. Parte</div>
                     </div>
-                            -->
-                        <!--
-                    <div class="row align-items-center justify-content-end">
-
-                            <div class="col-xxl-auto text-center">
-                            <div class="input-style-1">
-                                <a class="main-btn primary-btn rounded-full btn-hover w-100" style="text-decoration:none;" ng-click="Search()">Buscar</a>
-                            </div>
-
-                        </div>
-                        <div class="col-xxl-auto text-center">
-                            <div class="input-style-1 ">
-                                <a class="main-btn danger-btn rounded-full btn-hover w-100" style="text-decoration:none;" ng-click="ClearFilters()">Limpiar Filtros</a>
-                            </div>
-
-                        </div>
+                    <div class="inv-stat">
+                        <div class="val">{{totalItems}}</div>
+                        <div class="lbl">Total registros</div>
                     </div>
                 </div>
             </div>
-                            -->
-            <div class="col-lg-12">
-                <div class="card-style mb-30">
-                    <div class="title mb-30 d-flex justify-content-between align-items-center">
-                        <h6 class="mb-10">
-
-                        </h6>
-                        <div>
-                            <!--Boton de Excel Funciones de descarga-->
-                            <div class="col-xxl-auto text-center">
-                                <div class="input-style-1 ">
-                                    <a class="main-btn success-btn rounded-full btn-hover w-100" style="text-decoration:none;" ng-click="GetExcel()">Descargar Excel</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="table-wrapper table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th><h6>Tarima</h6></th>
-                                    <th><h6>Qr Tarima</h6></th>
-                                    <th><h6>Tag RFID</h6></th>
-                                    <th><h6>Producto</h6></th>
-                                    <th><h6>SKU</h6></th>
-                                    <th><h6>Cantiad actual</h6></th>
-                                    <th><h6>Lote</h6></th>
-                                    <th><h6>Fecha Expiración</h6></th>
-                                    <th><h6>Zona</h6></th>
-                                    <th><h6>Estatus</h6></th>
-                                    <th><h6>RSSI</h6></th>
-
-                                </tr>
-                                <!-- end table row-->
-                            </thead>
-                            <tbody>
-                                <tr ng-if="ExistData()" ng-repeat="item in data">
-
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.Barcode.substring(10, 20))}}</p>
-                                    </td>
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.NewBarcode)}}</p>
-                                    </td>
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.TagRFID)}}</p>
-                                    </td>
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.ProductDescription)}}</p>
-                                    </td>
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.ProductCode)}}</p>
-                                    </td>
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.CurrentQuantity)}}</p>
-                                    </td>
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.Lote)}}</p>
-                                    </td>
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.Expiration_Date)}}</p>
-                                    </td>
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.Zone)}}</p>
-                                    </td>
-                                    <td class="min-width">
-                                        <p>[Encontrado]</p>
-                                    </td>
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.RSSI)}}</p>
-                                    </td>
-                                </tr>
-                                <tr ng-if="!ExistData()">
-                                    <td colspan="11"><p style="text-align:center;font-size:22px;">Sin Resultados</p></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <!-- end table -->
-                    </div>
-                    <pagination-control show-items-per-page="true" paging-size="pagingSize" items-per-page="itemsPerPage" total-items="totalItems" display-items="displayItems" current-page="currentPage"></pagination-control>
-                </div>
-                <!-- end card -->
-            </div>
-            <!-- end col -->
         </div>
-        <!-- end row -->
+    </div>
+
+    <!-- ===== TABLA DE DETALLE ===== -->
+    <div class="card-style mb-30">
+        <div class="d-flex justify-content-between align-items-center mb-20">
+            <h6 class="mb-0"><i class="lni lni-layers"></i> Números de parte capturados</h6>
+        </div>
+
+        <div class="table-wrapper table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th><h6>No. Parte</h6></th>
+                        <th><h6>No. Denson</h6></th>
+                        <th><h6>Descripción</h6></th>
+                        <th><h6>Localización</h6></th>
+                        <th class="text-center"><h6>Cantidad</h6></th>
+                        <th><h6>Opciones</h6></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-if="ExistData()" ng-repeat="item in data">
+                        <td><strong><code>{{DatumToString(item.NoParte)}}</code></strong></td>
+                        <td><p>{{DatumToString(item.NoDenson)}}</p></td>
+                        <td><p>{{DatumToString(item.Descripcion)}}</p></td>
+                        <td>
+                            <span ng-if="item.Localizacion">
+                                <i class="lni lni-map-marker" style="color:#1565C0;"></i>
+                                {{item.Localizacion}}
+                            </span>
+                            <span ng-if="!item.Localizacion" class="text-muted">--</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="qty-badge">{{item.Cantidad}}</span>
+                        </td>
+                        <td>
+                            <button class="main-btn primary-btn btn-hover rounded-full"
+                                    style="padding:5px 12px;font-size:13px;"
+                                    ng-click="OpenTagsModal(item)">
+                                <i class="lni lni-tag"></i> Ver tags
+                            </button>
+                        </td>
+                    </tr>
+                    <tr ng-if="!ExistData()">
+                        <td colspan="6">
+                            <p class="text-center text-muted fs-5 py-4">
+                                <i class="lni lni-warning"></i> Sin resultados
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <pagination-control show-items-per-page="true"
+                            paging-size="pagingSize"
+                            items-per-page="itemsPerPage"
+                            total-items="totalItems"
+                            display-items="displayItems"
+                            current-page="currentPage">
+        </pagination-control>
     </div>
 </div>
 
 
-<div class="modal fade" id="ModalImages" tabindex="-1" aria-labelledby="ModalImagesLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="">
-            <div class="modal-header">
-                <h5 class="modal-title" id="ModalImagesLabel">Activo - {{NameActivo}} - {{CountImage}} de {{CountImages}}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body"  style="background: linear-gradient(180deg, rgba(17,59,84,1) 0%, rgba(18,45,74,1) 50%, rgba(17,28,58,1) 90%)">
-                <div id="CarouselImages" class="carousel slide" data-bs-touch="false" data-bs-interval="false">
-                    <div class="carousel-inner">
-                        <div ng-repeat="item in ImagesReport" ng-class="GetCssClass_ActiveFirst($event, item)" >
-                            <img src="{{item}}"
-                                 class="d-block w-75 p-1" alt="..."
-                                 style="margin: auto;">
+<!-- ================================================================ -->
+<!--               MODAL: TAGS DE UN NÚMERO DE PARTE                  -->
+<!-- ================================================================ -->
+<div class="modal fade" id="modalInventoryTags" tabindex="-1" role="dialog"
+     aria-labelledby="modalInventoryTagsLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content" style="border-radius:10px;overflow:hidden;">
+
+            <!-- Header -->
+            <div class="modal-header-inv">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="modal-title" id="modalInventoryTagsLabel">
+                            <i class="lni lni-tag"></i>&nbsp; Tags escaneados
+                        </div>
+                        <div class="modal-subtitle">
+                            Folio: <strong>{{folio}}</strong>
+                            &nbsp;|&nbsp;
+                            Parte: <strong>{{selectedPart.NoParte}}</strong>
                         </div>
                     </div>
-                    <button class="carousel-control-prev btn-hover" type="button" ng-click="CarruselPrev()"
-                            style="background: linear-gradient(180deg, rgba(17,59,84,1) 0%, rgba(18,45,74,1) 50%, rgba(17,28,58,1) 90%)">
-                        <span class="carousel-control-prev-icon"></span>
-                    </button>
-                    <button class="carousel-control-next btn-hover" type="button" ng-click="CarruselNext()"
-                            style="background: linear-gradient(180deg, rgba(17,59,84,1) 0%, rgba(18,45,74,1) 50%, rgba(17,28,58,1) 90%)">
-                        <span class="carousel-control-next-icon"></span>
-                    </button>
+                    <button type="button" class="btn-close btn-close-white mt-1"
+                            data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
             </div>
+
+            <!-- Resumen de la parte seleccionada -->
+            <div class="part-summary-bar" ng-if="selectedPart">
+                <div class="summary-item">
+                    <div class="lbl">No. Parte</div>
+                    <div class="val"><code>{{selectedPart.NoParte}}</code></div>
+                </div>
+                <div class="summary-item">
+                    <div class="lbl">No. Denson</div>
+                    <div class="val">{{selectedPart.NoDenson || '--'}}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="lbl">Descripción</div>
+                    <div class="val">{{selectedPart.Descripcion || '--'}}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="lbl">Localización</div>
+                    <div class="val">
+                        <i class="lni lni-map-marker" style="color:#1565C0;"></i>
+                        {{selectedPart.Localizacion || '--'}}
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <div class="lbl">Cantidad</div>
+                    <div class="val">
+                        <span class="qty-badge" style="width:28px;height:28px;line-height:28px;font-size:13px;">
+                            {{selectedPart.Cantidad}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body p-4">
+
+                <!-- Loading -->
+                <div class="tags-loading" ng-if="loadingTags">
+                    <div class="spinner-border spinner-border-sm text-primary"></div>
+                    Cargando tags...
+                </div>
+
+                <!-- Tabla de tags -->
+                <div ng-if="!loadingTags">
+                    <h6 class="mb-3">
+                        <i class="lni lni-tag"></i>&nbsp;
+                        Tags individuales
+                        <span class="text-muted" style="font-size:13px;font-weight:400;">
+                            ({{tagsData.length}} en total)
+                        </span>
+                    </h6>
+
+                    <div class="table-responsive" ng-if="ExistTags()">
+                        <table class="table table-bordered table-hover mb-0 tags-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Tag RFID</th>
+                                    <th>Localización</th>
+                                    <th>Fecha / Hora escaneo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="tag in tagsData">
+                                    <td>{{$index + 1}}</td>
+                                    <td>
+                                        <span class="tag-rfid-code">{{tag.TagRFID}}</span>
+                                    </td>
+                                    <td>
+                                        <i class="lni lni-map-marker" style="color:#1565C0;"></i>
+                                        {{tag.Localizacion || '--'}}
+                                    </td>
+                                    <td>{{FormatDateTime(tag.ScanDateTime)}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="text-center text-muted py-3" ng-if="!ExistTags()">
+                        <i class="lni lni-warning"></i> No se encontraron tags para esta parte.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer" style="border-top:1px solid #dee2e6;">
+                <button type="button"
+                        class="main-btn danger-btn btn-hover rounded-full"
+                        data-bs-dismiss="modal">
+                    <i class="lni lni-close"></i>&nbsp; Cerrar
+                </button>
+            </div>
+
         </div>
     </div>
 </div>

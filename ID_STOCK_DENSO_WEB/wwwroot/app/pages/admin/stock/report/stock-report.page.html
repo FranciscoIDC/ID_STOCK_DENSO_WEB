@@ -1,81 +1,405 @@
-﻿<div class="container-fluid">
+﻿<style>
+    /* ── Estilos específicos de stock-report ─────────────────────────────────── */
 
-    <!-- ========== title-wrapper start ========== -->
-    <div class="title-wrapper pt-30">
+    /* Tarjeta de existencia grande */
+    .stock-qty-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #E8F5E9;
+        color: #2E7D32;
+        border-radius: 20px;
+        padding: 3px 14px;
+        font-weight: 700;
+        font-size: 15px;
+        min-width: 48px;
+    }
+
+        .stock-qty-badge.zero {
+            background: #FFF3E0;
+            color: #E65100;
+        }
+
+    /* Código de producto */
+    .stock-code {
+        font-family: monospace;
+        background: #F0F4FF;
+        color: #1565C0;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+    }
+
+    /* Modal header */
+    .modal-header-stock {
+        background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+        color: #fff;
+        border-radius: 8px 8px 0 0;
+        padding: 18px 24px;
+    }
+
+        .modal-header-stock .modal-title {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .modal-header-stock .modal-subtitle {
+            font-size: 12px;
+            opacity: .8;
+            margin-top: 2px;
+        }
+
+    /* Resumen del producto en el modal */
+    .stock-summary-bar {
+        background: #F8FAFC;
+        border-bottom: 1px solid #E2E8F0;
+        padding: 12px 24px;
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+    }
+
+        .stock-summary-bar .s-item .lbl {
+            font-size: 11px;
+            color: #6B7280;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        .stock-summary-bar .s-item .val {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1F2937;
+        }
+
+    /* Tabla de tags */
+    .stock-tags-table thead th {
+        background: #2E7D32;
+        color: #fff;
+        font-size: 13px;
+    }
+
+    .stock-tags-table td {
+        font-size: 13px;
+        vertical-align: middle;
+    }
+
+    .tag-code {
+        font-family: monospace;
+        background: #F0FFF4;
+        color: #2E7D32;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+    }
+
+    /* Spinner inline */
+    .tags-loading {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 24px;
+        color: #6B7280;
+        font-size: 14px;
+    }
+
+    /* Stat cards header */
+    .stock-stat-card {
+        background: #fff;
+        border: 1px solid #E2E8F0;
+        border-radius: 10px;
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+        .stock-stat-card .s-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+            .stock-stat-card .s-icon.green {
+                background: #E8F5E9;
+                color: #2E7D32;
+            }
+
+        .stock-stat-card .s-info h4 {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .stock-stat-card .s-info small {
+            font-size: 12px;
+            color: #6B7280;
+        }
+</style>
+
+<div class="container-fluid">
+    <br>
+
+    <!-- ===== HEADER ===== -->
+    <div class="catalog-header mb-4">
         <div class="row align-items-center">
-            <div class="col-md-6">
-                <div class="titlemb-30">
-                    <h2>Reporte de Existencias en Almacén</h2>
+            <div class="col-lg-8 col-md-7">
+                <div class="header-content">
+                    <div class="breadcrumb-custom mb-2">
+                        <a ui-sref="home" class="breadcrumb-link">
+                            <i class="lni lni-home"></i> Inicio
+                        </a>
+                        <span class="separator">/</span>
+                        <span class="current">Existencias</span>
+                    </div>
+                    <h2 class="page-title mb-1">
+                        <i class="lni lni-database"></i> Reporte de Existencias
+                    </h2>
+                    <p class="page-subtitle text-muted mb-0">
+                        Stock actual en almacén — Sistema Spare Parts DENSO
+                    </p>
+                </div>
+            </div>
+            <!-- Stat card -->
+            <div class="col-lg-4 col-md-5">
+                <div class="stock-stat-card">
+                    <div class="s-icon green"><i class="lni lni-database"></i></div>
+                    <div class="s-info">
+                        <h4>{{counterData}}</h4>
+                        <small>Números de parte con existencia</small>
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- end row -->
     </div>
-    <!-- ========== title-wrapper end ========== -->
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="col-lg-12">
-                <div class="card-style mb-30">
-                    <div class="row title mb-30 d-flex justify-content-between align-items-center">
-                        <div class="col-10">
-                            <h6 class="mb-10">Existencias</h6>
+
+    <!-- ===== FILTROS ===== -->
+    <div class="card-style settings-card-1 mb-30">
+        <div class="row g-3 align-items-end">
+
+            <div class="col-lg-8 col-md-12">
+                <div class="input-style-1">
+                    <label><i class="lni lni-search-alt"></i> Buscar (No. Parte, No. Denso, Descripción)</label>
+                    <input type="text"
+                           ng-model="filterSearch"
+                           placeholder="Ej: HOSE123 / EAD-DCM-28 / VALVE"
+                           ng-keypress="$event.keyCode === 13 && Search()" />
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-12 d-flex gap-2 justify-content-end align-items-end">
+                <a class="main-btn primary-btn rounded-full btn-hover"
+                   style="text-decoration:none;" ng-click="Search()">
+                    <i class="lni lni-search"></i> Buscar
+                </a>
+                <a class="main-btn danger-btn rounded-full btn-hover"
+                   style="text-decoration:none;" ng-click="ClearFilters()">
+                    <i class="lni lni-brush-alt"></i> Limpiar
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TABLA ===== -->
+    <div class="card-style mb-30">
+        <div class="d-flex justify-content-between align-items-center mb-20">
+            <h6 class="mb-0"><i class="lni lni-list"></i> Existencias por número de parte</h6>
+        </div>
+
+        <div class="table-wrapper table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th><h6>No. Parte</h6></th>
+                        <th><h6>No. Denso</h6></th>
+                        <th><h6>No. Denson</h6></th>
+                        <th><h6>Descripción</h6></th>
+                        <th><h6>Tipo</h6></th>
+                        <th><h6>Localización</h6></th>
+                        <th><h6>Última Entrada</h6></th>
+                        <th class="text-center"><h6>Existencia</h6></th>
+                        <th><h6>Opciones</h6></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-if="ExistData()" ng-repeat="item in data">
+                        <td>
+                            <strong>
+                                <span class="stock-code">{{DatumToString(item.NoParte)}}</span>
+                            </strong>
+                        </td>
+                        <td><p>{{DatumToString(item.NoDenso)}}</p></td>
+                        <td><p>{{DatumToString(item.NoDenson)}}</p></td>
+                        <td><p>{{DatumToString(item.Descripcion)}}</p></td>
+                        <td><p>{{DatumToString(item.DescripcionTipo)}}</p></td>
+                        <td>
+                            <span ng-if="item.Localizacion && item.Localizacion !== '--'">
+                                <i class="lni lni-map-marker" style="color:#1565C0;"></i>
+                                {{item.Localizacion}}
+                            </span>
+                            <span ng-if="!item.Localizacion || item.Localizacion === '--'"
+                                  class="text-muted">--</span>
+                        </td>
+                        <td><p>{{FormatDate(item.UltimaEntrada)}}</p></td>
+                        <td class="text-center">
+                            <span class="stock-qty-badge" ng-class="{'zero': item.Existencia === 0}">
+                                {{item.Existencia}}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="main-btn primary-btn btn-hover rounded-full"
+                                    style="padding:5px 12px;font-size:13px;"
+                                    ng-click="OpenTagsModal(item)">
+                                <i class="lni lni-tag"></i> Ver tags
+                            </button>
+                        </td>
+                    </tr>
+                    <tr ng-if="!ExistData()">
+                        <td colspan="9">
+                            <p class="text-center text-muted fs-5 py-4">
+                                <i class="lni lni-warning"></i> Sin existencias registradas
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <pagination-control show-items-per-page="true"
+                            paging-size="pagingSize"
+                            items-per-page="itemsPerPage"
+                            total-items="totalItems"
+                            display-items="displayItems"
+                            current-page="currentPage">
+        </pagination-control>
+    </div>
+</div>
+
+
+<!-- ================================================================ -->
+<!--             MODAL: TAGS INDIVIDUALES DEL PRODUCTO                -->
+<!-- ================================================================ -->
+<div class="modal fade" id="modalStockTags" tabindex="-1" role="dialog"
+     aria-labelledby="modalStockTagsLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content" style="border-radius:10px;overflow:hidden;">
+
+            <!-- Header -->
+            <div class="modal-header-stock">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="modal-title" id="modalStockTagsLabel">
+                            <i class="lni lni-tag"></i>&nbsp; Tags en almacén
                         </div>
-                        <div class="col-2">
-                            <div class="col-xxl-auto text-center">
-                                <div class="input-style-1 ">
-                                    <a class="main-btn success-btn rounded-full btn-hover w-100" style="text-decoration:none;" ng-click="GetExcel()">Descargar Excel</a>
-                                </div>
-                            </div>
+                        <div class="modal-subtitle">
+                            Producto: <strong>{{selectedProduct.NoParte}}</strong>
+                            &nbsp;|&nbsp;
+                            Existencia: <strong>{{selectedProduct.Existencia}}</strong>
                         </div>
                     </div>
-                    <div class="table-wrapper table-responsive">
-                        <table class="table">
-                            <thead>
-                                <!-- table row -->
-                                <tr>
-                                    <th><h6>Folio</h6></th>
-                                    <th><h6>Codigo</h6></th>
-                                    <th><h6>SKU</h6></th>
-                                    <th><h6>Lote</h6></th>
-                                    <th><h6>Cantidad Actual</h6></th>
-                                    <th><h6>Tag RFID</h6></th>
-                                </tr>
-                                <!-- end table row -->
-                            </thead>
-                            <!-- Contenido de la tabla-->
-                            <tbody>
-                                <tr ng-if="ExistData()" ng-repeat="item in data">
+                    <button type="button" class="btn-close btn-close-white mt-1"
+                            data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+            </div>
 
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.Invoice)}}</p>
+            <!-- Resumen del producto -->
+            <div class="stock-summary-bar" ng-if="selectedProduct">
+                <div class="s-item">
+                    <div class="lbl">No. Parte</div>
+                    <div class="val"><code>{{selectedProduct.NoParte}}</code></div>
+                </div>
+                <div class="s-item">
+                    <div class="lbl">No. Denso</div>
+                    <div class="val">{{selectedProduct.NoDenso || '--'}}</div>
+                </div>
+                <div class="s-item">
+                    <div class="lbl">No. Denson</div>
+                    <div class="val">{{selectedProduct.NoDenson || '--'}}</div>
+                </div>
+                <div class="s-item">
+                    <div class="lbl">Descripción</div>
+                    <div class="val">{{selectedProduct.Descripcion || '--'}}</div>
+                </div>
+                <div class="s-item">
+                    <div class="lbl">Existencia</div>
+                    <div class="val">
+                        <span class="stock-qty-badge" ng-class="{'zero': selectedProduct.Existencia === 0}">
+                            {{selectedProduct.Existencia}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body p-4">
+
+                <!-- Loading -->
+                <div class="tags-loading" ng-if="loadingTags">
+                    <div class="spinner-border spinner-border-sm text-success"></div>
+                    Cargando tags...
+                </div>
+
+                <!-- Tabla de tags -->
+                <div ng-if="!loadingTags">
+                    <h6 class="mb-3">
+                        <i class="lni lni-tag"></i>&nbsp; Tags activos
+                        <span class="text-muted" style="font-size:13px;font-weight:400;">
+                            ({{tagsData.length}} registros)
+                        </span>
+                    </h6>
+
+                    <div class="table-responsive" ng-if="ExistTags()">
+                        <table class="table table-bordered table-hover mb-0 stock-tags-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Tag RFID</th>
+                                    <th>No. Orden Compra</th>
+                                    <th>Localización</th>
+                                    <th>Fecha Entrada</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="tag in tagsData">
+                                    <td>{{$index + 1}}</td>
+                                    <td>
+                                        <span class="tag-code">{{tag.TagRFID}}</span>
                                     </td>
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.Barcode)}}</p>
+                                    <td>
+                                        <strong>{{tag.IdPurchaseOrder}}</strong>
                                     </td>
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.Sku)}}</p>
+                                    <td>
+                                        <span ng-if="tag.Localizacion !== '--'">
+                                            <i class="lni lni-map-marker" style="color:#2E7D32;"></i>
+                                            {{tag.Localizacion}}
+                                        </span>
+                                        <span ng-if="tag.Localizacion === '--'" class="text-muted">--</span>
                                     </td>
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.Lote)}}</p>
-                                    </td>
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.CurrentQuantity)}}</p>
-                                    </td>
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.TagRFID)}}</p>
-                                    </td>
+                                    <td>{{FormatDateTime(tag.CreateDateTime)}}</td>
                                 </tr>
                             </tbody>
-                            <!-- Fin del Contenido de la tabla-->
                         </table>
-                        <!-- end table -->
                     </div>
-                    <pagination-control show-items-per-page="true" paging-size="pagingSize" items-per-page="itemsPerPage" total-items="totalItems" display-items="displayItems" current-page="currentPage"></pagination-control>
+
+                    <p class="text-center text-muted py-3" ng-if="!ExistTags()">
+                        <i class="lni lni-warning"></i> No se encontraron tags para este producto.
+                    </p>
                 </div>
-                <!-- end card -->
             </div>
-            <!-- end col -->
+
+            <!-- Footer -->
+            <div class="modal-footer" style="border-top:1px solid #dee2e6;">
+                <button type="button"
+                        class="main-btn danger-btn btn-hover rounded-full"
+                        data-bs-dismiss="modal">
+                    <i class="lni lni-close"></i>&nbsp; Cerrar
+                </button>
+            </div>
+
         </div>
-        <!-- end row -->
     </div>
 </div>

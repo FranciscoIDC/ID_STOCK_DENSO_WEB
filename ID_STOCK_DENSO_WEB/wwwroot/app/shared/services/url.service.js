@@ -16,8 +16,6 @@
         let baseProduct = base + 'Product';
         let baseInventory = base + 'Inventory';
 
-        let basePalletAssembly = base + 'PalletAssembly';
-
         let baseLogin = base + 'Login/';
         let baseWarehouse = base + 'Warehouse';
         let baseLocation = base + 'Location';
@@ -25,27 +23,11 @@
         //let baseLocalization = base + 'Localization';
         let baseZone = base + 'Zone';
         let baseAssetLog = base + 'AssetLog';
-        let baseNumpartCategory = base + 'NumpartCategory';
         let baseInbound = base + 'Inbound';
         let baseInboundProduct = base + 'InboundProduct';
         let baseOutbound = base + 'Outbound';
-        let baseIncident = base + 'Incident';
         let baseStock = base + 'Stock';
         let baseMovementLog = base + 'MovementLog';
-
-        //Denso
-        let baseSize = base + 'Size';
-        let baseVariety = base + 'Variety';
-        let baseDestination = base + 'Destination';
-        let baseBox = base + 'Box';
-        let baseDriver = base + 'Driver';
-        let baseCarrier = base + 'Carrier';
-        let baseFarmer = base + 'Farmer';
-        let baseTruck = base + 'Truck';
-        let baseColdBox = base + 'ColdBox';
-        let baseFieldLog = base + 'FieldLog';
-        let baseGateRegistration = base + 'GateRegistration';
-        let baseStaticMenu = base + 'StaticMenu';
 
         let basePurchaseOrder = base + 'PurchaseOrder';
         let baseRequisitionOrder = base + 'Requisition';
@@ -102,18 +84,9 @@
 
             getAssetLogLastMoves: baseAssetLog + '/Last-Moves-Group-By-Name',
 
-            getNumpartCategory: baseNumpartCategory + '',
-            postNumpartCategory: baseNumpartCategory + '',
-            putNumpartCategory: baseNumpartCategory + '',
-            getNumpartCategoryById: baseNumpartCategory + '/{id}',
-            deleteNumpartCategory: baseNumpartCategory + '/{id}',
-
             getInventory: baseInventory + '',
             getImagesInventory: baseInventory + '/GetImagesById/{id}',
             getInventoryDetail: baseInventory + '/Detail',
-
-            getPalletAssembly: basePalletAssembly + '',
-            getPalletAssemblyDetail: basePalletAssembly + '/Detail',
 
             getInbound: baseInbound + '',
 
@@ -123,78 +96,15 @@
 
             getOutbound: baseOutbound + '',
 
-            getIncident: baseIncident + '',
-            getIncidentReport: baseIncident + '',
-            getIncidentEmail: baseIncident + '/GetEmail',
-            postIncidentEmail: baseIncident + '/Email',
-            deleteIncidentEmail: baseIncident + '/Email/{id}',
-
             getStock: baseStock + '',
             getStockReport: baseStock + '',
+            getStockTags: baseStock + '/Tags/',  
+
+            getInventoryList: baseInventory + '/List',
+            getInventoryDetailWeb: baseInventory + '/DetailWeb',
+            getInventoryTagsByPart: baseInventory + '/TagsByPart',
 
             //Denso
-            getSize: baseSize + '',
-            postSize: baseSize + '',
-            putSize: baseSize + '',
-            getSizeById: baseSize + '/{id}',
-
-            getVariety: baseVariety + '',
-            postVariety: baseVariety + '',
-            putVariety: baseVariety + '',
-            getVarietyById: baseVariety + '/{id}',
-
-            getDestination: baseDestination + '',
-            postDestination: baseDestination + '',
-            putDestination: baseDestination + '',
-            getDestinationById: baseDestination + '/{id}',
-
-            getBox: baseBox + '',
-            postBox: baseBox + '',
-            putBox: baseBox + '',
-            getBoxById: baseBox + '/{id}',
-
-            getDriver: baseDriver + '',
-            postDriver: baseDriver + '',
-            putDriver: baseDriver + '',
-            getDriverById: baseDriver + '/{id}',
-
-            getCarrier: baseCarrier + '',
-            postCarrier: baseCarrier + '',
-            putCarrier: baseCarrier + '',
-            getCarrierById: baseCarrier + '/{id}',
-
-            getFarmer: baseFarmer + '',
-            postFarmer: baseFarmer + '',
-            putFarmer: baseFarmer + '',
-            getFarmerById: baseFarmer + '/{id}',
-
-            getTruck: baseTruck + '',
-            postTruck: baseTruck + '',
-            putTruck: baseTruck + '',
-            getTruckById: baseTruck + '/{id}',
-
-            getColdBox: baseColdBox + '',
-            postColdBox: baseColdBox + '',
-            putColdBox: baseColdBox + '',
-            getColdBoxById: baseColdBox + '/{id}',
-
-            getFieldLog: baseFieldLog + '',
-            getWebFieldLog: baseFieldLog + '/Web',
-            postFieldLog: baseFieldLog + '',
-            putFieldLog: baseFieldLog + '',
-            getFieldLogById: baseFieldLog + '/{id}',
-
-            //Gate
-            getGateRegistration: baseGateRegistration + '',
-
-            //Fijos
-            getColdRoom: baseStaticMenu + '/ColdRoom',
-
-            getRamp: baseStaticMenu + '/Ramp',
-
-            getPacking: baseStaticMenu + '/Packing',
-
-            getRejection: baseStaticMenu + '/Rejection',
 
             getPurchaseOrder: basePurchaseOrder + '',
             postPurchaseOrders: basePurchaseOrder + '',

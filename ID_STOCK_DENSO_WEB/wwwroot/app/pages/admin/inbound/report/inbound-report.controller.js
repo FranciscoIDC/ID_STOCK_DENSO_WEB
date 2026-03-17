@@ -107,9 +107,29 @@
                 'Page': page || 1,
                 'ItemsPerPage': self.itemsPerPage,
                 'Search': self.filterSearch,
-                'DtStart': self.filterDtStart || null,
-                'DtEnd': self.filterDtEnd || null,
+                //'DtStart': self.filterDtStart || null,
+                //'DtEnd': self.filterDtEnd || null,
+                'DtStart': _FormatDateParam(self.filterDtStart),
+                'DtEnd': _FormatDateParam(self.filterDtEnd),
             };
+        }
+
+        function _FormatDateParam(value) {
+            if (!value) return null;
+
+            // Si ya viene como string "yyyy-MM-dd" del input, lo devuelve directo
+            if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+                return value;
+            }
+
+            // Si AngularJS lo convirtió a objeto Date, lo formatea manualmente
+            var date = new Date(value);
+            if (isNaN(date.getTime())) return null;
+
+            var yyyy = date.getFullYear();
+            var mm = String(date.getMonth() + 1).padStart(2, '0');
+            var dd = String(date.getDate()).padStart(2, '0');
+            return yyyy + '-' + mm + '-' + dd;
         }
 
         async function _GetInboundAsync(params) {

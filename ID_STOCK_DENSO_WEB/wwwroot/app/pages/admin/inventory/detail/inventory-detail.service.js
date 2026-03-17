@@ -1,6 +1,6 @@
-﻿(function () {
+﻿// ── InventoryDetailService.js ────────────────────────────────────────────────
+(function () {
     'use strict';
-
     angular
         .module('app')
         .factory('InventoryDetailService', InventoryDetailService);
@@ -8,32 +8,31 @@
     InventoryDetailService.$inject = ['$http', 'UrlService'];
 
     function InventoryDetailService($http, UrlService) {
-        let service = {
+        return {
             Get: _Get,
-            /*Getimages: _Getimages,*/
+            GetTagsPart: _GetTagsPart,
         };
 
+        // Detalle paginado por NoParte  →  GET /api/Inventory/DetailWeb
         function _Get(dto) {
-            let request = {
+            return $http({
                 method: 'GET',
-                url: UrlService.getInventoryDetail,
-                headers: {
-                    'Authorization': 'Bearer ' + UrlService.token,
-                },
+                url: UrlService.getInventoryDetailWeb,
+                headers: { 'Authorization': 'Bearer ' + UrlService.token },
                 params: dto,
                 async: true
-            }
-            return $http(request)
+            });
         }
-        //function _Getimages(id) {
-        //    let request = {
-        //        method: 'GET',
-        //        url: UrlService.getImagesInventoryDetail.replace("{id}", id),
-        //        async: true
-        //    }
-        //    return $http(request)
-        //}
 
-        return service;
+        // Tags de un número de parte  →  GET /api/Inventory/TagsByPart
+        function _GetTagsPart(idInventory, idProduct, localizacion) {
+            return $http({
+                method: 'GET',
+                url: UrlService.getInventoryTagsByPart,
+                headers: { 'Authorization': 'Bearer ' + UrlService.token },
+                params: { idInventory, idProduct, localizacion },
+                async: true
+            });
+        }
     }
 })();

@@ -118,7 +118,7 @@
         }).state('location', {
             abstract: true,
             url: '/admin/catalog/location',
-            templateUrl: 'app/pages/admin/zone/zone.page.html',
+            templateUrl: 'app/pages/admin/location/location.page.html',
             //template:'<ui-view/>',
             controller: 'LocationController',
             data: {
@@ -166,7 +166,7 @@
             controller: 'StaffListController',
             data: {
                 requiresAuth: true,
-                menuID: 11,
+                menuID: 7,
                 typeUserAllowed: [1, 2]
             }
         }).state('staff.add', {
@@ -248,76 +248,6 @@
                 requiresAuth: true,
                 typeUserAllowed: [1, 2]
             }
-        }).state('numpartcategory', {
-            abstract: true,
-            url: '/admin/catalog/numpartCategory',
-            templateUrl: 'app/pages/admin/numpart_category/numpart_category.page.html',
-            //template:'<ui-view/>',
-            controller: 'NumpartCategoryController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('numpartcategory.list', {
-            url: '/list',
-            templateUrl: 'app/pages/admin/numpart_category/list/numpart_category-list.page.html',
-            controller: 'NumpartCategoryListController',
-            data: {
-                requiresAuth: true,
-                menuID: 5,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('numpartcategory.add', {
-            url: '/add',
-            templateUrl: 'app/pages/admin/numpart_category/add/numpart_category-add.page.html',
-            controller: 'NumpartCategoryAddController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('numpartcategory.edit', {
-            url: '/:id/edit',
-            templateUrl: 'app/pages/admin/numpart_category/edit/numpart_category-edit.page.html',
-            controller: 'NumpartCategoryEditController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('line', {
-            abstract: true,
-            url: '/admin/catalog/line',
-            templateUrl: 'app/pages/admin/line/line.page.html',
-            //template:'<ui-view/>',
-            controller: 'LineController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('line.list', {
-            url: '/list',
-            templateUrl: 'app/pages/admin/line/list/line-list.page.html',
-            controller: 'LineListController',
-            data: {
-                requiresAuth: true,
-                menuID: 9,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('line.add', {
-            url: '/add',
-            templateUrl: 'app/pages/admin/line/add/line-add.page.html',
-            controller: 'LineAddController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('line.edit', {
-            url: '/:id/edit',
-            templateUrl: 'app/pages/admin/line/edit/line-edit.page.html',
-            controller: 'LineEditController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
         }).state('product', {
             abstract: true,
             url: '/admin/catalog/product',
@@ -334,7 +264,7 @@
             controller: 'ProductListController',
             data: {
                 requiresAuth: true,
-                menuID: 7,
+                menuID: 4,
                 typeUserAllowed: [1, 2]
             }
         }).state('product.edit', {
@@ -353,36 +283,6 @@
                 requiresAuth: true,
                 typeUserAllowed: [1, 2]
             }
-        }).state('numpart', {
-            abstract: true,
-            url: '/admin/catalog/numpart',
-            templateUrl: 'app/pages/admin/numpart/numpart.page.html',
-            //template:'<ui-view/>',
-            controller: 'NumpartController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('numpart_bycategory', {
-            abstract: true,
-            url: '/admin/report/numpart_bycategory',
-            templateUrl: 'app/pages/admin/numpart_bycategory/numpart_bycategory.page.html',
-            //template:'<ui-view/>',
-            controller: 'NumpartByCategoryController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('numpart_bycategory.list', {
-            url: '/list',
-            templateUrl: 'app/pages/admin/numpart_bycategory/list/numpart_bycategory-list.page.html',
-            controller: 'NumpartByCategoryListController',
-            data: {
-                requiresAuth: true,
-                menuID: 15,
-                typeUserAllowed: [1, 2]
-            }
-
         }).state('inventory', {
             abstract: true,
             url: '/admin/report/inventory',
@@ -399,40 +299,13 @@
             controller: 'InventoryListController',
             data: {
                 requiresAuth: true,
-                menuID: 9,
+                menuID: 13,
                 typeUserAllowed: [1, 2]
             }
         }).state('inventory.detail', {
             url: '/:id/detail',
             templateUrl: 'app/pages/admin/inventory/detail/inventory-detail.page.html',
             controller: 'InventoryDetailController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('pallet_assembly', {
-            abstract: true,
-            url: '/admin/report/pallet_assembly',
-            templateUrl: 'app/pages/admin/pallet_assembly/pallet_assembly.page.html',
-            //template:'<ui-view/>',
-            controller: 'PalletAssemblyController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('pallet_assembly.list', {
-            url: '/list',
-            templateUrl: 'app/pages/admin/pallet_assembly/list/pallet_assembly-list.page.html',
-            controller: 'PalletAssemblyListController',
-            data: {
-                requiresAuth: true,
-                menuID: 12,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('pallet_assembly.detail', {
-            url: '/:id/detail',
-            templateUrl: 'app/pages/admin/pallet_assembly/detail/pallet_assembly-detail.page.html',
-            controller: 'PalletAssemblyDetailController',
             data: {
                 requiresAuth: true,
                 typeUserAllowed: [1, 2]
@@ -461,33 +334,7 @@
             controller: 'InboundReportController',
             data: {
                 requiresAuth: true,
-                menuID: 10,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('incident', {
-            abstract: true,
-            url: '/admin/catalog/incident',
-            templateUrl: 'app/pages/admin/incident/incident.page.html',
-            controller: 'IncidentController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('incident.report', {
-            url: '/report',
-            templateUrl: 'app/pages/admin/incident/report/incident-report.page.html',
-            controller: 'IncidentReportController',
-            data: {
-                requiresAuth: true,
-                menuID: 14,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('incident.email', {
-            url: '/email',
-            templateUrl: 'app/pages/admin/incident/email/email.page.html',
-            controller: 'EmailController',
-            data: {
-                requiresAuth: true,
+                menuID: 11,
                 typeUserAllowed: [1, 2]
             }
         }).state('stock', {
@@ -505,7 +352,7 @@
             controller: 'StockReportController',
             data: {
                 requiresAuth: true,
-                menuID: 11,
+                menuID: 14,
                 typeUserAllowed: [1, 2]
             }
         }).state('outbound', {
@@ -532,481 +379,7 @@
             controller: 'OutboundReportController',
             data: {
                 requiresAuth: true,
-                menuID: 13,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('size', {
-            abstract: true,
-            url: '/admin/catalog/size',
-            templateUrl: 'app/pages/admin/size/size.page.html',
-            //template:'<ui-view/>',
-            controller: 'SizeController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('size.list', {
-            url: '/list',
-            templateUrl: 'app/pages/admin/size/list/size-list.page.html',
-            controller: 'SizeListController',
-            data: {
-                requiresAuth: true,
-                menuID: 1,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('size.add', {
-            url: '/add',
-            templateUrl: 'app/pages/admin/size/add/size-add.page.html',
-            controller: 'SizeAddController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('size.edit', {
-            url: '/:id/edit',
-            templateUrl: 'app/pages/admin/size/edit/size-edit.page.html',
-            controller: 'SizeEditController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('variety', {
-            abstract: true,
-            url: '/admin/catalog/variety',
-            templateUrl: 'app/pages/admin/variety/variety.page.html',
-            //template:'<ui-view/>',
-            controller: 'VarietyController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('variety.list', {
-            url: '/list',
-            templateUrl: 'app/pages/admin/variety/list/variety-list.page.html',
-            controller: 'VarietyListController',
-            data: {
-                requiresAuth: true,
-                menuID: 2,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('variety.add', {
-            url: '/add',
-            templateUrl: 'app/pages/admin/variety/add/variety-add.page.html',
-            controller: 'VarietyAddController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('variety.edit', {
-            url: '/:id/edit',
-            templateUrl: 'app/pages/admin/variety/edit/variety-edit.page.html',
-            controller: 'VarietyEditController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('destination', {
-            abstract: true,
-            url: '/admin/catalog/destination',
-            templateUrl: 'app/pages/admin/destination/destination.page.html',
-            //template:'<ui-view/>',
-            controller: 'DestinationController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('destination.list', {
-            url: '/list',
-            templateUrl: 'app/pages/admin/destination/list/destination-list.page.html',
-            controller: 'DestinationListController',
-            data: {
-                requiresAuth: true,
-                menuID: 3,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('destination.add', {
-            url: '/add',
-            templateUrl: 'app/pages/admin/destination/add/destination-add.page.html',
-            controller: 'DestinationAddController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('destination.edit', {
-            url: '/:id/edit',
-            templateUrl: 'app/pages/admin/destination/edit/destination-edit.page.html',
-            controller: 'DestinationEditController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('box', {
-            abstract: true,
-            url: '/admin/catalog/box',
-            templateUrl: 'app/pages/admin/box/box.page.html',
-            //template:'<ui-view/>',
-            controller: 'BoxController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('box.list', {
-            url: '/list',
-            templateUrl: 'app/pages/admin/box/list/box-list.page.html',
-            controller: 'BoxListController',
-            data: {
-                requiresAuth: true,
-                menuID: 4,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('box.add', {
-            url: '/add',
-            templateUrl: 'app/pages/admin/box/add/box-add.page.html',
-            controller: 'BoxAddController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('box.edit', {
-            url: '/:id/edit',
-            templateUrl: 'app/pages/admin/box/edit/box-edit.page.html',
-            controller: 'BoxEditController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('driver', {
-            abstract: true,
-            url: '/admin/catalog/driver',
-            templateUrl: 'app/pages/admin/driver/driver.page.html',
-            //template:'<ui-view/>',
-            controller: 'DriverController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('driver.list', {
-            url: '/list',
-            templateUrl: 'app/pages/admin/driver/list/driver-list.page.html',
-            controller: 'DriverListController',
-            data: {
-                requiresAuth: true,
-                menuID: 11,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('driver.add', {
-            url: '/add',
-            templateUrl: 'app/pages/admin/driver/add/driver-add.page.html',
-            controller: 'DriverAddController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('driver.edit', {
-            url: '/:id/edit',
-            templateUrl: 'app/pages/admin/driver/edit/driver-edit.page.html',
-            controller: 'DriverEditController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('carrier', {
-            abstract: true,
-            url: '/admin/catalog/carrier',
-            templateUrl: 'app/pages/admin/carrier/carrier.page.html',
-            //template:'<ui-view/>',
-            controller: 'CarrierController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('carrier.list', {
-            url: '/list',
-            templateUrl: 'app/pages/admin/carrier/list/carrier-list.page.html',
-            controller: 'CarrierListController',
-            data: {
-                requiresAuth: true,
-                menuID: 7,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('carrier.add', {
-            url: '/add',
-            templateUrl: 'app/pages/admin/carrier/add/carrier-add.page.html',
-            controller: 'CarrierAddController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('carrier.edit', {
-            url: '/:id/edit',
-            templateUrl: 'app/pages/admin/carrier/edit/carrier-edit.page.html',
-            controller: 'CarrierEditController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('farmer', {
-            abstract: true,
-            url: '/admin/catalog/farmer',
-            templateUrl: 'app/pages/admin/farmer/farmer.page.html',
-            //template:'<ui-view/>',
-            controller: 'FarmerController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('farmer.list', {
-            url: '/list',
-            templateUrl: 'app/pages/admin/farmer/list/farmer-list.page.html',
-            controller: 'FarmerListController',
-            data: {
-                requiresAuth: true,
-                menuID: 8,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('farmer.add', {
-            url: '/add',
-            templateUrl: 'app/pages/admin/farmer/add/farmer-add.page.html',
-            controller: 'FarmerAddController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('farmer.edit', {
-            url: '/:id/edit',
-            templateUrl: 'app/pages/admin/farmer/edit/farmer-edit.page.html',
-            controller: 'FarmerEditController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('truck', {
-            abstract: true,
-            url: '/admin/catalog/truck',
-            templateUrl: 'app/pages/admin/truck/truck.page.html',
-            //template:'<ui-view/>',
-            controller: 'TruckController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('truck.list', {
-            url: '/list',
-            templateUrl: 'app/pages/admin/truck/list/truck-list.page.html',
-            controller: 'TruckListController',
-            data: {
-                requiresAuth: true,
-                menuID: 8,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('truck.add', {
-            url: '/add',
-            templateUrl: 'app/pages/admin/truck/add/truck-add.page.html',
-            controller: 'TruckAddController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('truck.edit', {
-            url: '/:id/edit',
-            templateUrl: 'app/pages/admin/truck/edit/truck-edit.page.html',
-            controller: 'TruckEditController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('cold_box', {
-            abstract: true,
-            url: '/admin/catalog/cold_box',
-            templateUrl: 'app/pages/admin/cold_box/cold_box.page.html',
-            //template:'<ui-view/>',
-            controller: 'ColdBoxController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('cold_box.list', {
-            url: '/list',
-            templateUrl: 'app/pages/admin/cold_box/list/cold_box-list.page.html',
-            controller: 'ColdBoxListController',
-            data: {
-                requiresAuth: true,
-                menuID: 8,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('cold_box.add', {
-            url: '/add',
-            templateUrl: 'app/pages/admin/cold_box/add/cold_box-add.page.html',
-            controller: 'ColdBoxAddController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('cold_box.edit', {
-            url: '/:id/edit',
-            templateUrl: 'app/pages/admin/cold_box/edit/cold_box-edit.page.html',
-            controller: 'ColdBoxEditController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('field_log', {
-            abstract: true,
-            url: '/admin/catalog/field_log',
-            templateUrl: 'app/pages/admin/field_log/field_log.page.html',
-            //template:'<ui-view/>',
-            controller: 'FieldLogController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('field_log.list', {
-            url: '/list',
-            templateUrl: 'app/pages/admin/field_log/list/field_log-list.page.html',
-            controller: 'FieldLogListController',
-            data: {
-                requiresAuth: true,
-                menuID: 13,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('field_log.add', {
-            url: '/add',
-            templateUrl: 'app/pages/admin/field_log/add/field_log-add.page.html',
-            controller: 'FieldLogAddController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('field_log.edit', {
-            url: '/:id/edit',
-            templateUrl: 'app/pages/admin/field_log/edit/field_log-edit.page.html',
-            controller: 'FieldLogEditController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('gate_registration', {
-            abstract: true,
-            url: '/admin/catalog/gate_registration',
-            templateUrl: 'app/pages/admin/gate_registration/gate_registration.page.html',
-            //template:'<ui-view/>',
-            controller: 'GateRegistrationController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('gate_registration.operation', {
-            url: '/list',
-            templateUrl: 'app/pages/admin/gate_registration/list/gate_registration-list.page.html',
-            controller: 'GateRegistrationListController',
-            data: {
-                requiresAuth: true,
-                menuID: 14,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('cold_room', {
-            abstract: true,
-            url: '/admin/catalog/cold_room',
-            templateUrl: 'app/pages/admin/cold_room/cold_room.page.html',
-            //template:'<ui-view/>',
-            controller: 'ColdRoomController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('cold_room.list', {
-            url: '/list',
-            templateUrl: 'app/pages/admin/cold_room/list/cold_room-list.page.html',
-            controller: 'ColdRoomListController',
-            data: {
-                requiresAuth: true,
-                menuID: 24,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('cold_room.add', {
-            url: '/add',
-            templateUrl: 'app/pages/admin/cold_room/add/cold_room-add.page.html',
-            controller: 'ColdRoomAddController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('cold_room.edit', {
-            url: '/:id/edit',
-            templateUrl: 'app/pages/admin/cold_room/edit/cold_room-edit.page.html',
-            controller: 'ColdRoomEditController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('ramp', {
-            abstract: true,
-            url: '/admin/catalog/ramp',
-            templateUrl: 'app/pages/admin/ramp/ramp.page.html',
-            //template:'<ui-view/>',
-            controller: 'RampController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('ramp.list', {
-            url: '/list',
-            templateUrl: 'app/pages/admin/ramp/list/ramp-list.page.html',
-            controller: 'RampListController',
-            data: {
-                requiresAuth: true,
-                menuID: 25,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('ramp.add', {
-            url: '/add',
-            templateUrl: 'app/pages/admin/ramp/add/ramp-add.page.html',
-            controller: 'RampAddController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('ramp.edit', {
-            url: '/:id/edit',
-            templateUrl: 'app/pages/admin/ramp/edit/ramp-edit.page.html',
-            controller: 'RampEditController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('packing', {
-            abstract: true,
-            url: '/admin/catalog/packing',
-            templateUrl: 'app/pages/admin/packing/packing.page.html',
-            //template:'<ui-view/>',
-            controller: 'PackingController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('packing.list', {
-            url: '/list',
-            templateUrl: 'app/pages/admin/packing/list/packing-list.page.html',
-            controller: 'PackingListController',
-            data: {
-                requiresAuth: true,
-                menuID: 26,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('packing.add', {
-            url: '/add',
-            templateUrl: 'app/pages/admin/packing/add/packing-add.page.html',
-            controller: 'PackingAddController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('packing.edit', {
-            url: '/:id/edit',
-            templateUrl: 'app/pages/admin/packing/edit/packing-edit.page.html',
-            controller: 'PackingEditController',
-            data: {
-                requiresAuth: true,
+                menuID: 12,
                 typeUserAllowed: [1, 2]
             }
         }).state('purchaseorder', {
@@ -1045,41 +418,6 @@
             data: {
                 requiresAuth: true,
                 menuID: 10,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('rejection', {
-            abstract: true,
-            url: '/admin/catalog/rejection',
-            templateUrl: 'app/pages/admin/rejection/rejection.page.html',
-            //template:'<ui-view/>',
-            controller: 'RejectionController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('rejection.list', {
-            url: '/list',
-            templateUrl: 'app/pages/admin/rejection/list/rejection-list.page.html',
-            controller: 'RejectionListController',
-            data: {
-                requiresAuth: true,
-                menuID: 27,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('rejection.add', {
-            url: '/add',
-            templateUrl: 'app/pages/admin/rejection/add/rejection-add.page.html',
-            controller: 'RejectionAddController',
-            data: {
-                requiresAuth: true,
-                typeUserAllowed: [1, 2]
-            }
-        }).state('rejection.edit', {
-            url: '/:id/edit',
-            templateUrl: 'app/pages/admin/rejection/edit/rejection-edit.page.html',
-            controller: 'RejectionEditController',
-            data: {
-                requiresAuth: true,
                 typeUserAllowed: [1, 2]
             }
         });
