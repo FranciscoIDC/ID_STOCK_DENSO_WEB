@@ -27,6 +27,7 @@
         let baseAssetLog = base + 'AssetLog';
         let baseNumpartCategory = base + 'NumpartCategory';
         let baseInbound = base + 'Inbound';
+        let baseInboundProduct = base + 'InboundProduct';
         let baseOutbound = base + 'Outbound';
         let baseIncident = base + 'Incident';
         let baseStock = base + 'Stock';
@@ -115,10 +116,12 @@
             getPalletAssemblyDetail: basePalletAssembly + '/Detail',
 
             getInbound: baseInbound + '',
-            getInboundReport: baseInbound + '',
+
+            getInboundReport: baseInboundProduct + '/Report',
+
+            getOutboundReport: baseRequisitionOrder + '/OutboundReport',
 
             getOutbound: baseOutbound + '',
-            getOutboundReport: baseOutbound + '',
 
             getIncident: baseIncident + '',
             getIncidentReport: baseIncident + '',

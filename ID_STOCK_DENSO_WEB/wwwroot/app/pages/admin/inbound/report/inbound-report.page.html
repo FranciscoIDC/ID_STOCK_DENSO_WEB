@@ -1,142 +1,542 @@
 ﻿<div class="container-fluid">
+    <br>
 
-
-    <!-- ========== title-wrapper start ========== -->
-    <div class="title-wrapper pt-30">
+    <!-- ===== HEADER ===== -->
+    <div class="catalog-header mb-4">
         <div class="row align-items-center">
-            <div class="col-md-6">
-                <div class="titlemb-30">
-                    <h2>Reporte de Entradas</h2>
+            <div class="col-lg-7 col-md-6">
+                <div class="header-content">
+                    <div class="breadcrumb-custom mb-2">
+                        <a ui-sref="home" class="breadcrumb-link">
+                            <i class="lni lni-home"></i> Inicio
+                        </a>
+                        <span class="separator">/</span>
+                        <span class="current">Reporte de Entradas</span>
+                    </div>
+                    <h2 class="page-title mb-1">
+                        <i class="lni lni-delivery"></i> Reporte de Entradas
+                    </h2>
+                    <p class="page-subtitle text-muted mb-0">
+                        Seguimiento de recepción, almacenamiento temporal y captura — DENSO Almacén 90
+                    </p>
                 </div>
             </div>
-            <!-- end col -->
-            <!--<div class="col-md-6">
-                <div class="breadcrumb-wrapper mb-30">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a onclick="history.back()" style="cursor:pointer;">Inventario</a></li>
-                            <li class="breadcrumb-item active" aria-current="page" style="cursor:pointer;">
-                                Detalle
-                            </li>
-                        </ol>
-                    </nav>
+            <div class="col-lg-5 col-md-6">
+                <div class="row g-2">
+                    <div class="col-4">
+                        <div class="stat-card-po">
+                            <div class="stat-icon-po bg-orange"><i class="lni lni-map-marker"></i></div>
+                            <div class="stat-info-po">
+                                <h4>{{countPaso1}}</h4>
+                                <small>Recibidos</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat-card-po">
+                            <div class="stat-icon-po bg-blue"><i class="lni lni-archive"></i></div>
+                            <div class="stat-info-po">
+                                <h4>{{countPaso2}}</h4>
+                                <small>Alm. Temporal</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat-card-po">
+                            <div class="stat-icon-po bg-green"><i class="lni lni-checkmark-circle"></i></div>
+                            <div class="stat-info-po">
+                                <h4>{{countPaso3}}</h4>
+                                <small>Capturados</small>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>-->
-            <!-- end col -->
+            </div>
         </div>
-        <!-- end row -->
     </div>
-    <!-- ========== title-wrapper end ========== -->
 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card-style settings-card-1 mb-30">
-                <div class="profile-info">
-                    <div class="row align-items-center">
-                        <div class="col-xxl-4">
-                            <div class="input-style-1">
-                                <label>Fecha de inicio</label>
-                                <input type="date" ng-model="startDate" />
-                            </div>
-                        </div>
-                        <div class="col-xxl-4">
-                            <div class="input-style-1">
-                                <label>Fecha de final</label>
-                                <input type="date" ng-model="endDate" />
-                            </div>
-                        </div>
-                        <div class="col-xxl-4">
-                            <div class="input-style-1">
-                                <label>Buscar</label>
-                                <input type="text" ng-model="filterSearch" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row align-items-center justify-content-end">
-                        <div class="col-xxl-auto text-center">
-                            <div class="input-style-1">
-                                <a class="main-btn primary-btn rounded-full btn-hover w-100" style="text-decoration:none;" ng-click="Search()">Buscar</a>
-                            </div>
-                        </div>
-                        <div class="col-xxl-auto text-center">
-                            <div class="input-style-1 ">
-                                <a class="main-btn danger-btn rounded-full btn-hover w-100" style="text-decoration:none;" ng-click="ClearFilters()">Limpiar Filtros</a>
-                            </div>
-                        </div>
-                        <!--Boton de Excel Funciones de descarga-->
-                        <div class="col-xxl-auto text-center">
-                            <div class="input-style-1 ">
-                                <a class="main-btn success-btn rounded-full btn-hover w-100" style="text-decoration:none;" ng-click="GetExcel()">Descargar Excel</a>
-                            </div>
-                        </div>
-                    </div>
+    <!-- ===== FILTROS ===== -->
+    <div class="card-style settings-card-1 mb-30">
+        <div class="row g-3 align-items-end">
+            <div class="col-lg-3 col-md-6">
+                <div class="input-style-1">
+                    <label><i class="lni lni-search-alt"></i> Buscar (PO, Proveedor, Parte)</label>
+                    <input type="text"
+                           ng-model="filterSearch"
+                           placeholder="Ej: 279866, TAMURA, MAD-DC-18..."
+                           ng-keypress="$event.keyCode === 13 && Search(1)" />
                 </div>
             </div>
-            <div class="col-lg-12">
-                <div class="card-style mb-30">
-                    <div class="title mb-30 d-flex justify-content-between align-items-center">
-                        <h6 class="mb-10">Lista de entradas</h6>
-                        <div>
-                            <!--<a class="main-btn primary-btn rounded-full btn-hover" ng-if="printLabelsButtonIsVisible" ng-click="MultipleLabelPrintingAsync()"
-                               style="text-decoration:none;">Imprimir Etiquetas</a>-->
-                            <!--<a class="main-btn primary-btn rounded-full btn-hover" ui-sref="asset.add" style="text-decoration:none;">Agregar Activo</a>-->
-                        </div>
-                    </div>
-
-                    <div class="table-wrapper table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-
-                                    <th><h6>Folio</h6></th>
-                                    <th><h6>Codigo de tarima</h6></th>
-                                    <th><h6>Tag Asignado</h6></th>
-                                    <th><h6>Producto</h6></th>
-                                    <th><h6>Lote</h6></th>
-                                    <th><h6>Cantidad</h6></th>
-                                    <th><h6>Fecha Caducidad</h6></th>
-                                    <th><h6>Recibo</h6></th>
-                                </tr>
-                                <!-- end table row-->
-                            </thead>
-                            <tbody>
-                                <tr ng-if="ExistData()" ng-repeat="item in data">
-
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.Invoice)}}</p>
-                                    </td>
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.Barcode)}}</p>
-                                    </td>
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.TagRFID)}}</p>
-                                    </td>
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.ProductDescription)}}</p>
-                                    </td>
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.Lote)}}</p>
-                                    </td>
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.Quantity)}}</p>
-                                    </td>
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.Expiration_Date)}}</p>
-                                    </td>
-                                    <td class="min-width">
-                                        <p>{{DatumToString(item.Recived_Date)}}</p>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <!-- end table -->
-                    </div>
-                    <pagination-control show-items-per-page="true" paging-size="pagingSize" items-per-page="itemsPerPage" total-items="totalItems" display-items="displayItems" current-page="currentPage"></pagination-control>
+            <div class="col-lg-3 col-md-6">
+                <div class="input-style-1">
+                    <label><i class="lni lni-calendar"></i> Fecha Inicio</label>
+                    <input type="date" ng-model="filterDtStart" />
                 </div>
-                <!-- end card -->
             </div>
-            <!-- end col -->
+            <div class="col-lg-3 col-md-6">
+                <div class="input-style-1">
+                    <label><i class="lni lni-calendar"></i> Fecha Fin</label>
+                    <input type="date" ng-model="filterDtEnd" />
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 d-flex justify-content-end gap-2 flex-wrap">
+                <a class="main-btn primary-btn rounded-full btn-hover"
+                   style="text-decoration:none;" ng-click="Search(1)">
+                    <i class="lni lni-search"></i> Buscar
+                </a>
+                <a class="main-btn danger-btn rounded-full btn-hover"
+                   style="text-decoration:none;" ng-click="ClearFilters()">
+                    <i class="lni lni-brush-alt"></i> Limpiar
+                </a>
+                <a class="main-btn success-btn rounded-full btn-hover"
+                   style="text-decoration:none;" ng-click="GetCSV()"
+                   ng-if="ExistData()">
+                    <i class="lni lni-download"></i> Exportar CSV
+                </a>
+            </div>
         </div>
-        <!-- end row -->
+    </div>
+
+    <!-- ===== LISTA DE ENTRADAS ===== -->
+    <div class="card-style mb-30">
+        <div class="d-flex justify-content-between align-items-center mb-20">
+            <h6 class="mb-0">
+                <i class="lni lni-list"></i> Entradas registradas
+                <span class="text-muted ms-2" style="font-size:13px;" ng-if="counterData > 0">
+                    ({{counterData}} POs)
+                </span>
+            </h6>
+        </div>
+
+        <!-- Loading -->
+        <div ng-if="isLoading" class="loading-overlay">
+            <div class="loading-spinner"></div>
+            <span>Cargando entradas...</span>
+        </div>
+
+        <!-- Estado vacío -->
+        <div ng-if="!isLoading && !ExistData()" class="text-center py-5 text-muted">
+            <i class="lni lni-search-alt" style="font-size:2.5rem; opacity:.3;"></i>
+            <p class="mt-3">Aplica los filtros para consultar el reporte de entradas.</p>
+        </div>
+
+        <!-- Cards de entradas -->
+        <div ng-if="!isLoading && ExistData()">
+            <div ng-repeat="item in data" class="inbound-entry-card mb-3">
+
+                <!-- ── Encabezado de la card ── -->
+                <div class="inbound-entry-header d-flex justify-content-between align-items-start flex-wrap gap-2">
+                    <div>
+                        <span class="inbound-po-num">
+                            <i class="lni lni-files"></i> PO #<strong>{{item.IdPurchaseOrder}}</strong>
+                        </span>
+                        <span class="inbound-po-sep mx-2 text-muted">|</span>
+                        <span class="inbound-supplier">
+                            <i class="lni lni-user"></i> {{DatumToString(item.SupplierName)}}
+                        </span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="text-muted" style="font-size:12px;">
+                            <i class="lni lni-calendar"></i>
+                            Reg: {{FormatDate(item.RegistrationDate)}}
+                            &nbsp;|&nbsp;
+                            Rec: {{FormatDate(item.ReceptionDate)}}
+                        </span>
+                        <span ng-class="GetPasoClass(item.PasoActual)" class="ms-1">
+                            {{GetPasoLabel(item.PasoActual)}}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- ── Timeline de 3 pasos ── -->
+                <div class="inbound-timeline mt-3">
+
+                    <!-- Paso 1: Pick Up / Recepción -->
+                    <div class="timeline-step-block" ng-class="GetStepClass(item.PasoActual, 1)">
+                        <div class="step-icon-wrap">
+                            <div class="step-circle">
+                                <i class="lni lni-map-marker"></i>
+                            </div>
+                            <div class="step-line"></div>
+                        </div>
+                        <div class="step-body">
+                            <p class="step-title mb-0">1. Recepción (Pick Up)</p>
+                            <p class="step-detail mb-0">
+                                <i class="lni lni-pin"></i>
+                                <strong>{{DatumToString(item.PickUpTracking)}}</strong>
+                            </p>
+                            <p class="step-detail mb-0">
+                                <i class="lni lni-user"></i> {{DatumToString(item.PickUpUser)}}
+                            </p>
+                            <p class="step-detail mb-0">
+                                <i class="lni lni-timer"></i> {{FormatDateTime(item.PickUpDateTime)}}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Paso 2: Almacenamiento Temporal -->
+                    <div class="timeline-step-block" ng-class="GetStepClass(item.PasoActual, 2)">
+                        <div class="step-icon-wrap">
+                            <div class="step-circle">
+                                <i class="lni lni-archive"></i>
+                            </div>
+                            <div class="step-line"></div>
+                        </div>
+                        <div class="step-body">
+                            <p class="step-title mb-0">2. Almacenamiento Temporal</p>
+                            <p class="step-detail mb-0">
+                                <i class="lni lni-pin"></i>
+                                <strong>{{DatumToString(item.TempStorageTracking)}}</strong>
+                            </p>
+                            <p class="step-detail mb-0">
+                                <i class="lni lni-user"></i> {{DatumToString(item.TempStorageUser)}}
+                            </p>
+                            <p class="step-detail mb-0">
+                                <i class="lni lni-timer"></i> {{FormatDateTime(item.TempStorageDateTime)}}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Paso 3: Estación de Captura -->
+                    <div class="timeline-step-block" ng-class="GetStepClass(item.PasoActual, 3)">
+                        <div class="step-icon-wrap">
+                            <div class="step-circle">
+                                <i class="lni lni-checkmark-circle"></i>
+                            </div>
+                            <!-- Sin línea en el último paso -->
+                        </div>
+                        <div class="step-body">
+                            <p class="step-title mb-0">3. Estación de Captura</p>
+                            <p class="step-detail mb-0">
+                                <i class="lni lni-pin"></i>
+                                <strong>{{DatumToString(item.CaptureTracking)}}</strong>
+                            </p>
+                            <p class="step-detail mb-0">
+                                <i class="lni lni-user"></i> {{DatumToString(item.CaptureUser)}}
+                            </p>
+                            <p class="step-detail mb-0">
+                                <i class="lni lni-timer"></i> {{FormatDateTime(item.CaptureDateTime)}}
+                            </p>
+                        </div>
+                    </div>
+
+                </div><!-- /timeline -->
+
+                <!-- ── Footer de la card ── -->
+                <div class="inbound-entry-footer mt-3 d-flex justify-content-between align-items-center">
+                    <span class="text-muted" style="font-size:12px;">
+                        <i class="lni lni-layers"></i>
+                        {{CountParts(item)}} parte(s) registrada(s)
+                    </span>
+                    <button class="main-btn primary-btn btn-hover rounded-full"
+                            style="padding: 6px 16px; font-size: 13px;"
+                            ng-click="OpenDetailModal(item)">
+                        <i class="lni lni-eye"></i> Ver Partes
+                    </button>
+                </div>
+
+            </div><!-- /ng-repeat -->
+
+            <!-- Paginación -->
+            <pagination-control show-items-per-page="true"
+                                paging-size="pagingSize"
+                                items-per-page="itemsPerPage"
+                                total-items="totalItems"
+                                display-items="displayItems"
+                                current-page="currentPage">
+            </pagination-control>
+        </div>
     </div>
 </div>
+
+
+<!-- ================================================================ -->
+<!--              MODAL DETALLE DE PARTES – INBOUND REPORT            -->
+<!-- ================================================================ -->
+<div class="modal fade modal-po" id="modalDetailInbound" tabindex="-1" role="dialog"
+     aria-labelledby="modalDetailInboundLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+
+            <!-- Header -->
+            <div class="modal-header-po">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5 class="modal-title" id="modalDetailInboundLabel">
+                            <i class="lni lni-layers"></i>&nbsp; Detalle de Partes
+                        </h5>
+                        <p class="modal-subtitle mb-0">
+                            <i class="lni lni-files"></i>
+                            <strong> PO #{{selectedOrder.IdPurchaseOrder}}</strong>
+                            &nbsp;|&nbsp;
+                            <i class="lni lni-ticket-alt"></i> Sol. {{DatumToString(selectedOrder.IdRequest)}}
+                            &nbsp;|&nbsp;
+                            <i class="lni lni-user"></i> {{DatumToString(selectedOrder.SupplierName)}}
+                        </p>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white mt-1"
+                            data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+            </div>
+
+            <!-- Resumen de tracking (los 3 pasos) -->
+            <div class="po-summary-bar">
+                <div class="row g-0">
+                    <div class="col-md-3 summary-col">
+                        <span class="summary-label"><i class="lni lni-map-marker"></i> Recepción</span>
+                        <span class="summary-value">
+                            {{DatumToString(selectedOrder.PickUpTracking)}}
+                            <br>
+                            <small class="text-muted">{{DatumToString(selectedOrder.PickUpUser)}}</small>
+                            <br>
+                            <small class="text-muted">{{FormatDateTime(selectedOrder.PickUpDateTime)}}</small>
+                        </span>
+                    </div>
+                    <div class="col-md-3 summary-col">
+                        <span class="summary-label"><i class="lni lni-archive"></i> Alm. Temporal</span>
+                        <span class="summary-value">
+                            {{DatumToString(selectedOrder.TempStorageTracking)}}
+                            <br>
+                            <small class="text-muted">{{DatumToString(selectedOrder.TempStorageUser)}}</small>
+                            <br>
+                            <small class="text-muted">{{FormatDateTime(selectedOrder.TempStorageDateTime)}}</small>
+                        </span>
+                    </div>
+                    <div class="col-md-3 summary-col">
+                        <span class="summary-label"><i class="lni lni-checkmark-circle"></i> Captura</span>
+                        <span class="summary-value">
+                            {{DatumToString(selectedOrder.CaptureTracking)}}
+                            <br>
+                            <small class="text-muted">{{DatumToString(selectedOrder.CaptureUser)}}</small>
+                            <br>
+                            <small class="text-muted">{{FormatDateTime(selectedOrder.CaptureDateTime)}}</small>
+                        </span>
+                    </div>
+                    <div class="col-md-3 summary-col">
+                        <span class="summary-label"><i class="lni lni-layers"></i> Estado / Partes</span>
+                        <span class="summary-value">
+                            <span ng-class="GetPasoClass(selectedOrder.PasoActual)">
+                                {{GetPasoLabel(selectedOrder.PasoActual)}}
+                            </span>
+                            <br>
+                            <small class="text-muted">{{CountParts(selectedOrder)}} parte(s)</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body p-4">
+                <h6 class="mb-3">
+                    <i class="lni lni-package"></i>&nbsp; Partes de la Orden
+                </h6>
+
+                <div ng-if="!selectedOrder.listapartes || selectedOrder.listapartes.length === 0"
+                     class="text-center text-muted py-4">
+                    <i class="lni lni-warning"></i> Sin partes registradas para esta orden.
+                </div>
+
+                <div class="table-responsive"
+                     ng-if="selectedOrder.listapartes && selectedOrder.listapartes.length > 0">
+                    <table class="table table-bordered table-hover mb-0 parts-table">
+                        <thead>
+                            <tr>
+                                <th style="width:50px;">Línea</th>
+                                <th>Descripción</th>
+                                <th>No. Parte</th>
+                                <th>No. Denso</th>
+                                <th>Denso N</th>
+                                <th>Tipo</th>
+                                <th class="text-center">Solicitada</th>
+                                <th class="text-center">Recibida</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="part in selectedOrder.listapartes">
+                                <td class="text-center">
+                                    <span class="part-line-badge">{{part.Linea}}</span>
+                                </td>
+                                <td><strong>{{DatumToString(part.Descripcion)}}</strong></td>
+                                <td><code>{{DatumToString(part.NoParte)}}</code></td>
+                                <td>{{DatumToString(part.NoDenso)}}</td>
+                                <td>{{DatumToString(part.NoDensoN)}}</td>
+                                <td>
+                                    <span class="badge bg-secondary">{{DatumToString(part.DescripcionTipo)}}</span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="qty-requested">{{part.CantidadSolicitada}}</span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="qty-received"
+                                          ng-if="part.CantidadRecibida !== null && part.CantidadRecibida !== undefined">
+                                        {{part.CantidadRecibida}}
+                                    </span>
+                                    <span class="text-muted"
+                                          ng-if="part.CantidadRecibida === null || part.CantidadRecibida === undefined">
+                                        --
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="6" class="text-end fw-bold">Totales:</td>
+                                <td class="text-center fw-bold">
+                                    {{SumQuantity(selectedOrder.listapartes, 'CantidadSolicitada') | number:0}}
+                                </td>
+                                <td class="text-center fw-bold">
+                                    {{SumQuantity(selectedOrder.listapartes, 'CantidadRecibida') | number:0}}
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer" style="border-top: 1px solid #dee2e6;">
+                <button type="button"
+                        class="main-btn danger-btn btn-hover rounded-full"
+                        data-bs-dismiss="modal">
+                    <i class="lni lni-close"></i>&nbsp; Cerrar
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- ================================================================ -->
+<!--                        CSS EMBEBIDO                              -->
+<!-- ================================================================ -->
+<style>
+/* ── Inbound Entry Card ── */
+.inbound-entry-card {
+    background: #fff;
+    border: 1px solid #e5e9f2;
+    border-radius: 10px;
+    padding: 18px 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.04);
+    transition: box-shadow .2s;
+}
+.inbound-entry-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,.08);
+}
+
+/* ── Card header ── */
+.inbound-entry-header {
+    border-bottom: 1px solid #f0f2f7;
+    padding-bottom: 10px;
+}
+.inbound-po-num {
+    font-size: 15px;
+    color: #2d2d2d;
+}
+.inbound-supplier {
+    font-size: 13px;
+    color: #6c757d;
+}
+
+/* ── Timeline ── */
+.inbound-timeline {
+    display: flex;
+    gap: 0;
+    padding: 10px 0 6px;
+    overflow-x: auto;
+}
+.timeline-step-block {
+    display: flex;
+    flex: 1;
+    min-width: 160px;
+    gap: 10px;
+}
+.step-icon-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 2px;
+}
+.step-circle {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+    transition: background .2s, color .2s;
+}
+.step-line {
+    width: 2px;
+    flex: 1;
+    min-height: 30px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    background: #e5e9f2;
+}
+
+/* Horizontal connector between steps */
+.timeline-step-block:not(:last-child) .step-icon-wrap::after {
+    display: none; /* vertical layout, no after */
+}
+
+/* ── Step states ── */
+.timeline-step-done .step-circle {
+    background: #28a745;
+    color: #fff;
+}
+.timeline-step-done .step-line {
+    background: #28a745;
+}
+.timeline-step-done .step-title {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.timeline-step-active .step-circle {
+    background: #fd7e14;
+    color: #fff;
+}
+.timeline-step-active .step-line {
+    background: #e5e9f2;
+}
+.timeline-step-active .step-title {
+    color: #fd7e14;
+    font-weight: 600;
+}
+
+.timeline-step-pending .step-circle {
+    background: #e5e9f2;
+    color: #aaa;
+}
+.timeline-step-pending .step-title {
+    color: #aaa;
+}
+.timeline-step-pending .step-detail {
+    color: #ccc;
+}
+
+/* ── Step body text ── */
+.step-body {
+    padding-bottom: 8px;
+}
+.step-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+}
+.step-detail {
+    font-size: 12px;
+    color: #6c757d;
+    line-height: 1.5;
+}
+
+/* ── Card footer ── */
+.inbound-entry-footer {
+    border-top: 1px solid #f0f2f7;
+    padding-top: 10px;
+}
+</style>

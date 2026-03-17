@@ -6,24 +6,25 @@
     InboundReportController.$inject = [
         '$scope',
         '$state',
+        '$timeout',
         'InboundReportService',
         'AlertService',
         'ErrorService',
         'ConstService',
         'GeneralInfo',
-        'UrlService'
     ];
 
     function InboundReportController(
         self,
         $state,
+        $timeout,
         InboundReportService,
         AlertService,
         ErrorService,
         ConstService,
-        GeneralInfo,
-        UrlService
+        GeneralInfo
     ) {
+
         async function _Init() {
             _InitValues();
             _RegisterFunctions();
@@ -33,97 +34,76 @@
         function _InitValues() {
             self.model = {};
 
-            //self.model = new InboundDtoGet();
-
             self.filterSearch = "";
+            self.filterDtStart = "";
+            self.filterDtEnd = "";
 
             self.data = [];
+            self.counterData = 0;
+            self.totalItems = 0;
 
             self.pagingSize = ConstService.pagingSize;
             self.itemsPerPage = ConstService.itemsPerPage;
-            self.totalItems = 0;
-            self.counterData = 0;
-
             self.currentPage = 1;
-
             self.displayItems = [];
 
-            self.itemsSelected = new Map();
-            self.counterItemsSelected = 0;
+            // Modal de detalle de partes
+            self.selectedOrder = {};
 
-            self.selectedPageAssets = false;
-
-            self.printLabelsButtonIsVisible = false;
-
-            //INDICA SI LOS ACTIVOS DE TODAS LAS PAGINAS ESTAN SELECCIONADOS YA SEA LOGICAMENTE
-            self.flagOfAllSelectedAssets = false;
-            //INDICA SI LA ALERTA PARA SELECCIONAR TODOS LOS ACTIVOS DE TODAS LAS PAGINAS ESTA VISIBLE
-            self.alertSelectAllIsVisible = false;
-            //INDICA SI LA ALERTA PARA ANULAR SELECCION DE TODOS LOS ACTIVOS DE TODAS LAS PAGINAS ESTA VISIBLE
-            self.alertDeselectAllIsVisible = false;
         }
 
         function _RegisterFunctions() {
             self.Search = _Search;
-
-            self.GoDetail = _GoDetail;
-            self.DatumToString = _DatumToString;
-            self.ExistData = _ExistData;
-
             self.ClearFilters = _ClearFilters;
+            self.ExistData = _ExistData;
+            self.DatumToString = _DatumToString;
+            self.FormatDate = _FormatDate;
+            self.FormatDateTime = _FormatDateTime;
 
-            //Get excel
-            self.GetExcel = _GetExcel;
+            // Semáforo de pasos
+            self.GetPasoClass = _GetPasoClass;
+            self.GetPasoLabel = _GetPasoLabel;
+            self.GetStepClass = _GetStepClass;
 
-            //VISORES DE LAS VARIABLES QUE SE USAN EL EN CONTROL DE PAGINACION
+            // Modal
+            self.OpenDetailModal = _OpenDetailModal;
+            self.SumQuantity = _SumQuantity;
+            self.CountParts = _CountParts;
+
+            // CSV
+            self.GetCSV = _GetCSV;
+
             self.$watch("currentPage", _ChangueCurrentPage);
             self.$watch("itemsPerPage", _ChangueItemsPerPage);
         }
 
         async function _FunctionsInit() {
             AlertService.Load();
-            await _GetAssetsOnResume();
+            // No cargamos datos al abrir; el usuario debe aplicar filtros
             swal.close();
         }
 
+        // ========== BÚSQUEDA PRINCIPAL ==========
+        async function _Search(newPage) {
+            newPage = !newPage ? 1 : newPage;
 
-        async function _GetAssetsOnResume() {
-            let filters = JSON.parse(localStorage.getItem(ConstService.inventoryListFilters));
-            if (!filters) return;
-
-            self.startDate = new Date(filters.DateStart);
-            self.endDate = new Date(filters.DateEnd);
-
-            self.$apply();
-            //await _GetCategoryAsync();
-
-            let params = BuildParamsToGetInbound(self.currentPage, self.itemsPerPage, self.startDate, self.endDate);
-            await _GetInboundAsync(params)
-        }
-
-        async function _Search() {
-            if (!self.startDate || !self.endDate) {
-                AlertService.Error("Los filtros son requeridos.");
-                return;
-            }
-
+            self.currentPage = newPage;
             AlertService.Load();
-            //localStorage.setItem(ConstService.inventoryListFilters, JSON.stringify(filters))
-            Filters();
-            self.currentPage = 1;
 
-            //var dt1 = GeneralInfo.formatDate(self.startDate);
-            //var dt2 = GeneralInfo.formatDate(self.endDate);
-            let params = BuildParamsToGetInbound(self.currentPage, self.itemsPerPage, self.startDate, self.endDate);
+            let params = _BuildParams(self.currentPage, self.itemsPerPage);
             await _GetInboundAsync(params);
+
             swal.close();
         }
 
-        function Filters() {
-            var dt1 = GeneralInfo.formatDate(self.startDate);
-            var dt2 = GeneralInfo.formatDate(self.endDate);
-            let filters = { 'DateStart': dt1, 'DateEnd': dt2 };
-            localStorage.setItem(ConstService.inventoryListFilters, JSON.stringify(filters));
+        function _BuildParams(page, itemsPerPage) {
+            return {
+                Page: page,
+                ItemsPerPage: +itemsPerPage,
+                Search: self.filterSearch,
+                DtStart: self.filterDtStart || null,
+                DtEnd: self.filterDtEnd || null,
+            };
         }
 
         async function _GetInboundAsync(params) {
@@ -133,364 +113,229 @@
                 self.counterData = 0;
 
                 let response = await InboundReportService.Get(params);
-                const { Status: status, Message: message, Data: data, Counter: counter } = response.data;
-                console.log(response);
+                const {
+                    Status: status,
+                    Message: message,
+                    Data: data,
+                    Counter: counter
+                } = response.data;
+
+                console.log('📦 InboundReport response:', response);
+
                 if (status !== 200) {
-                    console.error(message);
-                    AlertService.Error("Opps", message);
+                    console.error('❌ Error:', message);
+                    AlertService.Error("Oops", message);
                     return;
                 }
-                self.data = data;
-                self.totalItems = counter;
-                self.counterData = counter;
-                //self.setPage(1);
+
+                // listapartes ya viene ensamblada dentro de cada row por el backend (GroupBy en C#)
+                let rows = data || [];
+
+                self.data = rows;
+                self.totalItems = counter || 0;
+                self.counterData = counter || 0;
+
+                // Contadores para las stat cards del header
+                self.countPaso1 = rows.filter(function (r) { return r.PasoActual === 1; }).length;
+                self.countPaso2 = rows.filter(function (r) { return r.PasoActual === 2; }).length;
+                self.countPaso3 = rows.filter(function (r) { return r.PasoActual === 3; }).length;
+
                 self.$apply();
+
             } catch (ex) {
                 let error = ErrorService.GetError(ex);
-                console.error('Oops...', error);
+                console.error('❌ Oops:', error);
                 AlertService.ErrorHtml('Oops...', error);
             }
         }
 
-        //Apartado para Excel
-        async function _GetExcel() {
-            if (!self.data || self.data.length == 0) {
-                AlertService.Error("No hay elementos para descargar.");
-                return;
-            }
-            if (!self.startDate || !self.endDate) {
-                AlertService.Error("Los filtros son requeridos.");
-                return;
-            }
-            AlertService.Load();
-            Filters();
-            self.currentPage = 1;
-            var dt1 = GeneralInfo.formatDate(self.startDate);
-            var dt2 = GeneralInfo.formatDate(self.endDate);
-            let params = ('Page=' + 0 + '&ItemsPerPage=' + 0
-                + '&dtStart=' + dt1 + '&dtEnd=' + dt2);
-
-            await _Get_toExcel(params);
+        // ========== MODAL DE DETALLE DE PARTES ==========
+        function _OpenDetailModal(order) {
+            self.selectedOrder = order;
+            $timeout(function () {
+                $('#modalDetailInbound').modal('show');
+            });
         }
 
-        async function _Get_toExcel(params) {
-            try {
+        function _CountParts(order) {
+            return order && order.listapartes ? order.listapartes.length : 0;
+        }
 
-                let request = new XMLHttpRequest();
-                request.responseType = "blob";
-                request.open("GET", UrlService.getInboundReport + '/Excel?' + params);
-                //request.onloadstart = function () { generalInfo.LoadSpiner(); };
-                request.onload = function () {
-                    swal.close();
-                    let url = window.URL.createObjectURL(this.response);
-                    let a = document.createElement("a");
-                    document.body.appendChild(a);
-                    a.href = url;
-                    let hoy = new Date();
-                    let cadenaFecha = hoy.toLocaleDateString(); // "14/6/2020"
-                    a.download = this.response.name || "Reporte_Entradas" + cadenaFecha;
-                    a.click();
+        function _SumQuantity(lista, field) {
+            if (!lista || lista.length === 0) return 0;
+            return lista.reduce(function (acc, p) {
+                return acc + (parseFloat(p[field]) || 0);
+            }, 0);
+        }
+
+        // ========== SEMÁFORO DE PASOS ==========
+        // PasoActual: 0=sin mov, 1=recibido, 2=alm.temporal, 3=capturado
+        function _GetPasoClass(paso) {
+            switch (paso) {
+                case 3: return 'badge-status-completed';
+                case 2: return 'badge-status-in-progress';
+                case 1: return 'badge-status-pending';
+                default: return 'badge-status-default';
+            }
+        }
+
+        function _GetPasoLabel(paso) {
+            switch (paso) {
+                case 3: return 'Capturado';
+                case 2: return 'Alm. Temporal';
+                case 1: return 'Recibido';
+                default: return 'Sin movimiento';
+            }
+        }
+
+        // Clase para cada paso individual en la timeline
+        // stepIndex: 1=PickUp, 2=TempStorage, 3=Capture
+        function _GetStepClass(pasoActual, stepIndex) {
+            if (pasoActual >= stepIndex) return 'timeline-step-done';
+            if (pasoActual === stepIndex - 1) return 'timeline-step-active';
+            return 'timeline-step-pending';
+        }
+
+        // ========== EXPORTAR CSV ==========
+        function _GetCSV() {
+            if (!self.data || self.data.length === 0) {
+                AlertService.Error("No hay datos para exportar.");
+                return;
+            }
+
+            // Cabecera del CSV (formato plano: una fila por parte por PO)
+            let headers = [
+                '# Orden', 'Solicitud', 'Proveedor',
+                'F. Registro', 'F. Recepción',
+                'Recepción - Ubicación', 'Recepción - Usuario', 'Recepción - Fecha',
+                'Alm. Temporal - Ubicación', 'Alm. Temporal - Usuario', 'Alm. Temporal - Fecha',
+                'Captura - Ubicación', 'Captura - Usuario', 'Captura - Fecha',
+                'Paso Actual',
+                'Línea', 'No. Parte', 'No. Denso', 'Denso N', 'Descripción',
+                'Tipo', 'Cant. Solicitada', 'Cant. Recibida'
+            ];
+
+            let csvRows = [headers.join(',')];
+
+            self.data.forEach(function (row) {
+                let partes = row.listapartes || [];
+
+                if (partes.length === 0) {
+                    // PO sin detalle de partes registrado
+                    csvRows.push(_BuildCsvRow(row, null));
+                } else {
+                    partes.forEach(function (part) {
+                        csvRows.push(_BuildCsvRow(row, part));
+                    });
                 }
-                request.send();
-            } catch (ex) {
-                let error = ErrorService.GetError(ex);
-                console.error('Oops...', error);
-                AlertService.ErrorHtml('Oops...', error);
+            });
+
+            let csvContent = csvRows.join('\n');
+            let blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            let url = window.URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            document.body.appendChild(a);
+            a.href = url;
+            let fecha = new Date().toLocaleDateString('es-MX').replace(/\//g, '-');
+            a.download = 'Reporte_Entradas_' + fecha + '.csv';
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        function _BuildCsvRow(row, part) {
+            let esc = function (v) {
+                if (v === null || v === undefined) return '';
+                let s = String(v).replace(/"/g, '""');
+                return s.indexOf(',') >= 0 || s.indexOf('"') >= 0 ? '"' + s + '"' : s;
+            };
+
+            let cols = [
+                esc(row.IdPurchaseOrder),
+                esc(row.IdRequest),
+                esc(row.SupplierName),
+                esc(_FormatDate(row.RegistrationDate)),
+                esc(_FormatDate(row.ReceptionDate)),
+                esc(row.PickUpTracking),
+                esc(row.PickUpUser),
+                esc(_FormatDateTime(row.PickUpDateTime)),
+                esc(row.TempStorageTracking),
+                esc(row.TempStorageUser),
+                esc(_FormatDateTime(row.TempStorageDateTime)),
+                esc(row.CaptureTracking),
+                esc(row.CaptureUser),
+                esc(_FormatDateTime(row.CaptureDateTime)),
+                esc(_GetPasoLabel(row.PasoActual)),
+            ];
+
+            if (part) {
+                cols = cols.concat([
+                    esc(part.Linea),
+                    esc(part.NoParte),
+                    esc(part.NoDenso),
+                    esc(part.NoDensoN),
+                    esc(part.Descripcion),
+                    esc(part.DescripcionTipo),
+                    esc(part.CantidadSolicitada),
+                    esc(part.CantidadRecibida),
+                ]);
+            } else {
+                cols = cols.concat(['', '', '', '', '', '', '', '']);
             }
+
+            return cols.join(',');
         }
 
-        function BuildParamsToGetInbound(page, itemsPerPage, dtStart, dtEnd) {
-            var dt1 = GeneralInfo.formatDate(dtStart);
-            var dt2 = GeneralInfo.formatDate(dtEnd);
-
-            //self.model = new InboundDtoGet(); _ChangueItemsPerPage
-            self.model.Page = page;
-            self.model.ItemsPerPage = +itemsPerPage;
-            self.model.DtStart = dt1;
-            self.model.DtEnd = dt2;
-
-            return self.model;
+        // ========== HELPERS ==========
+        function _FormatDate(dateStr) {
+            if (!dateStr) return '--';
+            return new Date(dateStr).toLocaleDateString('es-MX', {
+                day: '2-digit', month: 'short', year: 'numeric'
+            });
         }
 
+        function _FormatDateTime(dateStr) {
+            if (!dateStr) return '--';
+            return new Date(dateStr).toLocaleString('es-MX', {
+                day: '2-digit', month: 'short', year: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            });
+        }
 
         function _ExistData() {
-            if (!self.data || self.data.length === 0)
-                return false;
-            else
-                return true;
-        }
-
-        function _GoDetail(id, addsId) {
-            $state.go("inventory.detail", { "id": id });
+            return self.data && self.data.length > 0;
         }
 
         function _DatumToString(datum) {
-            return datum ? datum : "--";
+            return datum ? datum : '--';
         }
 
-        function _ChangueCurrentPage(newPage, oldPage) {
-            if (newPage === oldPage) {
-                return;
-            }
+        function _ClearFilters() {
+            self.filterSearch = "";
+            self.filterDtStart = "";
+            self.filterDtEnd = "";
+            self.data = [];
+            self.totalItems = 0;
+            self.counterData = 0;
+        }
 
-            console.log("La pagina actual es: " + newPage);
+        // ========== PAGINACIÓN ==========
+        function _ChangueCurrentPage(newPage, oldPage) {
+            if (newPage === oldPage) return;
             AlertService.Load();
-            //let params = { 'Page': newPage, 'ItemsPerPage': self.itemsPerPage, 'LocationId': self.storeId, 'CategoryId': self.categoryId, 'Search': self.filterSearch }
-            //let params = { 'Page': self.currentPage, 'ItemsPerPage': self.itemsPerPage, 'IdStore': self.storeId, 'DtStart': self.startDate, 'DtEnd': self.endDate }
-            let params = BuildParamsToGetInbound(self.currentPage, self.itemsPerPage, self.startDate, self.endDate);
+            let params = _BuildParams(newPage, self.itemsPerPage);
             _GetInboundAsync(params);
             swal.close();
         }
 
-        function _ClearFilters() {
-            localStorage.removeItem(ConstService.assetListFilters);
-        }
-
-        async function _ChangueItemsPerPage() {
-
+        async function _ChangueItemsPerPage(newValue, oldValue) {
+            if (newValue === oldValue) return;
             AlertService.Load();
-            //let filters = { 'LocationId': self.storeId, 'CompanyId': self.companyId };
-            //localStorage.setItem(ConstService.inventoryListFilters, JSON.stringify(filters))
-            Filters();
-            self.currentPage = 1;
-            let params = BuildParamsToGetInbound(self.currentPage, self.itemsPerPage, self.startDate, self.endDate);
-            //let params = { 'Page': self.currentPage, 'ItemsPerPage': self.itemsPerPage, 'IdStore': self.storeId, 'DtStart': self.startDate, 'DtEnd': self.endDate }
-            //let params = { 'Page': self.currentPage, 'ItemsPerPage': self.itemsPerPage, 'LocationId': self.storeId, 'CategoryId': self.categoryId, 'Search': self.filterSearch }
+            let params = _BuildParams(1, self.itemsPerPage);
             await _GetInboundAsync(params);
             swal.close();
         }
 
-        //EVENTOS
-
-        //-----------FUNCIONES PARA SELECCIONAR O ANULAR SELECCION DE TODOS LOS ELEMENTOS
-
-        function _SelectAllAssets() {
-
-            self.selectedPageAssets = true;
-
-            //VARIABLE NUEVA PARA SABER SI SE SELECCIONARON LOGICAMENTE TODOS LOS ASSETS
-            self.flagOfAllSelectedAssets = true;
-        }
-
-        function _UnSelectAllAssets() {
-            self.selectedPageAssets = false;
-
-            //VARIABLE NUEVA PARA SABER SI SE SELECCIONARON LOGICAMENTE TODOS LOS ASSETS
-            self.flagOfAllSelectedAssets = false;
-
-            self.itemsSelected = new Map();
-            self.counterItemsSelected = 0;
-        }
-
-        //-----------FUNCIONES QUE MUESTRAN U OCULTAN LAS ALERTAS
-
-        function _ShowAlertSelectedAll() {
-            if (!self.data || self.data?.length <= 0) return false;
-            if (self.filterSearch) return false;
-
-            let totalRecords = self.counterData;
-            let totalRecordsOfTheCurrentPage = self.data?.length ?? 0;
-            let counterItemsSelected = _CountSelectedItems();
-            let itemsPerPage = self.itemsPerPage;
-            let allSelectedAssets = self.flagOfAllSelectedAssets;
-            let numberOfAssetsSelectedFromAllPages = self.itemsSelected.size;
-
-            let currentPageFullySelected = totalRecordsOfTheCurrentPage === counterItemsSelected;
-            let pages = Math.ceil(totalRecords / itemsPerPage);
-
-            if (pages === 1) {
-                let contionSelectedAssets = totalRecords === numberOfAssetsSelectedFromAllPages;
-                if (contionSelectedAssets) {
-                    self.flagOfAllSelectedAssets = true;
-                    self.alertSelectAllIsVisible = false;
-                    return false;
-                }
-                return false;
-            }
-            if (counterItemsSelected <= 0) return false;
-
-            let contionSelectedAssets = totalRecords === numberOfAssetsSelectedFromAllPages;
-            if (contionSelectedAssets) {
-                self.flagOfAllSelectedAssets = true;
-                self.alertSelectAllIsVisible = false;
-                return false;
-            }
-
-            let conditionToShow = currentPageFullySelected && !allSelectedAssets && !self.alertDeselectAllIsVisible;
-            self.alertSelectAllIsVisible = conditionToShow;
-
-            return conditionToShow;
-        }
-
-        function _ShowAlertUnSelectedAll() {
-            if (!self.data || self.data?.length <= 0) return false;
-            if (self.filterSearch) return false;
-
-            let totalRecords = self.counterData;
-            let totalRecordsOfTheCurrentPage = self.data?.length ?? 0;
-            let counterItemsSelected = _CountSelectedItems();
-            let itemsPerPage = self.itemsPerPage;
-            let allSelectedAssets = self.flagOfAllSelectedAssets;
-            let numberOfAssetsSelectedFromAllPages = self.itemsSelected.size;
-
-            let currentPageFullySelected = totalRecordsOfTheCurrentPage === counterItemsSelected;
-            let pages = Math.ceil(totalRecords / itemsPerPage);
-
-            if (pages === 1) {
-                let contionSelectedAssets = totalRecords === numberOfAssetsSelectedFromAllPages;
-                if (contionSelectedAssets) {
-                    self.flagOfAllSelectedAssets = true;
-                    self.alertDeselectAllIsVisible = false;
-                    return false;
-                }
-                return false;
-            }
-            if (counterItemsSelected <= 0) return false;
-
-            let contionSelectedAssets = totalRecords === numberOfAssetsSelectedFromAllPages;
-            if (contionSelectedAssets) {
-                self.flagOfAllSelectedAssets = true;
-                self.alertDeselectAllIsVisible = true;
-                return true;
-            }
-
-
-            let conditionToShow = currentPageFullySelected && allSelectedAssets && !self.alertSelectAllIsVisible;
-            self.alertDeselectAllIsVisible = conditionToShow;
-
-            return conditionToShow;
-        }
-
-        //FUNCION PARA SELECCIONAR UN ELEMENTO
-        function _Toggle(item) {
-            let keyAsset = item?.Id;
-            let condition = self.itemsSelected.has(keyAsset);
-            if (condition) {
-                _DeleteValueInItemsSelected(keyAsset);
-
-                let allSelectedAssets = self.flagOfAllSelectedAssets;
-
-                if (allSelectedAssets) {
-                    self.flagOfAllSelectedAssets = false;
-                }
-
-            } else {
-                _AddValueInItemsSelected(keyAsset, item);
-
-                let allSelectedAssets = self.flagOfAllSelectedAssets;
-
-                if (allSelectedAssets) {
-                    self.flagOfAllSelectedAssets = false;
-                }
-            }
-            self.counterItemsSelected = _CountSelectedItems();
-
-            console.log("Toggle - Todos los activos seleccionados: ", self.flagOfAllSelectedAssets)
-        };
-
-        //FUNCION QUE VERIFICA SI EL ELEMENTO EXISTE EN EL MAP Y LO CHECKEA O DESCHECKEA
-        function _Exists(item) {
-            let keyAsset = item?.Id;
-            return self.itemsSelected.has(keyAsset);
-        };
-
-        //FUNCION PARA EL CHECK GLOBAL ESTE COLOCA UNA LINEA HORIZONTAL EN EL CENTRO DEL CHECK
-        function _IsIndeterminate() {
-            self.counterItemsSelected = _CountSelectedItems();
-            let sizeItemsSelected = self.counterItemsSelected;
-            //REVISAR
-            let sizeData = self.data?.length;
-            return (sizeItemsSelected !== 0 && sizeItemsSelected !== sizeData);
-        };
-        //FUNCION PARA VERIFICAR QUE LOS ELEMENTOS DE LA PAGINA ESTEN SELECCIONADOS Y MARCAR EL CHECK GLOBAL
-        function _IsChecked() {
-            self.counterItemsSelected = _CountSelectedItems();
-            let sizeItemsSelected = self.counterItemsSelected;
-            //REVISAR
-            let sizeData = self.data?.length;
-            if (!sizeData || sizeData <= 0) {
-                self.selectedPageAssets = false;
-                return false;
-            }
-
-            let condition = sizeItemsSelected === self.data?.length;
-            self.selectedPageAssets = condition;
-
-            self.printLabelsButtonIsVisible = sizeItemsSelected > 0 && !self.filterSearch;
-
-            return condition;
-        };
-
-        //FUNCION PARA MARCAR TODOS LOS ELEMENTOS DE LA PAGINA
-        function _ToggleAll() {
-            self.counterItemsSelected = _CountSelectedItems();
-            let sizeItemsSelected = self.counterItemsSelected;
-
-            let sizeData = self.data?.length;
-            if (!sizeData || sizeData <= 0) return;
-
-            if (sizeItemsSelected === sizeData) {
-                let data = self.data;
-                data.forEach((item) => {
-                    let keyAsset = item?.Id;
-                    _DeleteValueInItemsSelected(keyAsset);
-                });
-                let allSelectedAssets = self.flagOfAllSelectedAssets;
-
-                if (allSelectedAssets) {
-                    self.flagOfAllSelectedAssets = false;
-                }
-            } else if (sizeItemsSelected === 0 || sizeItemsSelected > 0) {
-
-                let data = self.data;
-                data.forEach((item) => {
-                    let keyAsset = item?.Id;
-                    _AddValueInItemsSelected(keyAsset, item);
-                });
-                let allSelectedAssets = self.flagOfAllSelectedAssets;
-
-                if (allSelectedAssets) {
-                    self.flagOfAllSelectedAssets = false;
-                }
-            }
-            self.counterItemsSelected = _CountSelectedItems();
-        }
-
-        async function _ChangueItemsPerPage() {
-
-            await _Search(1);
-
-        }
-
-        //CUENTA EL NUMERO DE ELEMENTOS SELECCIONADOS DE LA PAGINA ACTUAL
-        function _CountSelectedItems() {
-
-            let counter = 0;
-            let data = self.data;
-
-            if (!data || data?.length <= 0) return 0;
-
-            let dataSize = data.length;
-
-            for (let index = 0; index < dataSize; index++) {
-
-                let value = data[index];
-
-                let isSelected = self.itemsSelected.has(value?.Id);
-                if (isSelected) counter++;
-            }
-
-            return counter;
-        }
-
-        function ReturnZeroifnull(id) {
-            if (!id || id === '' || id === "") {
-                return 0
-            }
-            return +id
-        }
-
         _Init();
-    };
-
+    }
 })();
