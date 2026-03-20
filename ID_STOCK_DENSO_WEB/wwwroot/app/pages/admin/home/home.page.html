@@ -12,7 +12,7 @@
                 </div>
                 <div class="quick-actions-grid">
 
-                    <a ui-sref="purchase_order.list" class="quick-action-item">
+                    <a ui-sref="purchaseorder.list" class="quick-action-item">
                         <div class="action-icon bg-gradient-primary">
                             <i class="lni lni-shopping-basket"></i>
                         </div>
@@ -22,7 +22,7 @@
                         </div>
                     </a>
 
-                    <a ui-sref="requisition_order.list" class="quick-action-item">
+                    <a ui-sref="requisitionorder.list" class="quick-action-item">
                         <div class="action-icon bg-gradient-success">
                             <i class="lni lni-clipboard"></i>
                         </div>
@@ -32,7 +32,7 @@
                         </div>
                     </a>
 
-                    <a ui-sref="report.entries" class="quick-action-item">
+                    <a ui-sref="inbound.report" class="quick-action-item">
                         <div class="action-icon bg-gradient-info">
                             <i class="lni lni-enter"></i>
                         </div>
@@ -42,7 +42,7 @@
                         </div>
                     </a>
 
-                    <a ui-sref="report.exits" class="quick-action-item">
+                    <a ui-sref="outbound.report" class="quick-action-item">
                         <div class="action-icon bg-gradient-warning">
                             <i class="lni lni-exit"></i>
                         </div>
@@ -52,23 +52,23 @@
                         </div>
                     </a>
 
-                    <a ui-sref="report.inventory_location" class="quick-action-item">
+                    <a ui-sref="inventory.list" class="quick-action-item">
                         <div class="action-icon bg-gradient-purple">
                             <i class="lni lni-package"></i>
                         </div>
                         <div class="action-content">
-                            <h6>Inventario por Ubicación</h6>
-                            <small>Físico</small>
+                            <h6>Inventario por Localización</h6>
+                            <small>Reporte Físico</small>
                         </div>
                     </a>
 
-                    <a ui-sref="report.traceability" class="quick-action-item">
+                    <a ui-sref="stock.report" class="quick-action-item">
                         <div class="action-icon bg-gradient-danger">
                             <i class="lni lni-map-marker"></i>
                         </div>
                         <div class="action-content">
-                            <h6>Trazabilidad</h6>
-                            <small>Historial de movimientos</small>
+                            <h6>Existencias </h6>
+                            <small>Reporte de Existencias</small>
                         </div>
                     </a>
 
@@ -179,11 +179,11 @@
                     </div>
                     <div class="info-item">
                         <span class="info-label">Versión:</span>
-                        <span class="info-value">v1.0</span>
+                        <span class="info-value">v1.2</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Última actualización:</span>
-                        <span class="info-value">Enero 2026</span>
+                        <span class="info-value">Marzo 2026</span>
                     </div>
                 </div>
             </div>
@@ -210,11 +210,11 @@
                     </p>
                     <p class="mb-0">
                         <i class="lni lni-checkmark-circle text-success me-2"></i>
-                        Usa los reportes de trazabilidad para auditar movimientos por refacción.
+                        Ante cualquier duda, revisa el historial de entradas y salidas del mes.
                     </p>
                     <p class="mb-0">
                         <i class="lni lni-checkmark-circle text-success me-2"></i>
-                        Ante cualquier duda, revisa el historial de entradas y salidas del mes.
+                        Usa el reporte de existencias para validar refacciones en stock.
                     </p>
                 </div>
             </div>

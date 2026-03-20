@@ -93,7 +93,7 @@
     angular.module('app').directive('paginationControl', [function () {
         return {
             restrict: 'E',
-            templateUrl: '/app/directives/pagination-control/pagination-control.directive.html',
+            templateUrl: '/idStockWeb/app/directives/pagination-control/pagination-control.directive.html',
             controller: ['$scope', PagingController],
             scope: {
                 totalItems: "=",

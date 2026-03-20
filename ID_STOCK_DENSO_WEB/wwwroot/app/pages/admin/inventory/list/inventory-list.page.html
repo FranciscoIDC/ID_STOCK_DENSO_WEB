@@ -85,7 +85,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-3 col-md-6 d-flex gap-2 justify-content-end align-items-end">
+            <div class="col-lg-3 col-md-6 d-flex gap-2 justify-content-end align-items-end flex-wrap">
                 <a class="main-btn primary-btn rounded-full btn-hover"
                    style="text-decoration:none;" ng-click="Search()">
                     <i class="lni lni-search"></i> Buscar
@@ -93,6 +93,12 @@
                 <a class="main-btn danger-btn rounded-full btn-hover"
                    style="text-decoration:none;" ng-click="ClearFilters()">
                     <i class="lni lni-brush-alt"></i> Limpiar
+                </a>
+                <a class="main-btn success-btn rounded-full btn-hover"
+                   style="text-decoration:none;"
+                   ng-if="ExistData()"
+                   ng-click="GetCSV()">
+                    <i class="lni lni-download"></i> Exportar CSV
                 </a>
             </div>
         </div>

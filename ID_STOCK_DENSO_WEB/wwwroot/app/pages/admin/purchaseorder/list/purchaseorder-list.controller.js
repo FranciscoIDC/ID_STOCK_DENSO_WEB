@@ -47,6 +47,14 @@
             // Modal de detalle de partes
             self.selectedOrder = {};
 
+            // Contadores stat cards — vienen del API, no del filtro local
+            self.countPending = 0;
+            self.countInProgress = 0;
+            self.countCompleted = 0;
+
+            // ✅ Bandera para evitar que el $watch dispare durante _Search
+            self._suppressPageWatch = false;
+
             // Catálogo de estatus para el filtro dropdown
             self.statusOptions = [
                 { id: "", label: "Todos los estatus" },
@@ -85,12 +93,15 @@
             newPage = !newPage ? 1 : newPage;
 
             AlertService.Load();
+
+            // ✅ Suprimir el $watch antes de cambiar currentPage
+            //    para evitar que _ChangueCurrentPage haga una segunda llamada al API
+            self._suppressPageWatch = true;
             self.currentPage = newPage;
+            self._suppressPageWatch = false;
 
             let params = _BuildParams(self.currentPage);
-
             await _GetPurchaseOrdersAsync(params);
-
             swal.close();
         }
 
@@ -109,9 +120,22 @@
                 self.data = [];
                 self.totalItems = 0;
                 self.counterData = 0;
+                self.countPending = 0;
+                self.countInProgress = 0;
+                self.countCompleted = 0;
 
                 let response = await PurchaseOrderListService.Get(params);
-                const { Status: status, Message: message, Data: data, Counter: counter } = response.data;
+                const {
+                    Status: status,
+                    Message: message,
+                    Data: data,
+                    Counter: counter,
+                    // ✅ Si el API devuelve contadores globales úsalos directamente.
+                    //    Si no, se mantienen en 0 (no se calculan desde la página actual).
+                    CountPending: countPending,
+                    CountInProgress: countInProgress,
+                    CountCompleted: countCompleted
+                } = response.data;
 
                 console.log('✅ Ordenes de compra obtenidas:', response);
 
@@ -125,10 +149,12 @@
                 self.totalItems = counter || 0;
                 self.counterData = counter || 0;
 
-                // Contadores por estatus para las stat cards del header
-                self.countPending = self.data.filter(function (o) { return o.IdReceivedStatus === 1; }).length;
-                self.countInProgress = self.data.filter(function (o) { return o.IdReceivedStatus === 3; }).length;
-                self.countCompleted = self.data.filter(function (o) { return o.IdReceivedStatus === 4; }).length;
+                // ✅ Usar contadores del API si existen;
+                //    si el API no los devuelve aún, calcular sobre la página actual
+                //    como fallback (sabiendo que es parcial)
+                self.countPending = countPending != null ? countPending : self.data.filter(function (o) { return o.IdReceivedStatus === 1; }).length;
+                self.countInProgress = countInProgress != null ? countInProgress : self.data.filter(function (o) { return o.IdReceivedStatus === 3; }).length;
+                self.countCompleted = countCompleted != null ? countCompleted : self.data.filter(function (o) { return o.IdReceivedStatus === 4; }).length;
 
                 self.$apply();
 
@@ -207,25 +233,23 @@
 
         function _ClearFilters() {
             console.log('🧹 Limpiando filtros');
-
             self.filterSearch = "";
             self.filterStatus = "";
             self.filterProveedor = "";
-
-            $timeout(function () {
-                _Search(1);
-            }, 100);
+            _Search(1);
         }
 
         // ========== PAGINACION ==========
         function _ChangueCurrentPage(newPage, oldPage) {
             if (newPage === oldPage) return;
 
+            // ✅ Si _Search ya actualizó currentPage, ignorar el disparo del $watch
+            if (self._suppressPageWatch) return;
+
             console.log("📄 Cambiando a página:", newPage);
             AlertService.Load();
 
             let params = _BuildParams(newPage);
-
             _GetPurchaseOrdersAsync(params);
             swal.close();
         }

@@ -186,7 +186,7 @@
 
 <div class="container-fluid">
 
-    <!-- ===== BREADCRUMB ===== -->
+    <!-- Sección BREADCRUMB + BOTONES — reemplaza la tuya completa -->
     <div class="title-wrapper pt-30">
         <div class="row align-items-center">
             <div class="col-md-8">
@@ -198,7 +198,14 @@
                     <span class="current">{{folio || 'Detalle'}}</span>
                 </div>
             </div>
-            <div class="col-md-4 text-end">
+            <div class="col-md-4 text-end d-flex justify-content-end gap-2">
+                <!-- ✅ Botón CSV: visible solo cuando hay datos -->
+                <a class="main-btn success-btn rounded-full btn-hover"
+                   style="text-decoration:none;"
+                   ng-if="ExistData()"
+                   ng-click="GetCSV()">
+                    <i class="lni lni-download"></i> Exportar CSV
+                </a>
                 <a class="main-btn danger-btn rounded-full btn-hover"
                    style="text-decoration:none;" ng-click="GoBack()">
                     <i class="lni lni-arrow-left"></i> Volver
@@ -206,6 +213,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- ===== CABECERA DEL INVENTARIO ===== -->
     <div class="inv-detail-header">

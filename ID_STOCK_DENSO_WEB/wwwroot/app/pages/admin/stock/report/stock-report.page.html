@@ -200,6 +200,13 @@
                    style="text-decoration:none;" ng-click="ClearFilters()">
                     <i class="lni lni-brush-alt"></i> Limpiar
                 </a>
+                <!-- ✅ Botón CSV: visible solo cuando hay datos -->
+                <a class="main-btn success-btn rounded-full btn-hover"
+                   style="text-decoration:none;"
+                   ng-if="ExistData()"
+                   ng-click="GetCSV()">
+                    <i class="lni lni-download"></i> Exportar CSV
+                </a>
             </div>
         </div>
     </div>

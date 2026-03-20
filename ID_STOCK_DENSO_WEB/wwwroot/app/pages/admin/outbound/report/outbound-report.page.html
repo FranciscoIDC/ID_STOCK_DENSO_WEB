@@ -110,8 +110,8 @@
             <p class="mt-3">Aplica los filtros para consultar el reporte de salidas.</p>
         </div>
 
-        <!-- Cards de salidas -->
-        <div ng-if="ExistData()">
+        <!-- ✅ ng-show en lugar de ng-if: oculta el DOM pero NO lo destruye -->
+        <div ng-show="ExistData()">
             <div ng-repeat="item in data" class="inbound-entry-card mb-3">
 
                 <!-- ── Encabezado ── -->
@@ -119,7 +119,7 @@
                     <div>
                         <span class="inbound-po-num">
                             <i class="lni lni-clipboard"></i>
-                            Req. <strong>{{DatumToString(item.RequisitionNumber)}}</strong>
+                            Req. <strong>{{DatumToString(item.IdRequisition)}}</strong>
                         </span>
                         <span class="inbound-po-sep mx-2 text-muted">|</span>
                         <span class="inbound-supplier">
@@ -207,16 +207,17 @@
                 </div>
 
             </div><!-- /ng-repeat -->
-            <!-- Paginación -->
-            <pagination-control show-items-per-page="true"
-                                paging-size="pagingSize"
-                                items-per-page="itemsPerPage"
-                                total-items="totalItems"
-                                display-items="displayItems"
-                                current-page="currentPage">
-            </pagination-control>
-        </div>
-    </div>
+        </div><!-- /ng-show -->
+        <!-- ✅ Paginación SIEMPRE en el DOM, fuera de cualquier ng-if / ng-show -->
+        <pagination-control show-items-per-page="true"
+                            paging-size="pagingSize"
+                            items-per-page="itemsPerPage"
+                            total-items="totalItems"
+                            display-items="displayItems"
+                            current-page="currentPage">
+        </pagination-control>
+
+    </div><!-- /card-style -->
 </div>
 
 

@@ -56,6 +56,9 @@
             // Contadores de stat cards
             self.countPending = 0;
             self.countDelivered = 0;
+
+            // ✅ Bandera para evitar que el $watch dispare durante _Search
+            self._suppressPageWatch = false;
         }
 
         function _RegisterFunctions() {
@@ -87,12 +90,15 @@
             newPage = !newPage ? 1 : newPage;
 
             AlertService.Load();
+
+            // ✅ Suprimir el $watch antes de cambiar currentPage
+            //    para evitar que _ChangueCurrentPage haga una segunda llamada al API
+            self._suppressPageWatch = true;
             self.currentPage = newPage;
+            self._suppressPageWatch = false;
 
             let params = _BuildParams(self.currentPage);
-
             await _GetRequisitionsAsync(params);
-
             swal.close();
         }
 
@@ -111,9 +117,20 @@
                 self.data = [];
                 self.totalItems = 0;
                 self.counterData = 0;
+                self.countPending = 0;
+                self.countDelivered = 0;
 
                 let response = await RequisitionOrderListService.Get(params);
-                const { Status: status, Message: message, Data: data, Counter: counter } = response.data;
+                const {
+                    Status: status,
+                    Message: message,
+                    Data: data,
+                    Counter: counter,
+                    // ✅ Si el API devuelve contadores globales úsalos directamente.
+                    //    Si no, se mantienen en 0 (no se calculan desde la página actual).
+                    CountPending: countPending,
+                    CountDelivered: countDelivered
+                } = response.data;
 
                 console.log('✅ Requisiciones obtenidas:', response);
 
@@ -127,11 +144,14 @@
                 self.totalItems = counter || 0;
                 self.counterData = counter || 0;
 
-                // Contadores por estatus para las stat cards del header
-                self.countPending = self.data.filter(function (r) { return r.IdRequisitionStatus === 1; }).length;
-                self.countDelivered = self.data.filter(function (r) { return r.IdRequisitionStatus === 2; }).length;
+                // ✅ Usar contadores del API si existen;
+                //    si el API no los devuelve aún, calcular sobre la página actual
+                //    como fallback (sabiendo que es parcial)
+                self.countPending = countPending != null ? countPending : self.data.filter(function (r) { return r.IdRequisitionStatus === 1; }).length;
+                self.countDelivered = countDelivered != null ? countDelivered : self.data.filter(function (r) { return r.IdRequisitionStatus === 2; }).length;
 
                 self.$apply();
+
             } catch (ex) {
                 let error = ErrorService.GetError(ex);
                 console.error('❌ Error obteniendo requisiciones:', error);
@@ -210,24 +230,22 @@
 
         function _ClearFilters() {
             console.log('🧹 Limpiando filtros');
-
             self.filterSearch = "";
             self.filterStatus = "";
-
-            $timeout(function () {
-                _Search(1);
-            }, 100);
+            _Search(1);
         }
 
         // ========== PAGINACIÓN ==========
         function _ChangueCurrentPage(newPage, oldPage) {
             if (newPage === oldPage) return;
 
+            // ✅ Si _Search ya actualizó currentPage, ignorar el disparo del $watch
+            if (self._suppressPageWatch) return;
+
             console.log("📄 Cambiando a página:", newPage);
             AlertService.Load();
 
             let params = _BuildParams(newPage);
-
             _GetRequisitionsAsync(params);
             swal.close();
         }

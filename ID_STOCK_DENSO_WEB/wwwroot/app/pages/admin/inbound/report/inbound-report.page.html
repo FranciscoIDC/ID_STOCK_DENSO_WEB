@@ -119,8 +119,8 @@
             <p class="mt-3">Aplica los filtros para consultar el reporte de entradas.</p>
         </div>
 
-        <!-- Cards de entradas -->
-        <div ng-if="ExistData()">
+        <!-- ✅ ng-show en lugar de ng-if: oculta el DOM pero NO lo destruye -->
+        <div ng-show="ExistData()">
             <div ng-repeat="item in data" class="inbound-entry-card mb-3">
 
                 <!-- ── Encabezado de la card ── -->
@@ -234,16 +234,17 @@
                 </div>
 
             </div><!-- /ng-repeat -->
-            <!-- Paginación -->
-            <pagination-control show-items-per-page="true"
-                                paging-size="pagingSize"
-                                items-per-page="itemsPerPage"
-                                total-items="totalItems"
-                                display-items="displayItems"
-                                current-page="currentPage">
-            </pagination-control>
-        </div>
-    </div>
+        </div><!-- /ng-show -->
+        <!-- ✅ Paginación SIEMPRE en el DOM, fuera de cualquier ng-if / ng-show -->
+        <pagination-control show-items-per-page="true"
+                            paging-size="pagingSize"
+                            items-per-page="itemsPerPage"
+                            total-items="totalItems"
+                            display-items="displayItems"
+                            current-page="currentPage">
+        </pagination-control>
+
+    </div><!-- /card-style -->
 </div>
 
 

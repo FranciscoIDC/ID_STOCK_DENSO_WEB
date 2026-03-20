@@ -44,6 +44,7 @@
                 method: 'POST',
                 url: url,
                 data: list,
+                headers: { 'Authorization': 'Bearer ' + UrlService.token },
                 async: true
             }
             return $http(request)

@@ -45,6 +45,9 @@
             self.selectedProduct = null;
             self.tagsData = [];
             self.loadingTags = false;
+
+            // ✅ Bandera para evitar que el $watch dispare durante _Search
+            self._suppressPageWatch = false;
         }
 
         function _RegisterFunctions() {
@@ -56,6 +59,9 @@
             self.FormatDate = _FormatDate;
             self.FormatDateTime = _FormatDateTime;
             self.OpenTagsModal = _OpenTagsModal;
+
+            // ✅ Exportar CSV
+            self.GetCSV = _GetCSV;
 
             self.$watch('currentPage', _ChangueCurrentPage);
             self.$watch('itemsPerPage', _ChangueItemsPerPage);
@@ -70,8 +76,15 @@
         // ── Búsqueda ─────────────────────────────────────────────────────────
         async function _Search(newPage) {
             newPage = !newPage ? 1 : newPage;
-            self.currentPage = newPage;
+
             AlertService.Load();
+
+            // ✅ Suprimir el $watch antes de cambiar currentPage
+            //    para evitar que _ChangueCurrentPage haga una segunda llamada al API
+            self._suppressPageWatch = true;
+            self.currentPage = newPage;
+            self._suppressPageWatch = false;
+
             await _GetStockAsync(_BuildParams(newPage));
             swal.close();
         }
@@ -133,6 +146,62 @@
             }
         }
 
+        // ── Exportar CSV ──────────────────────────────────────────────────────
+        function _GetCSV() {
+            if (!self.data || self.data.length === 0) {
+                AlertService.Error('Oops', 'No hay datos para exportar.');
+                return;
+            }
+
+            let headers = [
+                'No. Parte',
+                'No. Denso',
+                'No. Denson',
+                'Descripción',
+                'Tipo',
+                'Localización',
+                'Última Entrada',
+                'Existencia'
+            ];
+
+            let csvRows = [headers.join(',')];
+
+            self.data.forEach(function (row) {
+                csvRows.push(_BuildCsvRow(row));
+            });
+
+            let csvContent = csvRows.join('\n');
+            let blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            let url = window.URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            document.body.appendChild(a);
+            a.href = url;
+            let fecha = new Date().toLocaleDateString('es-MX').replace(/\//g, '-');
+            a.download = 'Reporte_Existencias_' + fecha + '.csv';
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        function _BuildCsvRow(row) {
+            let esc = function (v) {
+                if (v === null || v === undefined) return '';
+                let s = String(v).replace(/"/g, '""');
+                return s.indexOf(',') >= 0 || s.indexOf('"') >= 0 ? '"' + s + '"' : s;
+            };
+
+            return [
+                esc(row.NoParte),
+                esc(row.NoDenso),
+                esc(row.NoDenson),
+                esc(row.Descripcion),
+                esc(row.DescripcionTipo),
+                esc(row.Localizacion),
+                esc(_FormatDate(row.UltimaEntrada)),
+                esc(row.Existencia)
+            ].join(',');
+        }
+
         // ── Helpers ───────────────────────────────────────────────────────────
         function _ExistData() { return self.data && self.data.length > 0; }
         function _ExistTags() { return self.tagsData && self.tagsData.length > 0; }
@@ -155,12 +224,16 @@
 
         function _ClearFilters() {
             self.filterSearch = '';
-            $timeout(() => _Search(1), 100);
+            _Search(1);
         }
 
         // ── Paginación ────────────────────────────────────────────────────────
         function _ChangueCurrentPage(nv, ov) {
             if (nv === ov) return;
+
+            // ✅ Si _Search ya actualizó currentPage, ignorar el disparo del $watch
+            if (self._suppressPageWatch) return;
+
             AlertService.Load();
             _GetStockAsync(_BuildParams(nv));
             swal.close();
